@@ -487,7 +487,9 @@ const P={
     cat:'Logistics · Commercial · 3D Packing',
     title:'CargoCast',
     body:'Commercial teams need accurate shipping cost estimates long before the real packing list exists. CargoCast takes SKU codes and forecasted quantities, applies product-family rules to generate physical crates (panels by m², profiles by linear metre, doors by count), then runs a 3D bin packing simulation to output container count and saturation levels. Built with a Python/FastAPI backend and a web front-end with 2D load visualisation. The same model is reused in the operational phase on the real packing list, ensuring continuity between commercial estimate and actual dispatch.',
-    stack:['Python','FastAPI','HTML·CSS·JS','3D Bin Packing','Skyline Algorithm','Grid-Based Packing']
+    stack:['Python','FastAPI','HTML·CSS·JS','3D Bin Packing','Skyline Algorithm','Grid-Based Packing'],
+    demo:'https://cargocast.onrender.com',
+    github:'https://github.com/me-deep-me/cargocast'
   },
   load:{
     cat:'Logistics · Visualization · Operational',
@@ -533,6 +535,12 @@ function openModal(k){
   document.getElementById('mt').textContent=p.title;
   document.getElementById('mb').textContent=p.body;
   document.getElementById('ms').innerHTML=p.stack.map(t=>`<span>${t}</span>`).join('');
+  const demoBtn=document.getElementById('md');
+  const ghBtn=document.getElementById('mg');
+  if(p.demo){demoBtn.href=p.demo;demoBtn.style.display='inline-flex';}
+  else{demoBtn.style.display='none';}
+  if(p.github){ghBtn.href=p.github;ghBtn.style.display='inline-flex';}
+  else{ghBtn.style.display='none';}
   document.getElementById('mwrap').classList.add('open');
   document.body.style.overflow='hidden';
 }
