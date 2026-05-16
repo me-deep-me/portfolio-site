@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mattia Erigoni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07101c;
+  --bg2:#0b1724;
+  --bg3:#0f1e2e;
+  --ink:#dde6f2;
+  --ink2:rgba(221,230,242,0.52);
+  --ink3:rgba(221,230,242,0.28);
+  --sky:#6aaee8;
+  --sky2:#3d85c8;
+  --skydim:rgba(106,174,232,0.11);
+  --border:rgba(106,174,232,0.09);
+  --border2:rgba(106,174,232,0.18);
+  --fd:'DM Serif Display',Georgia,serif;
+  --fb:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:16px;line-height:1.65;font-weight:300;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.35rem 3.5rem;
+  background:rgba(7,16,28,0.78);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{font-family:var(--fd);font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:0.01em}
+.nav-links{display:flex;gap:2.4rem;list-style:none}
+.nav-links a{font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);text-decoration:none;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--sky)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:0 3.5rem 5.5rem;
+  position:relative;overflow:hidden;
+}
+.glow{position:absolute;border-radius:50%;pointer-events:none;will-change:transform}
+.glow-a{top:8%;right:-8%;width:58vw;height:58vw;max-width:860px;max-height:860px;
+  background:radial-gradient(circle at 38% 38%,rgba(61,133,200,0.13) 0%,rgba(106,174,232,0.04) 50%,transparent 72%);
+  transition:transform 1.1s cubic-bezier(.16,1,.3,1), opacity .7s ease, filter .7s ease}
+.glow-b{bottom:-14%;left:-10%;width:44vw;height:44vw;max-width:640px;max-height:640px;
+  background:radial-gradient(circle,rgba(61,133,200,0.06) 0%,transparent 65%)}
+.hero-label{
+  font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--sky);margin-bottom:1.8rem;font-weight:500;
+  opacity:0;animation:up .9s ease forwards .2s
+}
+.hero-title{
+  font-family:var(--fd);font-size:clamp(4.2rem,9.5vw,11rem);
+  line-height:.875;letter-spacing:-.02em;margin-bottom:3.8rem;
+  opacity:0;animation:up .9s ease forwards .4s
+}
+.hero-title .it{font-style:italic;color:var(--sky)}
+.hero-foot{display:flex;justify-content:space-between;align-items:flex-end;
+  opacity:0;animation:up .9s ease forwards .7s}
+.hero-bio{max-width:44ch;font-size:1.05rem;color:var(--ink2);line-height:1.8}
+.scroll-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem;
+  font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+.scroll-line{width:1px;height:58px;
+  background:linear-gradient(to bottom,var(--sky),transparent);
+  animation:breathe 2.2s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.25}50%{opacity:.85}}
+
+/* ── SECTIONS ── */
+section{padding:7rem 3.5rem}
+.s-tag{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sky);margin-bottom:1.1rem;font-weight:500}
+.s-rule{width:100%;height:1px;background:var(--border);margin-bottom:5rem}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start}
+.about-h{font-family:var(--fd);font-size:clamp(2.6rem,5vw,5.2rem);line-height:.9;letter-spacing:-.02em}
+.about-h .dim{color:var(--ink3)}
+.about-h .it{font-style:italic}
+.about-body{font-size:.98rem;color:var(--ink2);line-height:1.88;margin-bottom:2.5rem}
+.about-body strong{color:var(--ink);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:.38rem .95rem;border:1px solid var(--border2);border-radius:999px;
+  color:var(--ink3);font-weight:500;transition:all .2s}
+.chip:hover{border-color:var(--sky);color:var(--sky);background:var(--skydim)}
+
+/* ── PROJECTS ── */
+.proj-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem}
+.proj-ht{font-family:var(--fd);font-size:clamp(2.6rem,5vw,5.2rem);line-height:.9;letter-spacing:-.02em}
+.proj-ht .it{font-style:italic;color:var(--ink3)}
+.proj-ct{font-size:.8rem;color:var(--ink3);letter-spacing:.04em}
+.proj-list{display:flex;flex-direction:column}
+.pi{
+  display:grid;grid-template-columns:5ch 1fr auto;gap:2.8rem;
+  align-items:center;padding:2.4rem 0;
+  border-top:1px solid var(--border);
+  cursor:pointer;position:relative;overflow:hidden;
+}
+.pi::before{
+  content:'';position:absolute;inset:0;
+  background:var(--skydim);
+  transform:translateX(-100%);
+  transition:transform .48s cubic-bezier(.16,1,.3,1)
+}
+.pi:hover::before{transform:translateX(0)}
+.pi:last-child{border-bottom:1px solid var(--border)}
+.pi-n{font-size:.72rem;color:var(--ink3);letter-spacing:.06em;position:relative}
+.pi-info{position:relative}
+.pi-name{
+  font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2.3rem);
+  letter-spacing:-.02em;margin-bottom:.4rem;
+  transition:color .2s;line-height:1.05
+}
+.pi:hover .pi-name{color:var(--sky)}
+.pi-desc{font-size:.85rem;color:var(--ink3);max-width:52ch;line-height:1.62}
+.pi-pills{display:flex;flex-wrap:wrap;gap:.38rem;justify-content:flex-end;position:relative}
+.pp{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.28rem .72rem;border:1px solid var(--border);border-radius:999px;color:var(--ink3);white-space:nowrap}
+.pp.hi{border-color:var(--border2);color:var(--sky)}
+
+/* ── MODAL ── */
+.mwrap{
+  position:fixed;inset:0;background:rgba(7,16,28,.92);
+  backdrop-filter:blur(20px);z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:2rem;
+  opacity:0;pointer-events:none;transition:opacity .3s
+}
+.mwrap.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:1.2rem;padding:2.8rem 3rem 2.5rem;
+  max-width:640px;width:100%;
+  transform:translateY(20px);
+  transition:transform .38s cubic-bezier(.16,1,.3,1);
+  position:relative
+}
+.mwrap.open .modal{transform:translateY(0)}
+.mclose{
+  position:absolute;top:1.4rem;right:1.4rem;
+  background:none;border:1px solid var(--border2);border-radius:50%;
+  color:var(--ink3);width:32px;height:32px;font-size:.85rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;font-family:var(--fb)
+}
+.mclose:hover{border-color:var(--sky);color:var(--sky)}
+.mcat{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sky);margin-bottom:.7rem;font-weight:500}
+.mtitle{font-family:var(--fd);font-size:2.2rem;letter-spacing:-.02em;margin-bottom:1.1rem;line-height:1}
+.mbody{font-size:.93rem;color:var(--ink2);line-height:1.84;margin-bottom:1.7rem}
+.mstack{display:flex;flex-wrap:wrap;gap:.42rem;margin-bottom:2rem}
+.mstack span{font-size:.65rem;letter-spacing:.09em;text-transform:uppercase;
+  padding:.32rem .82rem;border:1px solid var(--border2);border-radius:999px;color:var(--ink3)}
+.mbtns{display:flex;gap:.9rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.68rem 1.45rem;
+  border-radius:999px;font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;
+  text-decoration:none;font-family:var(--fb);font-weight:600;transition:all .2s;cursor:pointer;border:none}
+.btn-a{background:var(--sky);color:var(--bg)}
+.btn-a:hover{background:#8ac4ef}
+.btn-b{background:transparent;color:var(--ink);border:1px solid var(--border2)}
+.btn-b:hover{border-color:var(--sky);color:var(--sky)}
+
+/* ── THESIS CALLOUT ── */
+.thesis-block{
+  margin-top:5rem;padding:2.5rem 3rem;
+  border:1px solid var(--border2);border-radius:1rem;
+  background:var(--bg2);
+  display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center
+}
+.thesis-kicker{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sky);margin-bottom:.6rem;font-weight:500}
+.thesis-title{font-family:var(--fd);font-size:1.55rem;line-height:1.15;letter-spacing:-.01em;margin-bottom:.7rem}
+.thesis-body{font-size:.88rem;color:var(--ink2);line-height:1.78;max-width:55ch}
+.thesis-tag{
+  font-size:.65rem;letter-spacing:.09em;text-transform:uppercase;
+  padding:.32rem .82rem;border:1px solid var(--border2);border-radius:999px;
+  color:var(--ink3);white-space:nowrap
+}
+
+/* ── CONTACT ── */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:end}
+.contact-h{font-family:var(--fd);font-size:clamp(3.5rem,7vw,8rem);line-height:.87;letter-spacing:-.03em}
+.contact-h .it{font-style:italic;color:var(--sky)}
+.clines{margin-bottom:2.4rem}
+.cline{display:flex;justify-content:space-between;padding:.95rem 0;border-bottom:1px solid var(--border);font-size:.88rem;color:var(--ink3)}
+.cline a{color:var(--ink2);text-decoration:none;transition:color .2s}
+.cline a:hover{color:var(--sky)}
+
+/* ── FOOTER ── */
+footer{padding:2.2rem 3.5rem;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.73rem;color:var(--ink3);letter-spacing:.04em}
+footer a{color:var(--ink3);text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--sky)}
+
+/* ── ANIMATIONS ── */
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .78s ease,transform .78s cubic-bezier(.16,1,.3,1)}
+.reveal.on{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:1.2rem 1.5rem}
+  .nav-links{display:none}
+  section{padding:5rem 1.5rem}
+  .hero{padding:0 1.5rem 4rem}
+  .about-grid,.contact-grid,.thesis-block{grid-template-columns:1fr;gap:2.5rem}
+  .pi{grid-template-columns:1fr;gap:.65rem}
+  .pi-pills{justify-content:flex-start}
+  .proj-hd{flex-direction:column;align-items:flex-start;gap:.7rem}
+  footer{flex-direction:column;gap:.9rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Mattia Erigoni</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#thesis">Research</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="glow glow-a" id="orb" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+  <div class="hero-label">Management Engineer · Digital Builder · AI</div>
+  <h1 class="hero-title">
+    Mattia<br/>
+    <span class="it">Erigoni</span>
+  </h1>
+  <div class="hero-foot">
+    <p class="hero-bio">
+      I turn industrial complexity into software that works. From combinatorial optimization to AI-assisted pipelines — I build tools that make hard operational problems disappear.
+    </p>
+    <div class="scroll-wrap" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="s-tag">About</div>
+  <div class="s-rule"></div>
+  <div class="about-grid">
+    <div class="reveal">
+      <h2 class="about-h">
+        Engineer<br/>
+        <span class="dim it">who</span><br/>
+        <span class="dim">ships.</span>
+      </h2>
+    </div>
+    <div class="reveal" style="transition-delay:.12s">
+      <p class="about-body">
+        I'm a Management Engineer with a strong lean toward <strong>process digitalization, operations research and AI</strong>. My work sits at the intersection of industrial logic and software craft — I analyse how things actually work, find where the friction is, and build tools that remove it.<br/><br/>
+        Over the past year I independently designed and deployed a full suite of industrial applications in a real healthcare infrastructure company — solving NP-hard optimization problems, automating logistics planning, structuring a 85,000-record database, and experimenting with local LLM and RAG architectures. Every tool was born from direct observation of a broken process, and validated in production.<br/><br/>
+        I work through rapid prototyping and iterative validation. I care about the quality of the data, the coherence of the flow, and the elegance of the result.
+      </p>
+      <div class="chips">
+        <span class="chip">Python</span>
+        <span class="chip">Operations Research</span>
+        <span class="chip">FastAPI</span>
+        <span class="chip">Excel · VBA</span>
+        <span class="chip">HTML · CSS · JS</span>
+        <span class="chip">2D/3D Bin Packing</span>
+        <span class="chip">LLM · RAG</span>
+        <span class="chip">Data Quality</span>
+        <span class="chip">BIM · Revit</span>
+        <span class="chip">Process Design</span>
+        <span class="chip">Lean Digital Engineering</span>
+        <span class="chip">Prompt Engineering</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="s-tag">Projects</div>
+  <div class="s-rule"></div>
+  <div class="proj-hd reveal">
+    <h2 class="proj-ht">What I've<br/><span class="it">built.</span></h2>
+    <div class="proj-ct">08 tools</div>
+  </div>
+
+  <div class="proj-list">
+
+    <div class="pi reveal" onclick="openModal('nest')">
+      <div class="pi-n">01</div>
+      <div class="pi-info">
+        <div class="pi-name">Æ-Nest</div>
+        <div class="pi-desc">2D cut-stock optimizer for modular wall panels. Solves a NP-hard bin packing problem using heuristic algorithms with kerf management, rotation and CNC output in DXF.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Python</span>
+        <span class="pp">NP-Hard</span>
+        <span class="pp">CNC · DXF</span>
+        <span class="pp">BIM Integration</span>
+      </div>
+    </div>
+
+    <div class="pi reveal" onclick="openModal('cargo')">
+      <div class="pi-n">02</div>
+      <div class="pi-info">
+        <div class="pi-name">CargoCast</div>
+        <div class="pi-desc">Pre-shipment container planning tool. Takes SKU codes and estimated quantities, simulates 3D loading and outputs how many containers a shipment needs — before the packing list exists.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Python · FastAPI</span>
+        <span class="pp">3D Bin Packing</span>
+        <span class="pp">Web UI</span>
+      </div>
+    </div>
+
+    <div class="pi reveal" onclick="openModal('load')">
+      <div class="pi-n">03</div>
+      <div class="pi-info">
+        <div class="pi-name">LoadScan</div>
+        <div class="pi-desc">Operational logistics tool for real packing lists. Computes 2D footprint and 3D volume occupancy per container with stacking rules, weight constraints and graphical layout output.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Python · JS</span>
+        <span class="pp">3D Visualization</span>
+        <span class="pp">Logistics</span>
+      </div>
+    </div>
+
+    <div class="pi reveal" onclick="openModal('door')">
+      <div class="pi-n">04</div>
+      <div class="pi-info">
+        <div class="pi-name">Door Pack Optimizer</div>
+        <div class="pi-desc">Automatically configures shipping crates for technical hospital doors — hermetic, lead-lined, acoustic — decoding product strings, estimating weight, and solving a multi-constraint bin packing problem.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Python</span>
+        <span class="pp">Multi-constraint Packing</span>
+        <span class="pp">DSS</span>
+      </div>
+    </div>
+
+    <div class="pi reveal" onclick="openModal('gantt')">
+      <div class="pi-n">05</div>
+      <div class="pi-info">
+        <div class="pi-name">Gantt PM</div>
+        <div class="pi-desc">Automatic production scheduling system. Transforms technical order data into a Gantt-based plan, allocating activities across resources and timelines with fast recalculation on change.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Excel · VBA</span>
+        <span class="pp">Scheduling</span>
+        <span class="pp">Production</span>
+      </div>
+    </div>
+
+    <div class="pi reveal" onclick="openModal('db')">
+      <div class="pi-n">06</div>
+      <div class="pi-info">
+        <div class="pi-name">ContactBase XL</div>
+        <div class="pi-desc">Data governance system for an 85,000+ record B2B contact database. Deduplication, normalisation, validation rules, structured CRUD forms and automated email drafting via Outlook integration.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Excel · VBA</span>
+        <span class="pp">Data Quality</span>
+        <span class="pp">85k Records</span>
+      </div>
+    </div>
+
+    <div class="pi reveal" onclick="openModal('rag')">
+      <div class="pi-n">07</div>
+      <div class="pi-info">
+        <div class="pi-name">RAG Experiments</div>
+        <div class="pi-desc">Exploratory work on local LLM inference and Retrieval-Augmented Generation architectures for querying technical documentation — product specs, manuals, project records — without leaking data externally.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Python</span>
+        <span class="pp">LLM · RAG</span>
+        <span class="pp">Local Inference</span>
+      </div>
+    </div>
+
+    <div class="pi reveal" onclick="openModal('micro')">
+      <div class="pi-n">08</div>
+      <div class="pi-info">
+        <div class="pi-name">Micro Tools & Analytics</div>
+        <div class="pi-desc">A set of focused utilities: MBOX-to-PDF batch converter, statistical production and supplier analysis scripts, and data pipeline helpers that turn raw ERP exports into structured decision-support outputs.</div>
+      </div>
+      <div class="pi-pills">
+        <span class="pp hi">Python</span>
+        <span class="pp">Automation</span>
+        <span class="pp">Analytics</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- THESIS CALLOUT -->
+  <div class="thesis-block reveal" id="thesis">
+    <div>
+      <div class="thesis-kicker">Degree Thesis · 2026</div>
+      <div class="thesis-title">Digitalizzazione e automazione dei processi<br/>in un'azienda del settore healthcare</div>
+      <p class="thesis-body">
+        My thesis documents the complete methodology and technical implementation behind the tools above — from process analysis and criticality mapping, to heuristic algorithm design, to AI/RAG experimentation and the ÆMed vision. Written from 12 months of embedded work in a real industrial environment.
+      </p>
+    </div>
+    <div>
+      <span class="thesis-tag">Lean Digital Engineering</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="s-tag">Contact</div>
+  <div class="s-rule"></div>
+  <div class="contact-grid">
+    <div class="reveal">
+      <h2 class="contact-h">Let's<br/><span class="it">talk.</span></h2>
+    </div>
+    <div class="reveal" style="transition-delay:.12s">
+      <div class="clines">
+        <div class="cline">
+          <span>Email</span>
+          <a href="mailto:mattiaerigoni99@gmail.com">mattiaerigoni99@gmail.com</a>
+        </div>
+        <div class="cline">
+          <span>LinkedIn</span>
+          <a href="https://linkedin.com/in/mattia-erigoni" target="_blank">linkedin.com/in/mattia-erigoni</a>
+        </div>
+        <div class="cline">
+          <span>GitHub</span>
+          <a href="https://github.com/mattia-erigoni" target="_blank">github.com/mattia-erigoni</a>
+        </div>
+        <div class="cline">
+          <span>Languages</span>
+          <span>Italian · English · Spanish</span>
+        </div>
+        <div class="cline">
+          <span>Availability</span>
+          <span>Open to opportunities</span>
+        </div>
+      </div>
+      <a href="mailto:mattiaerigoni99@gmail.com" class="btn btn-a">Get in touch ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Mattia Erigoni</span>
+  <span>Management Engineer · Digital Builder</span>
+  <a href="https://github.com/mattia-erigoni" target="_blank">GitHub ↗</a>
+</footer>
+
+<!-- MODAL -->
+<div class="mwrap" id="mwrap" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal(null)">✕</button>
+    <div class="mcat" id="mc"></div>
+    <h3 class="mtitle" id="mt"></h3>
+    <p class="mbody" id="mb"></p>
+    <div class="mstack" id="ms"></div>
+    <div class="mbtns">
+      <a href="#" class="btn btn-a" id="md" target="_blank">Live Demo ↗</a>
+      <a href="#" class="btn btn-b" id="mg" target="_blank">View on GitHub →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const P={
+  nest:{
+    cat:'Optimization · Manufacturing · NP-Hard',
+    title:'Æ-Nest',
+    body:'Æ-Nest is a Python pipeline for 2D nesting of rectangular panels on standard-size sheets — a cut-stock problem classified as NP-hard. Data flows from BIM Revit exports, through robust normalisation (flexible column mapping, numeric parsing for Italian/English formats, error diagnostics), into a multi-strategy heuristic engine (Best Short Side Fit + Best Area Fit via rectpack). The system manages kerf width, optional rotation, and a smart panel ordering logic that groups components by destination room — so the first crates produced are already logistically coherent. Outputs include Excel workbooks, DXF files for CNC machines, 3D GLB/IFC models, and PNG layouts.',
+    stack:['Python','Tkinter','rectpack','Revit·BIM','DXF·CNC','Excel','GLB·IFC','NP-Hard Heuristics']
+  },
+  cargo:{
+    cat:'Logistics · Commercial · 3D Packing',
+    title:'CargoCast',
+    body:'Commercial teams need accurate shipping cost estimates long before the real packing list exists. CargoCast takes SKU codes and forecasted quantities, applies product-family rules to generate physical crates (panels by m², profiles by linear metre, doors by count), then runs a 3D bin packing simulation to output container count and saturation levels. Built with a Python/FastAPI backend and a web front-end with 2D load visualisation. The same model is reused in the operational phase on the real packing list, ensuring continuity between commercial estimate and actual dispatch.',
+    stack:['Python','FastAPI','HTML·CSS·JS','3D Bin Packing','Skyline Algorithm','Grid-Based Packing']
+  },
+  load:{
+    cat:'Logistics · Visualization · Operational',
+    title:'LoadScan',
+    body:'LoadScan takes a confirmed packing list — crate codes, quantities, dimensions — and computes container utilisation in both 2D and 3D, applying stacking rules, fragility constraints, weight distribution limits and rotation options. Produces graphical load maps that logistics coordinators can share with carriers and validate before dispatch. Part of the same unified model as CargoCast: the only difference is data quality — estimated vs. confirmed.',
+    stack:['Python','JavaScript','3D Packing','Matplotlib','Web UI','Logistics Planning']
+  },
+  door:{
+    cat:'Engineering · Multi-Constraint Packing · DSS',
+    title:'Door Pack Optimizer',
+    body:'Technical hospital doors — hermetic, lead-lined, acoustic, glazed — have high dimensional variability and strict fragility requirements that make manual crate design error-prone and non-scalable. This tool parses product technical strings automatically, extracting type, dimensions, lead shielding thickness, glazing specs and structural elements. It then estimates component weights through material-specific models and solves a multi-constraint bin packing problem (weight, depth, stability) using a multi-start heuristic with local search. The result: minimum crate count, full weight control, traceable output in Excel and interactive dashboard.',
+    stack:['Python','Tkinter','Multi-constraint Bin Packing','Product String Parsing','Excel Output','Decision Support']
+  },
+  gantt:{
+    cat:'Production Planning · Scheduling',
+    title:'Gantt PM',
+    body:'In engineer-to-order production environments, scheduling is typically slow, manual and dependent on individual expertise. This Excel/VBA system reads order data — item codes, quantities, operation types — together with resource capacities and mean times, and automatically generates a Gantt chart with daily allocation across machines and departments. When priorities or project scopes change, the plan recalculates in seconds. The tool bridges the gap between technical design and production execution, creating direct traceability between engineering outputs and shop floor scheduling.',
+    stack:['Excel','VBA','Gantt','Production Scheduling','Resource Allocation','Outlook Integration']
+  },
+  db:{
+    cat:'Data Governance · CRM · Automation',
+    title:'ContactBase XL',
+    body:'A 85,000+ record B2B contact database covering hospitals, clinics, distributors and suppliers across international markets was managed without structured governance: duplicates, inconsistent formats, incomplete fields and no validation rules. This VBA system introduces data governance principles without requiring a CRM platform: standardised field definitions, automatic format validation (email, geographic fields, names), deduplication via logical key combinations, and a separation between raw input and the consolidated master database. A standout feature: selecting any email cell and triggering a macro auto-generates a pre-filled Outlook draft — name, company and context variables included — turning the database from a passive archive into an active commercial tool.',
+    stack:['Excel','VBA','UserForms','Data Quality','Deduplication','Outlook Automation','85k Records']
+  },
+  rag:{
+    cat:'AI Research · LLM · RAG Architecture',
+    title:'RAG Experiments',
+    body:'Technical documentation in industrial companies — product specs, manuals, normative references, project records — is typically large, fragmented and hard to query efficiently. This exploratory project investigates local LLM inference and Retrieval-Augmented Generation (RAG) architectures as a way to make that knowledge accessible without sending data to external services. Key challenges addressed include document heterogeneity (PDF, Excel, technical formats), OCR pre-processing, vector indexing, hallucination mitigation through source-constrained generation, and verifiability of responses. The work is exploratory but informs the ÆMed vision — a privacy-first, modular health record intelligence system.',
+    stack:['Python','Local LLM','RAG','Vector DB','OCR','Prompt Engineering','ÆMed']
+  },
+  micro:{
+    cat:'Automation · Analytics · ETL',
+    title:'Micro Tools & Analytics',
+    body:'A collection of focused utilities developed to automate recurring operational tasks: a batch MBOX-to-PDF converter for archiving email threads into searchable documents; production analytics scripts that transform raw ERP exports into structured reports on output volumes, product type distribution and production load variability; supplier analysis tools for comparative cost and quality evaluation; and statistical reporting pipelines that move data from raw operational tables to decision-support outputs. Each tool follows the same lean digital engineering principle: observe the manual process, formalise it, automate the repetitive part.',
+    stack:['Python','Pandas','Matplotlib','ERP Export Processing','PDF Generation','Statistical Reporting','ETL']
+  }
+};
+
+function openModal(k){
+  const p=P[k];
+  document.getElementById('mc').textContent=p.cat;
+  document.getElementById('mt').textContent=p.title;
+  document.getElementById('mb').textContent=p.body;
+  document.getElementById('ms').innerHTML=p.stack.map(t=>`<span>${t}</span>`).join('');
+  document.getElementById('mwrap').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('mwrap'))return;
+  document.getElementById('mwrap').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal(null)});
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((en,i)=>{
+    if(en.isIntersecting){
+      setTimeout(()=>en.target.classList.add('on'),i*65);
+      obs.unobserve(en.target);
+    }
+  });
+},{threshold:.07});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+
+<!-- SOFT ORB MOUSE INTERACTION -->
+<script>
+(function(){
+  const orb = document.getElementById('orb');
+  const hero = orb.closest('.hero');
+  if(!orb || !hero) return;
+
+  let tx=0, ty=0, cx=0, cy=0;
+  let inside = false;
+
+  function lerp(a,b,t){ return a+(b-a)*t }
+
+  hero.addEventListener('mousemove', e=>{
+    const r = hero.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width;
+    const ny = (e.clientY - r.top)  / r.height;
+    tx = (nx - 0.5) * 52;
+    ty = (ny - 0.5) * 32;
+    inside = true;
+  });
+
+  hero.addEventListener('mouseleave', ()=>{
+    tx = 0; ty = 0;
+    inside = false;
+  });
+
+  function tick(){
+    const speed = inside ? 0.055 : 0.03;
+    cx = lerp(cx, tx, speed);
+    cy = lerp(cy, ty, speed);
+    orb.style.transform = `translate(${cx}px, ${cy}px)`;
+
+    const brightness = inside ? 1.22 : 1;
+    const bCurrent = parseFloat(orb.dataset.b || '1');
+    const bNext = lerp(bCurrent, brightness, 0.04);
+    orb.dataset.b = bNext;
+    orb.style.filter = `brightness(${bNext.toFixed(3)})`;
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>
