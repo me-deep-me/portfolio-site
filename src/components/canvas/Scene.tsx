@@ -2,38 +2,15 @@
 
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import { CameraRig }  from './CameraRig';
-import { DNAHelix }   from './DNAHelix';
+import { CameraRig } from './CameraRig';
+import { FluidDNA }  from './FluidDNA';
 
 function Lighting() {
   return (
     <>
-      {/* Strong ambient for bright white bg */}
-      <ambientLight intensity={1.4} color="#ffffff" />
-      {/* Key light — top-right, creates glass highlights */}
-      <directionalLight position={[4, 8, 4]} intensity={2.2} color="#ffffff" />
-      {/* Fill — left-back, cool blue tint */}
-      <directionalLight position={[-5, 3, -3]} intensity={0.9} color="#cce4ff" />
-      {/* Rim — top-center-back for glass edge glow */}
-      <pointLight position={[0, 7, -4]} intensity={2.0} color="#aaccff" />
-      {/* Ground bounce */}
-      <pointLight position={[0, -3, 3]} intensity={0.6} color="#e8f2ff" />
+      <ambientLight intensity={1.0} color="#ffffff" />
+      <directionalLight position={[3, 6, 4]} intensity={0.8} color="#ffffff" />
     </>
-  );
-}
-
-function PostFX() {
-  return (
-    <EffectComposer>
-      <Bloom
-        intensity={0.35}
-        luminanceThreshold={0.78}
-        luminanceSmoothing={0.6}
-        mipmapBlur
-        radius={0.5}
-      />
-    </EffectComposer>
   );
 }
 
@@ -57,13 +34,12 @@ export function Scene() {
           powerPreference: 'high-performance',
           antialias: true,
         }}
-        style={{ background: '#f0f4fc' }}
+        style={{ background: '#f4f6fb' }}
       >
         <Suspense fallback={null}>
           <Lighting />
-          <DNAHelix />
+          <FluidDNA />
           <CameraRig />
-          <PostFX />
         </Suspense>
       </Canvas>
     </div>

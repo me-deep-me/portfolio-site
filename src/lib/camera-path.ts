@@ -1,25 +1,24 @@
 import * as THREE from 'three';
 
 /**
- * Camera path orbiting the DNA helix.
- * DNA grows from y=-1.0 to y=6.7, visual center tracks upward with scroll.
- * Camera arcs: front → right → front-high → left → front-pullback.
+ * Camera path for the fluid DNA particle field.
+ * The fluid rotates on its own — camera moves subtly to reveal depth.
+ * Arc: front → slight-right → front-higher → slight-left → pullback.
  */
 const POSITIONS = [
-  new THREE.Vector3( 0.0,  0.5, 5.5),   // 0 HERO  — front, lower DNA in frame
-  new THREE.Vector3( 3.0,  1.5, 4.5),   // 1 ABOUT — right orbit
-  new THREE.Vector3( 0.0,  2.8, 5.0),   // 2 PROJ  — front, mid-height
-  new THREE.Vector3(-3.0,  3.5, 4.5),   // 3 SKILLS — left orbit, higher
-  new THREE.Vector3( 0.0,  3.2, 7.0),   // 4 CONTACT — front, pulled back
+  new THREE.Vector3( 0.0,  0.2, 5.5),   // 0 HERO  — front, low
+  new THREE.Vector3( 1.8,  1.2, 5.2),   // 1 ABOUT — right drift
+  new THREE.Vector3( 0.0,  2.4, 5.0),   // 2 PROJ  — front, mid-high
+  new THREE.Vector3(-1.8,  3.0, 5.2),   // 3 SKILLS — left drift
+  new THREE.Vector3( 0.0,  2.8, 7.0),   // 4 CONTACT — front, pulled back
 ];
 
-/** LookAt targets tracking the growing DNA center */
 const LOOKAT_TARGETS = [
-  new THREE.Vector3(0,  1.0, 0),   // lower DNA visible
-  new THREE.Vector3(0,  2.0, 0),   // mid DNA
-  new THREE.Vector3(0,  2.8, 0),   // mid-upper DNA
-  new THREE.Vector3(0,  3.2, 0),   // upper DNA
-  new THREE.Vector3(0,  3.0, 0),   // full DNA
+  new THREE.Vector3(0,  0.8, 0),
+  new THREE.Vector3(0,  1.6, 0),
+  new THREE.Vector3(0,  2.4, 0),
+  new THREE.Vector3(0,  2.8, 0),
+  new THREE.Vector3(0,  2.6, 0),
 ];
 
 export const POSITION_CURVE = new THREE.CatmullRomCurve3(POSITIONS, false, 'catmullrom', 0.5);
