@@ -42,8 +42,10 @@ export function ProjectCard({ project, index, total, progress, onOpen }: Props) 
   return (
     <motion.article
       onClick={visible > 0.45 ? onOpen : undefined}
-      className={`absolute top-1/2 z-20 w-[min(340px,34vw)] cursor-pointer rounded-3xl border border-white/80 bg-white/55 px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-xl transition-shadow hover:shadow-[0_30px_90px_rgba(0,0,0,0.14)] ${
-        isLeft ? 'right-[calc(50%+108px)]' : 'left-[calc(50%+108px)]'
+      className={`absolute top-1/2 z-20 w-[min(280px,30vw)] xl:w-[min(340px,32vw)] overflow-hidden cursor-pointer rounded-3xl border border-white/80 bg-white/65 px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-xl transition-shadow hover:shadow-[0_30px_90px_rgba(0,0,0,0.14)] ${
+        isLeft
+          ? 'right-[calc(50%+80px)] xl:right-[calc(50%+112px)]'
+          : 'left-[calc(50%+80px)] xl:left-[calc(50%+112px)]'
       }`}
       style={{
         opacity: visible,
@@ -51,29 +53,33 @@ export function ProjectCard({ project, index, total, progress, onOpen }: Props) 
         pointerEvents: visible > 0.45 ? 'auto' : 'none',
       }}
     >
-      <div className="mb-3 flex items-center justify-between gap-4">
-        <span className="font-mono text-xs tracking-[0.28em] text-neutral-500">
+      {/* Header: number + line + category (truncates) */}
+      <div className="mb-3 flex min-w-0 items-center gap-3">
+        <span className="shrink-0 font-mono text-[11px] tracking-[0.20em] text-neutral-500">
           {project.number}
         </span>
         <span className="h-px flex-1 bg-neutral-200" />
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400 max-w-[120px] truncate">
+        <span className="min-w-0 shrink truncate font-mono text-[9px] uppercase tracking-[0.12em] text-neutral-400">
           {project.cat.split(' · ')[0]}
         </span>
       </div>
 
-      <h3 className="text-balance text-base font-medium tracking-tight text-neutral-950 md:text-lg">
+      {/* Title */}
+      <h3 className="text-balance break-words text-[15px] font-medium leading-snug tracking-tight text-neutral-950 md:text-base">
         {project.title}
       </h3>
 
-      <p className="mt-2 text-pretty text-[13px] leading-snug text-neutral-600 line-clamp-3">
+      {/* Short description */}
+      <p className="mt-2 text-pretty text-[12.5px] leading-snug text-neutral-600 line-clamp-3">
         {project.shortDesc}
       </p>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {project.pills.slice(0, 3).map((pill) => (
+      {/* Pills (max 2, compact) */}
+      <div className="mt-3.5 flex flex-wrap gap-1.5">
+        {project.pills.slice(0, 2).map((pill) => (
           <span
             key={pill.label}
-            className={`rounded-full border px-3 py-1 text-[10px] tracking-wide uppercase ${
+            className={`max-w-full truncate rounded-full border px-2 py-[2px] text-[9px] tracking-wide uppercase ${
               pill.hi
                 ? 'border-neutral-900/20 bg-neutral-900/5 text-neutral-900'
                 : 'border-neutral-200 bg-white/70 text-neutral-700'

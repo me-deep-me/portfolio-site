@@ -97,8 +97,10 @@ export default function Home() {
       >
         <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden px-5">
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 h-[78vh] w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-neutral-950/10 to-transparent" />
-          <div className="absolute left-1/2 top-[14vh] z-20 -translate-x-1/2 text-center">
-            <p className="text-xs uppercase tracking-[0.34em] text-neutral-500">Selected work</p>
+          <div className="absolute left-1/2 top-[7vh] z-30 -translate-x-1/2 text-center">
+            <p className="rounded-full bg-white/80 px-4 py-1.5 text-[10px] uppercase tracking-[0.32em] text-neutral-600 backdrop-blur-md ring-1 ring-black/[0.04]">
+              Selected work
+            </p>
           </div>
           <div>
             {PROJECTS.map((project, index) => (
@@ -162,57 +164,54 @@ export default function Home() {
       {/* ── About ── */}
       <section
         id="about"
-        className="relative z-20 mx-auto flex min-h-screen max-w-5xl items-center px-5 py-20 md:py-24"
+        className="relative z-20 mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-5 py-20 text-center md:py-24"
       >
-        <div className="grid w-full gap-8 md:grid-cols-[0.75fr_1.25fr] md:items-start md:gap-12">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.34em] text-neutral-500">about</p>
-          </div>
-          <div>
-            <h2 className="text-balance text-3xl font-semibold tracking-[-0.035em] text-neutral-950 md:text-5xl md:tracking-[-0.04em]">
-              Engineer who ships.
-            </h2>
-            <p className="mt-6 text-pretty text-[15px] leading-relaxed text-neutral-600 md:mt-8 md:text-lg md:leading-8">
-              I&apos;m a Management Engineer with a strong lean toward{' '}
-              <span className="font-medium text-neutral-950">
-                process digitalization, operations research and AI
-              </span>
-              . My work sits at the intersection of industrial logic and software craft — I analyse how
-              things actually work, find where the friction is, and build tools that remove it.
-            </p>
-            <p className="mt-4 text-pretty text-[15px] leading-relaxed text-neutral-600 md:mt-5 md:text-lg md:leading-8">
-              Over the past year I independently designed and deployed a full suite of industrial
-              applications in a real healthcare infrastructure company — solving NP-hard optimization
-              problems, automating logistics planning, structuring a 85,000-record database, and
-              experimenting with local LLM and RAG architectures.
-            </p>
+        <p className="text-[10px] uppercase tracking-[0.34em] text-neutral-500">about</p>
 
-            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3 md:mt-10">
-              {['Process Automation', 'Operations Research', 'AI Workflows'].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-neutral-100 bg-white/70 p-4 text-center shadow-[0_18px_60px_rgba(0,0,0,0.045)] md:p-5 md:text-left"
-                >
-                  <p className="text-sm font-medium text-neutral-950">{item}</p>
-                </div>
-              ))}
-            </div>
+        <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.035em] text-neutral-950 md:mt-6 md:text-5xl md:tracking-[-0.04em]">
+          Engineer who ships.
+        </h2>
 
-            <div className="mt-7 flex flex-wrap gap-1.5 md:mt-8 md:gap-2">
-              {[
-                'Python', 'Operations Research', 'FastAPI', 'Excel · VBA', 'HTML · CSS · JS',
-                '2D/3D Bin Packing', 'LLM · RAG', 'Data Quality', 'BIM · Revit',
-                'Process Design', 'Lean Digital Engineering', 'Prompt Engineering',
-              ].map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded-full border border-neutral-200 bg-white/60 px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-neutral-600 md:px-3 md:py-1 md:text-[11px]"
-                >
-                  {chip}
-                </span>
-              ))}
+        <p className="mx-auto mt-7 max-w-2xl text-pretty text-[15px] leading-relaxed text-neutral-600 md:mt-8 md:text-lg md:leading-8">
+          I&apos;m a Management Engineer with a strong lean toward{' '}
+          <span className="font-medium text-neutral-950">
+            process digitalization, operations research and AI
+          </span>
+          . My work sits at the intersection of industrial logic and software craft — I analyse how
+          things actually work, find where the friction is, and build tools that remove it.
+        </p>
+
+        <p className="mx-auto mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-neutral-600 md:mt-5 md:text-lg md:leading-8">
+          Over the past year I independently designed and deployed a full suite of industrial
+          applications in a real healthcare infrastructure company — solving NP-hard optimization
+          problems, automating logistics planning, structuring a 85,000-record database, and
+          experimenting with local LLM and RAG architectures.
+        </p>
+
+        <div className="mx-auto mt-10 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+          {['Process Automation', 'Operations Research', 'AI Workflows'].map((item) => (
+            <div
+              key={item}
+              className="rounded-2xl border border-neutral-100 bg-white/70 p-4 text-center shadow-[0_18px_60px_rgba(0,0,0,0.045)]"
+            >
+              <p className="text-sm font-medium text-neutral-950">{item}</p>
             </div>
-          </div>
+          ))}
+        </div>
+
+        <div className="mx-auto mt-8 flex max-w-2xl flex-wrap justify-center gap-1.5 md:gap-2">
+          {[
+            'Python', 'Operations Research', 'FastAPI', 'Excel · VBA', 'HTML · CSS · JS',
+            '2D/3D Bin Packing', 'LLM · RAG', 'Data Quality', 'BIM · Revit',
+            'Process Design', 'Lean Digital Engineering', 'Prompt Engineering',
+          ].map((chip) => (
+            <span
+              key={chip}
+              className="rounded-full border border-neutral-200 bg-white/60 px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-neutral-600 md:px-3 md:py-1 md:text-[11px]"
+            >
+              {chip}
+            </span>
+          ))}
         </div>
       </section>
 
