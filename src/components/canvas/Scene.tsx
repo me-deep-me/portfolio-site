@@ -5,10 +5,10 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense } from 'react';
 import * as THREE from 'three';
 import { Bloom, DepthOfField, Vignette, EffectComposer } from '@react-three/postprocessing';
-import { CameraRig }      from './CameraRig';
-import { GridFloor }      from './GridFloor';
-import { FloatingPanels } from './FloatingPanels';
-import { ParticleField }  from './ParticleField';
+import { CameraRig }     from './CameraRig';
+import { GridFloor }     from './GridFloor';
+import { BoxTree }       from './BoxTree';
+import { ParticleField } from './ParticleField';
 import { useSceneStore }  from '@/store/sceneStore';
 
 function Lighting() {
@@ -71,7 +71,7 @@ export function Scene() {
           <Lighting />
           <FogLayer />
           <GridFloor />
-          <FloatingPanels />
+          <BoxTree />
           <ParticleField />
           <CameraRig />
           <PostFX />
