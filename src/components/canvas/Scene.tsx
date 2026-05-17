@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { Bloom, DepthOfField, Vignette, EffectComposer } from '@react-three/postprocessing';
 import { CameraRig }     from './CameraRig';
 import { GridFloor }     from './GridFloor';
-import { BoxTree }       from './BoxTree';
+import { TubeTree }      from './TubeTree';
 import { ParticleField } from './ParticleField';
 import { useSceneStore }  from '@/store/sceneStore';
 
@@ -71,7 +71,7 @@ export function Scene() {
           <Lighting />
           <FogLayer />
           <GridFloor />
-          <BoxTree />
+          <TubeTree />
           <ParticleField />
           <CameraRig />
           <PostFX />
