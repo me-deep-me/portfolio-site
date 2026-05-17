@@ -5,7 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useSceneStore } from '@/store/sceneStore';
 
-const PARTICLE_COUNT = 1500;
+const PARTICLE_COUNT = 500;
 
 const VERT = /* glsl */`
   attribute float aSpeed;
@@ -21,10 +21,10 @@ const VERT = /* glsl */`
 
     // Fade based on density
     float dist = length(p.xz);
-    vAlpha = uDensity * (1.0 - smoothstep(3.5, 7.0, dist)) * 0.6;
+    vAlpha = uDensity * (1.0 - smoothstep(3.5, 7.0, dist)) * 0.20;
 
     vec4 mvPos = modelViewMatrix * vec4(p, 1.0);
-    gl_PointSize = 1.8 * (300.0 / -mvPos.z);
+    gl_PointSize = 1.4 * (300.0 / -mvPos.z);
     gl_Position  = projectionMatrix * mvPos;
   }
 `;

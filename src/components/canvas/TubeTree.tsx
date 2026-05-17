@@ -150,8 +150,8 @@ export function TubeTree() {
   useFrame(() => {
     const sp = spRef.current;
 
-    // Reveal: trunk visible at load (growth starts at 0.12), fully grown by sp≈0.58
-    const growth = Math.min(1, 0.12 + sp / 0.58);
+    // Reveal: ~60% grown at load (trunk + main branches visible), fully grown by sp≈0.80
+    const growth = Math.min(1, 0.55 + sp * 0.55);
     growPlane.constant = TREE_BOTTOM + growth * (TREE_TOP - TREE_BOTTOM);
 
     // Emissive: ramps up with scroll, pulses at station 3 (skills)

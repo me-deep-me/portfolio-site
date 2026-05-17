@@ -6,20 +6,20 @@ import * as THREE from 'three';
  * We orbit the camera around it so different stations reveal different facets.
  */
 const POSITIONS = [
-  new THREE.Vector3(0,    2.2,  8.0),   // 0 HERO  — front, high, far → full tree silhouette
-  new THREE.Vector3(-4.5, 1.0,  4.5),   // 1 ABOUT — hard left, mid distance
-  new THREE.Vector3(-1.5, 0.3, -5.5),   // 2 PROJECTS — behind the tree, low angle
-  new THREE.Vector3( 5.0, 3.5,  2.5),   // 3 SKILLS — right, elevated, bird's eye
-  new THREE.Vector3( 0,   1.5,  9.0),   // 4 CONTACT — front again, wider shot
+  new THREE.Vector3(0,    1.6,  7.5),   // 0 HERO  — front, mid-height → tree fills frame
+  new THREE.Vector3(-4.0, 1.4,  4.0),   // 1 ABOUT — left arc, same height band
+  new THREE.Vector3(-1.5, 1.2, -5.5),   // 2 PROJECTS — behind tree, raised so tree stays center
+  new THREE.Vector3( 4.5, 2.8,  2.5),   // 3 SKILLS — right, elevated but less extreme
+  new THREE.Vector3( 0,   1.4,  9.0),   // 4 CONTACT — front wide shot
 ];
 
-/** LookAt targets — all pointing toward the tree's visual center */
+/** LookAt targets — tracking the tree's visual center (~y=1.4) consistently */
 const LOOKAT_TARGETS = [
-  new THREE.Vector3(0,   1.2, 0),       // 0 HERO
-  new THREE.Vector3(0,   0.8, 0),       // 1 ABOUT
-  new THREE.Vector3(0,   1.0, 0),       // 2 PROJECTS — looking at tree from behind
-  new THREE.Vector3(0,   1.4, 0),       // 3 SKILLS
-  new THREE.Vector3(0,   1.0, 0),       // 4 CONTACT
+  new THREE.Vector3(0,   1.4, 0),       // 0 HERO
+  new THREE.Vector3(0,   1.3, 0),       // 1 ABOUT
+  new THREE.Vector3(0,   1.4, 0),       // 2 PROJECTS
+  new THREE.Vector3(0,   1.5, 0),       // 3 SKILLS
+  new THREE.Vector3(0,   1.3, 0),       // 4 CONTACT
 ];
 
 export const POSITION_CURVE = new THREE.CatmullRomCurve3(POSITIONS, false, 'catmullrom', 0.5);
