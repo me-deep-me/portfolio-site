@@ -1,7 +1,9 @@
 'use client';
 
-import { Canvas } from '@react-three/fiber';
+import { useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense } from 'react';
+import * as THREE from 'three';
 import { Bloom, DepthOfField, Vignette, EffectComposer } from '@react-three/postprocessing';
 import { CameraRig }      from './CameraRig';
 import { GridFloor }      from './GridFloor';
@@ -79,8 +81,18 @@ export function Scene() {
   );
 }
 
-/** Reads fogFar from store each frame — must be inside Canvas */
+/** Smoothly mutates fog.far each frame — avoids creating new Fog objects */
 function FogLayer() {
-  const fogFar = useSceneStore((s) => s.fogFar);
-  return <fog attach="fog" args={['#07101c', 4, fogFar]} />;
+  const fogFarRef = useRef(18);
+  const fogFar    = useSceneStore((s) => s.fogFar);
+  fogFarRef.current = fogFar;
+
+  useFrame(({ scene }) => {
+    if (scene.fog) {
+      const fog = scene.fog as THREE.Fog;
+      fog.far = THREE.MathUtils.lerp(fog.far, fogFarRef.current, 0.05);
+    }
+  });
+
+  return <fog attach="fog" args={['#07101c', 4, 18]} />;
 }
