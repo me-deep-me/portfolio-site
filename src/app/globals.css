@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/* ── Design tokens ── */
+:root {
+  --bg:      #07101c;
+  --bg2:     #0b1724;
+  --bg3:     #0f1e2e;
+  --ink:     #dde6f2;
+  --ink2:    rgba(221,230,242,0.52);
+  --ink3:    rgba(221,230,242,0.28);
+  --sky:     #6aaee8;
+  --sky2:    #3d85c8;
+  --skydim:  rgba(106,174,232,0.11);
+  --border:  rgba(106,174,232,0.09);
+  --border2: rgba(106,174,232,0.18);
+  --fd: var(--font-dm-serif), Georgia, serif;
+  --fb: var(--font-plus-jakarta), system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-bg:      var(--bg);
+  --color-bg2:     var(--bg2);
+  --color-bg3:     var(--bg3);
+  --color-ink:     var(--ink);
+  --color-ink2:    var(--ink2);
+  --color-ink3:    var(--ink3);
+  --color-sky:     var(--sky);
+  --color-sky2:    var(--sky2);
+  --color-skydim:  var(--skydim);
+  --color-border:  var(--border);
+  --color-border2: var(--border2);
+  --font-display: var(--fd);
+  --font-body:    var(--fb);
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--fb);
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: 300;
+  overflow-x: hidden;
+  /* Lenis needs this */
+  height: auto;
+}
+
+/* ── Keyframes ── */
+@keyframes breathe {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 0.85; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes revealIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Scroll progress bar ── */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--sky);
+  z-index: 999;
+  transform-origin: left;
+  transition: transform 0.1s linear;
+}
+
+/* ── Section reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
