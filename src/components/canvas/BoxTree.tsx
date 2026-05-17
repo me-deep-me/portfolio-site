@@ -113,8 +113,9 @@ export function BoxTree() {
     if (!bodyRef.current || !wireRef.current) return;
     const sp = spRef.current;
 
-    // Tree fully grown by station 2 (sp=0.60)
-    const growth = Math.min(1, sp / 0.60);
+    // Tree starts partially grown at hero, fully grown by station 2 (sp≈0.45)
+    // growth=0.20 at scroll=0 → trunk + level-1 branches visible from the start
+    const growth = Math.min(1, 0.20 + sp / 0.65);
 
     for (const b of branches) {
       // Each branch reveals as growth surpasses its revealT
