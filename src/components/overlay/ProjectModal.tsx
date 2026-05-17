@@ -1,223 +1,126 @@
 'use client';
 
-import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useSceneStore } from '@/store/sceneStore';
+import { useEffect } from 'react';
 import { PROJECTS } from '@/data/projects';
 
-export function ProjectModal() {
-  const openProjectId   = useSceneStore((s) => s.openProjectId);
-  const setOpenProject  = useSceneStore((s) => s.setOpenProjectId);
-  const project         = PROJECTS.find((p) => p.id === openProjectId) ?? null;
+interface Props {
+  openId: string | null;
+  onClose: () => void;
+}
 
-  // Close on Escape
+export function ProjectModal({ openId, onClose }: Props) {
+  const project = openId ? PROJECTS.find((p) => p.id === openId) : null;
+
+  /* Escape to close */
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpenProject(null);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
     };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [setOpenProject]);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
 
-  // Prevent body scroll when modal open
+  /* Lock body scroll while open */
   useEffect(() => {
-    document.body.style.overflow = openProjectId ? 'hidden' : '';
+    if (project) document.body.style.overflow = 'hidden';
+    else         document.body.style.overflow = '';
     return () => { document.body.style.overflow = ''; };
-  }, [openProjectId]);
+  }, [project]);
 
   return (
     <AnimatePresence>
       {project && (
         <motion.div
-          key="modal-backdrop"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          onClick={() => setOpenProject(null)}
-          style={{
-            position: 'fixed', inset: 0,
-            background: 'rgba(7,16,28,0.92)',
-            backdropFilter: 'blur(20px)',
-            zIndex: 200,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '2rem',
-          }}
+          transition={{ duration: 0.22 }}
+          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/35 px-4 py-10 backdrop-blur-md md:items-center md:py-16"
+          onClick={onClose}
         >
           <motion.div
-            key="modal-box"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0,  scale: 1 }}
+            exit={{    opacity: 0, y: 20, scale: 0.96 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-2xl rounded-3xl border border-white/80 bg-white p-6 shadow-[0_30px_100px_rgba(0,0,0,0.22)] md:p-10"
             onClick={(e) => e.stopPropagation()}
-            style={{
-              background: 'var(--bg3)',
-              border: '1px solid var(--border2)',
-              borderRadius: '1.2rem',
-              padding: '2.8rem 3rem 2.5rem',
-              maxWidth: 640,
-              width: '100%',
-              position: 'relative',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-            }}
           >
-            {/* Close button */}
+            {/* Close */}
             <button
-              onClick={() => setOpenProject(null)}
+              onClick={onClose}
               aria-label="Close"
-              style={{
-                position: 'absolute', top: '1.4rem', right: '1.4rem',
-                background: 'none',
-                border: '1px solid var(--border2)',
-                borderRadius: '50%',
-                color: 'var(--ink3)',
-                width: 32, height: 32,
-                fontSize: '0.85rem',
-                cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: 'all 0.2s',
-                fontFamily: 'var(--fb)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--sky)';
-                e.currentTarget.style.color = 'var(--sky)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--border2)';
-                e.currentTarget.style.color = 'var(--ink3)';
-              }}
+              className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-950 md:right-6 md:top-6"
             >
-              ✕
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
             </button>
 
-            {/* Category */}
-            <div style={{
-              fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase',
-              color: 'var(--sky)', marginBottom: '0.7rem', fontWeight: 500,
-            }}>
-              {project.cat}
+            {/* Header */}
+            <div className="mb-3 flex items-center gap-3">
+              <span className="font-mono text-xs tracking-[0.28em] text-neutral-500">
+                #{project.number}
+              </span>
+              <span className="h-px w-8 bg-neutral-300" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400">
+                {project.cat}
+              </span>
             </div>
 
             {/* Title */}
-            <h3 style={{
-              fontFamily: 'var(--fd)',
-              fontSize: '2.2rem',
-              letterSpacing: '-0.02em',
-              marginBottom: '1.1rem',
-              lineHeight: 1,
-            }}>
+            <h2 className="mb-5 text-balance text-3xl font-semibold tracking-tight text-neutral-950 md:text-4xl">
               {project.title}
-            </h3>
+            </h2>
 
             {/* Body */}
-            <p style={{
-              fontSize: '0.93rem',
-              color: 'var(--ink2)',
-              lineHeight: 1.84,
-              marginBottom: '1.7rem',
-            }}>
+            <p className="mb-7 text-pretty text-[15px] leading-relaxed text-neutral-600 md:text-base">
               {project.body}
             </p>
 
-            {/* Demo disclaimer */}
-            {project.demo && (
-              <div style={{
-                fontSize: '0.75rem',
-                color: 'rgba(221,230,242,0.42)',
-                lineHeight: 1.65,
-                borderLeft: '2px solid rgba(106,174,232,0.3)',
-                padding: '0.5rem 0.9rem',
-                marginBottom: '1.6rem',
-                fontStyle: 'italic',
-              }}>
-                ⚠ The live demo is a web-based simplification. The full tool runs locally and includes
-                additional features: native desktop UI, file import/export, Excel and DXF outputs, and
-                deeper algorithm controls not exposed here.
+            {/* Stack */}
+            <div className="mb-7">
+              <p className="mb-3 text-[10px] uppercase tracking-[0.18em] text-neutral-400">Stack</p>
+              <div className="flex flex-wrap gap-1.5">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-[11px] text-neutral-700"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Buttons */}
+            {(project.demo || project.github) && (
+              <div className="flex flex-wrap gap-3">
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-700"
+                  >
+                    Live Demo
+                    <span className="text-xs">↗</span>
+                  </a>
+                )}
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-neutral-500 hover:bg-neutral-50"
+                  >
+                    GitHub
+                    <span className="text-xs">↗</span>
+                  </a>
+                )}
               </div>
             )}
-
-            {/* Stack pills */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.42rem', marginBottom: '1.4rem' }}>
-              {project.stack.map((tag) => (
-                <span
-                  key={tag}
-                  style={{
-                    fontSize: '0.65rem',
-                    letterSpacing: '0.09em',
-                    textTransform: 'uppercase',
-                    padding: '0.32rem 0.82rem',
-                    border: '1px solid var(--border2)',
-                    borderRadius: 999,
-                    color: 'var(--ink3)',
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Action buttons */}
-            <div style={{ display: 'flex', gap: '0.9rem' }}>
-              {project.demo && (
-                <a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                    padding: '0.68rem 1.45rem',
-                    borderRadius: 999,
-                    fontSize: '0.75rem',
-                    letterSpacing: '0.07em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    fontFamily: 'var(--fb)',
-                    fontWeight: 600,
-                    background: 'var(--sky)',
-                    color: 'var(--bg)',
-                    transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = '#8ac4ef')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--sky)')}
-                >
-                  Live Demo ↗
-                </a>
-              )}
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                    padding: '0.68rem 1.45rem',
-                    borderRadius: 999,
-                    fontSize: '0.75rem',
-                    letterSpacing: '0.07em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    fontFamily: 'var(--fb)',
-                    fontWeight: 600,
-                    background: 'transparent',
-                    color: 'var(--ink)',
-                    border: '1px solid var(--border2)',
-                    transition: 'all 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--sky)';
-                    e.currentTarget.style.color = 'var(--sky)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--border2)';
-                    e.currentTarget.style.color = 'var(--ink)';
-                  }}
-                >
-                  View on GitHub →
-                </a>
-              )}
-            </div>
           </motion.div>
         </motion.div>
       )}
