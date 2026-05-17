@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Packaging Optimizer SHD</title>
+  <link rel="icon" type="image/x-icon" href="Container_Red_icon-icons.com_54903.ico" />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --fg: #e8eef9;
+      --muted: #a9b4c7;
+      --accent: #7cc4ff;
+      --accent-2: #9b8cff;
+      --glass: rgba(17, 28, 53, 0.55);
+      --glass-2: rgba(17, 28, 53, 0.35);
+      --border: rgba(255, 255, 255, 0.12);
+      --ok: #2ecc71;
+      --err: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 800px at 10% -10%, #1f2f58 0%, transparent 45%),
+        radial-gradient(1000px 600px at 110% 10%, #1b355e 0%, transparent 48%),
+        linear-gradient(160deg, #0b1220 0%, #0b1220 60%, #0d1430 100%);
+      color: var(--fg);
+      font: 14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 10px;
+      padding-top: 80px;
+      /* spazio per l’header fisso */
+      padding-bottom: 72px;
+      /* spazio riservato al footer fisso */
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 14px;
+    }
+
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(18px) saturate(130%);
+      -webkit-backdrop-filter: blur(18px) saturate(130%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .04)
+    }
+
+    header {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+
+      position: fixed;
+      /* lo rende fisso */
+      top: 0;
+      /* attaccato in alto */
+      left: 0;
+      right: 0;
+      /* a tutta larghezza */
+      z-index: 1000;
+      /* sopra gli altri */
+      background: rgba(11, 18, 32, 0.75);
+      /* trasparente stile glass */
+      backdrop-filter: blur(12px) saturate(120%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .title {
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .title .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 24px var(--accent)
+    }
+
+    .title h1 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--fg);
+      letter-spacing: .2px
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      color: var(--fg);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+      border-radius: 14px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: .2s
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, .25)
+    }
+
+    .btn.primary {
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f1d;
+      font-weight: 700
+    }
+
+    .btn.small {
+      padding: 7px 10px;
+      border-radius: 12px;
+      font-size: 12px
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    .left,
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0
+    }
+
+    .card {
+      padding: 14px
+    }
+
+    .card h3 {
+      margin: 0 0 12px 0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      color: #d6def0
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    input,
+    select {
+      width: 100%;
+      appearance: none;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03));
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: var(--fg);
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05)
+    }
+
+    input::placeholder {
+      color: #98a6be
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    select option {
+      background-color: #0f1c38;
+      color: #e2e8f5;
+      font-size: 13px;
+      padding: 6px 10px;
+    }
+
+    select option:checked,
+    select option:hover {
+      background-color: #1a3060;
+      color: #63cab7;
+      font-weight: 600;
+    }
+
+    select option:disabled,
+    select option[value=""] {
+      color: #5a6a88;
+      font-style: italic;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px
+    }
+
+    .table thead th {
+      font-size: 11px;
+      letter-spacing: .2px;
+      color: #b7c3d8;
+      text-align: left;
+      padding: 0 8px
+    }
+
+    .table tbody tr {
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border)
+    }
+
+    .table tbody td {
+      padding: 10px 8px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .table tbody tr:first-child td {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px
+    }
+
+    .table tbody tr:last-child td {
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding: 0 10px
+    }
+
+    .tab {
+      padding: 10px 12px;
+      border-radius: 12px 12px 0 0;
+      cursor: pointer
+    }
+
+    .tab.active {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-bottom: none
+    }
+
+    .panel {
+      display: none;
+      padding: 12px
+    }
+
+    .panel.active {
+      display: block
+    }
+
+    .canvas-wrap {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .02))
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 420px;
+      background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .03) 0 2px, transparent 2px 40px), repeating-linear-gradient(90deg, rgba(255, 255, 255, .03) 0 2px, transparent 2px 40px)
+    }
+
+    .kpi {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px
+    }
+
+    .kpi .item {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--glass);
+      backdrop-filter: blur(12px)
+    }
+
+    .kpi .item b {
+      display: block;
+      font-size: 16px;
+      margin-top: 4px
+    }
+
+    .code-list {
+      height: calc(100vh - 250px);
+      overflow: auto
+    }
+
+    .code {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin: 4px 0;
+      padding: 4px 0;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40px;
+      /* altezza fissa del footer */
+      padding: 0 12px;
+      /* orizzontale */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+
+      /* vetro/blur coerenti con il tema */
+      background: rgba(17, 28, 53, 0.55);
+      backdrop-filter: blur(12px) saturate(130%);
+      -webkit-backdrop-filter: blur(12px) saturate(130%);
+      border-top: 1px solid var(--border);
+      z-index: 999;
+      /* sopra il resto */
+    }
+
+    /* —— Pills / toggle buttons —— */
+    .pillbar {
+      display: flex;
+      gap: 8px;
+      overflow: auto;
+      padding: 4px 2px
+    }
+
+    .pill {
+      user-select: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+      font-size: 12px;
+      white-space: nowrap
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      margin: 18px 0;
+    }
+
+    .pill:hover {
+      border-color: rgba(255, 255, 255, .25)
+    }
+
+    .pill.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f1d;
+      font-weight: 700;
+      border: none
+    }
+
+    .group-title {
+      margin: 12px 0 6px 0;
+      font-size: 12px;
+      color: #cfe0ff;
+      opacity: .9
+    }
+
+    /* --- pill buttons (bar) --- */
+    .pillbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--glass-2);
+      user-select: none
+    }
+
+    .pill.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f1d;
+      border: none;
+      font-weight: 700
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid var(--border);
+      font-size: 12px
+    }
+
+    /* solo testo del select container più chiaro a contrasto */
+    /* Dropdown container coerente con card */
+    #containerSelect {
+      color: var(--fg);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03));
+    }
+
+    /* Opzioni nel menu a discesa */
+    #containerSelect option {
+      background: #111c35;
+      /* colore pieno simile al --glass */
+      color: var(--fg);
+    }
+
+    /* Highlight di selezione coerente */
+    #containerSelect option:checked,
+    #containerSelect option:hover {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f1d;
+      font-weight: 600;
+    }
+
+    /* Allinea sempre le colonne in tutte le tabelle riepilogo */
+    #perContainer table.table,
+    #resultsCard table.table {
+      table-layout: fixed;
+      /* tutte le colonne stessa regola */
+      width: 100%;
+    }
+
+    #perContainer table.table th,
+    #perContainer table.table td,
+    #resultsCard table.table th,
+    #resultsCard table.table td {
+      text-align: left;
+      vertical-align: top;
+      white-space: nowrap;
+      /* evita andare a capo */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* larghezze proporzionali per le colonne */
+    #perContainer table.table th:nth-child(1),
+    #perContainer table.table td:nth-child(1) {
+      width: 28%;
+    }
+
+    #perContainer table.table th:nth-child(2),
+    #perContainer table.table td:nth-child(2) {
+      width: 28%;
+    }
+
+    #perContainer table.table th:nth-child(3),
+    #perContainer table.table td:nth-child(3) {
+      width: 22%;
+    }
+
+    #perContainer table.table th:nth-child(4),
+    #perContainer table.table td:nth-child(4) {
+      width: 22%;
+    }
+
+    /* riepilogo compatto sotto */
+    #perContainerBody td:nth-child(1) {
+      width: 25%;
+    }
+
+    #perContainerBody td:nth-child(2) {
+      width: 25%;
+    }
+
+    #perContainerBody td:nth-child(3) {
+      width: 25%;
+    }
+
+    #perContainerBody td:nth-child(4) {
+      width: 25%;
+    }
+
+
+    /* area scrollabile per la panoramica (principale + alternativa) */
+    #gridScroll, #altGridScroll {
+      max-height: 66vh;
+      /* altezza visibile: scrolla se supera */
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--glass);
+      backdrop-filter: blur(12px) saturate(130%);
+      -webkit-backdrop-filter: blur(12px) saturate(130%);
+      padding: 8px;
+    }
+
+    /* 40px di spazio sotto la card risultati */
+    #resultsCard {
+      margin-bottom: 30px;
+    }
+
+    /* il canvas della panoramica NON deve avere altezza forzata */
+    #gridCanvas, #altGridCanvas {
+      height: auto !important;
+      /* lascia che l’altezza la decida il disegno */
+      display: block;
+      width: 100%;
+      /* riempi la larghezza del contenitore scrollabile */
+    }
+
+    /* scroll e padding panoramica */
+    #panel-overview .canvas-wrap {
+      padding: 0;
+      /* niente spazio extra */
+      max-height: 70vh;
+      /* così non diventa infinito, ma scrollabile */
+      overflow: auto;
+      /* abilita scroll verticale */
+    }
+
+    /* ===== IMPOSTAZIONI OVERLAY ===== */
+    #settingsOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(5, 10, 22, 0.82);
+      backdrop-filter: blur(6px);
+      overflow-y: auto;
+      padding: 30px 16px 60px;
+    }
+    #settingsOverlay.open { display: block; }
+    #settingsPanel {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(17, 28, 53, 0.97);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+    }
+    #settingsPanel h2 {
+      margin: 0 0 20px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    /* --- crate blocks --- */
+    .crate-block {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+    .crate-block:last-child { margin-bottom: 0; }
+    .crate-dims-row {
+      display: grid;
+      grid-template-columns: 80px 80px 80px 110px 80px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .crate-dims-row input.s-input {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+    .crate-dims-row .btn.s-save {
+      padding: 6px 10px;
+      font-size: 11px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f1d;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .crate-dims-row .btn.s-save:disabled { opacity:.4; cursor:default; }
+    .crate-dims-header {
+      display: grid;
+      grid-template-columns: 80px 80px 80px 110px 80px;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .crate-codes-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .crate-code-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(99,202,183,0.1);
+      border: 1px solid rgba(99,202,183,0.25);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .crate-code-pill .pill-unit {
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 10px;
+    }
+    .pill-del {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255,80,80,0.15);
+      border: 1px solid rgba(255,80,80,0.3);
+      color: #ff6060;
+      font-size: 10px;
+      cursor: pointer;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .pill-del:hover {
+      background: rgba(255,80,80,0.35);
+      border-color: rgba(255,80,80,0.7);
+    }
+    .crate-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+    .settings-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      margin: 22px 0 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+    #newCodeForm {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    #newCodeForm h3 {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: var(--fg);
+    }
+    #newCodeForm .grid-new {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: end;
+    }
+    #newCodeForm .grid-dims {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: end;
+      margin-top: 10px;
+    }
+    #newCodeForm .grid-cat {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: end;
+      margin-top: 10px;
+    }
+    #ncDimsSection { display: none; }
+    .nc-crate-info {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+    }
+    .s-saved-flash {
+      color: var(--ok);
+      font-size: 11px;
+      animation: fadeout 2s forwards;
+    }
+    @keyframes fadeout { 0%{opacity:1} 70%{opacity:1} 100%{opacity:0} }
+
+    /* ===== CONFIRM DIALOG ===== */
+    #confirmDialog {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(5,10,22,0.75);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+    #confirmDialog.open {
+      display: flex;
+    }
+    #confirmBox {
+      background: #111e3a;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 32px;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+    #confirmBox .confirm-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    #confirmBox .confirm-msg {
+      font-size: 14px;
+      color: var(--fg);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    #confirmBox .confirm-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+    #confirmBox .confirm-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    #confirmBox .confirm-btns button {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+    #confirmBox #confirmYes {
+      background: linear-gradient(135deg, #e05050, #c03030);
+      color: #fff;
+    }
+    #confirmBox #confirmYes:hover { background: linear-gradient(135deg,#ff6060,#e04040); }
+    #confirmBox #confirmNo {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border) !important;
+      color: var(--fg);
+    }
+    #confirmBox #confirmNo:hover { background: rgba(255,255,255,0.12); }
+
+    /* ===== LIGHT THEME ===== */
+    [data-theme="light"] {
+      --bg: #f4f7ff;
+      --fg: #111827;
+      --muted: #4b6080;
+      --accent: #2563eb;
+      --accent-2: #7c3aed;
+      --glass: rgba(255,255,255,0.88);
+      --glass-2: rgba(255,255,255,0.65);
+      --border: rgba(30,60,120,0.1);
+      --ok: #16a34a;
+      --err: #dc2626;
+    }
+    /* ---- BODY ---- */
+    [data-theme="light"] body {
+      background:
+        radial-gradient(ellipse 1400px 700px at 0% 0%,   #c7d9ff 0%, transparent 55%),
+        radial-gradient(ellipse 900px  600px at 100% 5%,  #e0d4ff 0%, transparent 50%),
+        radial-gradient(ellipse 800px  500px at 50% 100%, #d0e8ff 0%, transparent 60%),
+        linear-gradient(160deg, #eef3ff 0%, #f4f7ff 100%);
+    }
+    /* ---- HEADER / FOOTER ---- */
+    [data-theme="light"] header {
+      background: rgba(255,255,255,0.85) !important;
+      border-bottom: 1px solid rgba(30,60,120,0.1) !important;
+      box-shadow: 0 2px 16px rgba(30,60,120,0.07);
+    }
+    [data-theme="light"] .footer {
+      background: rgba(255,255,255,0.85) !important;
+      border-top: 1px solid rgba(30,60,120,0.1) !important;
+    }
+    /* ---- CARDS / GLASS ---- */
+    [data-theme="light"] .glass {
+      background: rgba(255,255,255,0.88) !important;
+      border: 1px solid rgba(30,60,120,0.1) !important;
+      box-shadow: 0 2px 20px rgba(30,60,120,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+    }
+    [data-theme="light"] .card h3 { color: #1e3a6e !important; }
+    [data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3 { color: #111827 !important; }
+    [data-theme="light"] label { color: #4b6080 !important; }
+    /* ---- INPUTS / SELECTS ---- */
+    [data-theme="light"] input,
+    [data-theme="light"] select {
+      background: rgba(255,255,255,0.9) !important;
+      border: 1px solid rgba(30,60,120,0.14) !important;
+      color: var(--fg) !important;
+      box-shadow: 0 1px 3px rgba(30,60,120,0.06) inset;
+    }
+    [data-theme="light"] input:focus,
+    [data-theme="light"] select:focus {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
+    }
+    [data-theme="light"] input::placeholder { color: #8898b8; }
+    /* Override ad alta specificità per tutti i select in tema chiaro (vince sul gradient del #containerSelect) */
+    [data-theme="light"] select,
+    [data-theme="light"] select#containerSelect,
+    [data-theme="light"] select#ncUnit,
+    [data-theme="light"] select#ncCrateExisting,
+    [data-theme="light"] select#ncCatExisting {
+      background: #ffffff !important;
+      background-image: none !important;
+      color: #111827 !important;
+      border: 1px solid rgba(30,60,120,0.2) !important;
+    }
+    [data-theme="light"] select option,
+    [data-theme="light"] select option:hover {
+      background: #ffffff !important;
+      color: #111827 !important;
+    }
+    [data-theme="light"] select option:checked,
+    [data-theme="light"] select option:focus {
+      background: #eff6ff !important;
+      color: #1e3a6e !important;
+    }
+    /* ---- BUTTONS ---- */
+    [data-theme="light"] .btn {
+      background: linear-gradient(180deg, #fff 0%, #f0f4ff 100%) !important;
+      border: 1px solid rgba(30,60,120,0.15) !important;
+      color: var(--fg) !important;
+      box-shadow: 0 1px 3px rgba(30,60,120,0.08);
+    }
+    [data-theme="light"] .btn:hover {
+      background: linear-gradient(180deg, #fff 0%, #e8efff 100%) !important;
+      border-color: rgba(37,99,235,0.3) !important;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+    }
+    [data-theme="light"] .btn.primary {
+      background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+      border: none !important;
+      color: #fff !important;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.35);
+    }
+    [data-theme="light"] .btn.primary:hover {
+      box-shadow: 0 4px 18px rgba(37,99,235,0.45) !important;
+    }
+    /* ---- PILLS ---- */
+    [data-theme="light"] .pill {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(30,60,120,0.18);
+      color: #111827 !important;
+    }
+    [data-theme="light"] .pill:hover { border-color: rgba(37,99,235,0.35); background: rgba(240,246,255,0.95); }
+    [data-theme="light"] .pill.active {
+      background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+      color: #fff !important;
+      border: none !important;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.35);
+    }
+    /* ---- BADGE ---- */
+    [data-theme="light"] .badge {
+      background: rgba(37,99,235,0.08);
+      border-color: rgba(37,99,235,0.15);
+      color: #1e3a6e;
+    }
+    /* ---- DOT ---- */
+    [data-theme="light"] .title .dot { box-shadow: 0 0 14px rgba(37,99,235,0.4); }
+    /* ---- TABLES ---- */
+    [data-theme="light"] .table thead th { color: #2d4a70 !important; }
+    [data-theme="light"] .table tbody tr {
+      background: rgba(255,255,255,0.9) !important;
+      box-shadow: 0 1px 4px rgba(30,60,120,0.05);
+    }
+    [data-theme="light"] .table tbody td { border-color: rgba(30,60,120,0.07); color: #111827 !important; }
+    /* ---- KPI ---- */
+    [data-theme="light"] .kpi .item {
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(30,60,120,0.1);
+      box-shadow: 0 1px 6px rgba(30,60,120,0.06);
+    }
+    /* ---- TABS ---- */
+    [data-theme="light"] .tabs { border-bottom-color: rgba(30,60,120,0.1); }
+    [data-theme="light"] .tab { color: #4b6080 !important; }
+    [data-theme="light"] .tab:hover { color: var(--fg); background: rgba(37,99,235,0.05); border-radius: 10px 10px 0 0; }
+    [data-theme="light"] .tab.active {
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(30,60,120,0.1);
+      color: #2563eb !important;
+      font-weight: 600;
+    }
+    /* ---- PANELS ---- */
+    [data-theme="light"] .panel { color: #111827 !important; }
+    /* ---- CANVAS ---- */
+    [data-theme="light"] .canvas-wrap {
+      background: #f8faff;
+      border: 1px solid rgba(30,60,120,0.1);
+      box-shadow: inset 0 2px 8px rgba(30,60,120,0.04);
+    }
+    [data-theme="light"] canvas {
+      background:
+        repeating-linear-gradient(0deg,  rgba(37,99,235,0.05) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(90deg, rgba(37,99,235,0.05) 0 1px, transparent 1px 40px),
+        #f8faff;
+    }
+    [data-theme="light"] #gridCanvas,
+    [data-theme="light"] #altGridCanvas { background: #f8faff !important; }
+    [data-theme="light"] #gridScroll {
+      background: #f4f7ff;
+      border: 1px solid rgba(30,60,120,0.1);
+    }
+    /* ---- DIVIDER ---- */
+    [data-theme="light"] .divider { background: linear-gradient(90deg, transparent, rgba(30,60,120,0.15), transparent); }
+    /* ---- SETTINGS OVERLAY ---- */
+    [data-theme="light"] #settingsOverlay { background: rgba(180,195,230,0.72); }
+    [data-theme="light"] #settingsPanel {
+      background: #fff !important;
+      border: 1px solid rgba(30,60,120,0.1) !important;
+      box-shadow: 0 20px 60px rgba(30,60,120,0.12);
+    }
+    [data-theme="light"] #settingsPanel h2 { color: var(--accent); }
+    [data-theme="light"] .settings-group-title {
+      color: var(--accent-2);
+      border-bottom-color: rgba(30,60,120,0.1);
+    }
+    [data-theme="light"] .crate-block {
+      background: rgba(37,99,235,0.03);
+      border-color: rgba(30,60,120,0.08);
+    }
+    [data-theme="light"] .crate-code-pill {
+      background: rgba(37,99,235,0.08);
+      border-color: rgba(37,99,235,0.2);
+      color: var(--accent);
+    }
+    [data-theme="light"] .crate-label { color: var(--muted); }
+    [data-theme="light"] .pill-del { background: rgba(220,38,38,0.08); border-color: rgba(220,38,38,0.2); }
+    [data-theme="light"] #newCodeForm { border-top-color: rgba(30,60,120,0.1); }
+    [data-theme="light"] .nc-crate-info { background: rgba(37,99,235,0.05); }
+    [data-theme="light"] .group-title { color: #1e3a6e; }
+    /* ---- CONFIRM DIALOG ---- */
+    [data-theme="light"] #confirmDialog { background: rgba(180,195,230,0.65); }
+    [data-theme="light"] #confirmBox {
+      background: #fff !important;
+      border-color: rgba(30,60,120,0.1) !important;
+      box-shadow: 0 20px 60px rgba(30,60,120,0.15);
+    }
+    [data-theme="light"] #confirmBox .confirm-msg { color: var(--fg); }
+    [data-theme="light"] #confirmBox .confirm-sub { color: var(--muted); }
+    [data-theme="light"] #confirmBox #confirmNo {
+      background: rgba(0,0,0,0.04) !important;
+      color: var(--fg);
+      border: 1px solid rgba(30,60,120,0.15) !important;
+    }
+    [data-theme="light"] #confirmBox #confirmNo:hover { background: rgba(0,0,0,0.08) !important; }
+    /* ---- CONFIG PANEL ---- */
+    [data-theme="light"] #configPanel {
+      background: #fff !important;
+      box-shadow: 0 24px 60px rgba(30,60,120,0.12);
+    }
+    [data-theme="light"] .config-item {
+      background: rgba(37,99,235,0.04);
+      border-color: rgba(30,60,120,0.1);
+    }
+    [data-theme="light"] .config-item:hover { background: rgba(37,99,235,0.08); }
+    [data-theme="light"] .config-item-name { color: var(--fg); }
+    /* ---- STATUS / MUTED ---- */
+    [data-theme="light"] .muted { color: #4b6080 !important; }
+    [data-theme="light"] #statusArea { color: #4b6080 !important; }
+    [data-theme="light"] .group-title { color: #1e3a6e !important; }
+    [data-theme="light"] .settings-group-title { color: #7c3aed !important; }
+    [data-theme="light"] .crate-label { color: #4b6080 !important; }
+    [data-theme="light"] #altSuggestion { color: #2563eb !important; }
+
+    /* ===== THEME TOGGLE BUTTON ===== */
+    #btnTheme {
+      font-size: 18px;
+      padding: 7px 10px;
+      border-radius: 12px;
+      line-height: 1;
+    }
+
+    /* ===== CONFIG MODAL ===== */
+    #configOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2500;
+      background: rgba(5,10,22,0.82);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+    }
+    #configOverlay.open { display: flex; }
+    [data-theme="light"] #configOverlay { background: rgba(180,190,215,0.75); }
+    #configPanel {
+      background: rgba(17,28,53,0.97);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 24px;
+      width: 520px;
+      max-width: 95vw;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+    [data-theme="light"] #configPanel {
+      background: rgba(255,255,255,0.98);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+    }
+    #configPanel h2 { margin: 0; font-size: 15px; font-weight: 700; color: var(--accent); }
+    .config-header { display: flex; justify-content: space-between; align-items: center; }
+    .config-save-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .config-save-row input { flex: 1; margin: 0; }
+    .config-save-row .btn { white-space: nowrap; flex-shrink: 0; }
+    #configList {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .config-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--glass-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .config-item-info { flex: 1; min-width: 0; }
+    .config-item-name { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .config-item-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .config-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 20px 0; }
+  </style>
+  <link rel="icon" type="image/x-icon" href="/ui/favicon.ico" />
+
+</head>
+
+<body>
+  <div class="app">
+    <header class="glass">
+      <div class="title"><span class="dot"></span>
+        <h1>Packaging Optimizer System</h1><span class="badge">SHD ITALIA S.r.l.</span>
+      </div>
+      <div class="row">
+        <button id="btnTheme" class="btn" title="Cambia tema">🌙</button>
+        <button id="btnConfig" class="btn">💾 Config</button>
+        <button id="btnSaveJson" class="btn">Esporta JSON</button>
+        <button id="btnReset" class="btn">Pulisci</button>
+        <button id="btnSettings" class="btn">&#9881; Impostazioni</button>
+        <button id="btnCalc" class="btn primary">INIZIA IL CALCOLO</button>
+      </div>
+    </header>
+
+    <!-- LEFT COLUMN -->
+    <section class="left">
+      <input type="hidden" id="apiUrl" value="" />
+      <input type="hidden" id="optimizerSelect" value="exact" />
+
+      <div class="card glass">
+        <h3>Tipo di Container</h3>
+        <div class="grid-3">
+          <div>
+            <label>Seleziona</label>
+            <select id="containerSelect" class="select-contrast">
+              <option value='{"length":12036,"width":2340,"height":2280}'>Container 40'</option>
+              <option value='{"length":12036,"width":2340,"height":2580}'>Container 40' HC</option>
+              <option value='{"length":5900,"width":2342,"height":2280}'>Container 20'</option>
+              <option value='{"length":5900,"width":2342,"height":2580}'>Container 20' HC</option>
+              <option value='{"length":13600,"width":2400,"height":2400}'>TIR</option>
+            </select>
+
+          </div>
+          <div>
+            <label>Dimensioni (mm)</label>
+            <input id="containerDims" disabled value="12036 × 2340 × 2280" />
+          </div>
+          <div class="row" style="align-items:flex-end">
+            <button id="btnEditDims" class="btn small">Modifica</button>
+            <button id="btnApplyDims" class="btn small" style="display:none">Applica</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card glass">
+        <h3>Inserimento Articoli</h3>
+        <div class="grid-3">
+          <div>
+            <label>Codice Articolo</label>
+            <input id="codeInput" placeholder="es. AS.114.03, TCP, SL.C.03…" />
+          </div>
+          <div>
+            <label>Quantità (sqm/ml/unità)</label>
+            <input id="qtyInput" type="number" step="0.01" />
+          </div>
+          <div class="row" style="align-items:flex-end">
+            <button id="btnAddArticle" class="btn">Aggiungi</button>
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="divider"></div>
+        <h3>Configurazione Porte</h3>
+
+        <!-- Tipo porta in alto -->
+        <div class="row" style="margin-bottom:12px">
+          <div class="grow">
+            <label>Tipo Porta</label>
+            <div id="doorBar" class="pillbar"></div>
+            <input id="doorType" type="hidden" />
+          </div>
+        </div>
+
+        <!-- H, W, Quantità in una riga -->
+        <div class="grid-3">
+          <div>
+            <label>H (mm)</label>
+            <input id="doorH" type="number" />
+          </div>
+          <div>
+            <label>W (mm)</label>
+            <input id="doorW" type="number" />
+          </div>
+          <div>
+            <label>Quantità</label>
+            <input id="doorQ" type="number" />
+          </div>
+        </div>
+
+        <!-- Bottone sotto -->
+        <div class="row" style="margin-top:10px">
+          <button id="btnAddDoor" class="btn small">Aggiungi Porta</button>
+        </div>
+
+
+        <div style="height:10px"></div>
+        <div class="divider"></div>
+        <h3>Telai Vetrati</h3>
+        <div class="grid-3">
+          <div>
+            <label>Codice (AS.125…)</label>
+            <input id="visCode" placeholder="AS.125" />
+          </div>
+          <div>
+            <label>L×W (mm)</label>
+            <div class="row">
+              <input id="visL" placeholder="L" type="number" style="flex:1" />
+              <input id="visW" placeholder="W" type="number" style="flex:1" />
+            </div>
+          </div>
+          <div>
+            <label>Quantità</label>
+            <input id="visQ" type="number" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <button id="btnAddVisual" class="btn small" style="margin-right:10px">Aggiungi Telaio Vetrato</button>
+          <button id="btnCommitVisuals" class="btn small">Conferma gruppo telai vetrati</button>
+        </div>
+        <div id="visualsPreview" class="muted" style="margin-top:10px"></div>
+
+      </div>
+
+      <div class="card glass">
+        <h3>Articoli Inseriti</h3>
+        <div class="row">
+          <button id="btnClear" class="btn small">Svuota lista</button>
+        </div>
+        <table class="table" id="articlesTable">
+          <thead>
+            <tr>
+              <th>Codice</th>
+              <th>Quantità</th>
+              <th>Tipo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="articlesBody"></tbody>
+        </table>
+      </div>
+
+      <div class="card glass" id="resultsCard" style="display:none">
+        <div class="tabs">
+          <div class="tab" data-tab="report">Report Efficienza</div>
+          <div class="tab active" data-tab="summary">Riepilogo</div>
+          <div class="tab" data-tab="single">Visualizzazione Singola</div>
+          <div class="tab" data-tab="overview">Visualizzazione Panoramica</div>
+          <div class="tab" data-tab="notplaced">Non posizionati</div>
+          <div class="tab" id="tabAlternative" data-tab="alternative" style="display:none;color:#60a5fa;">💡 Alternativa 20'</div>
+        </div>
+        <div class="panel" id="panel-report">
+          <h3>Report Efficienza</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Container</th>
+                <th>Efficienza</th>
+                <th>Area usata</th>
+                <th>Packaging</th>
+              </tr>
+            </thead>
+            <tbody id="efficiencyBody"></tbody>
+          </table>
+        </div>
+
+        <div class="panel active" id="panel-summary">
+          <div class="kpi" id="kpi"></div>
+          <div style="height:10px"></div>
+          <h3>Dettaglio per container</h3>
+          <div id="perContainer"></div>
+        </div>
+        <div class="panel" id="panel-single">
+          <div class="row" style="align-items:center;justify-content:space-between">
+            <div class="grow">
+              <label>Seleziona container</label>
+              <div id="singleBar" class="pillbar"></div>
+            </div>
+            <div class="row">
+              <button id="btnToggleLabelsSingle" class="btn small">Etichette ON</button>
+              <button id="btnSaveCanvasSingle" class="btn small">Salva PNG</button>
+            </div>
+          </div>
+
+          <div class="canvas-wrap" style="margin-top:8px">
+            <canvas id="singleCanvas" width="1400" height="500"></canvas>
+          </div>
+          <div id="singleInfo" class="muted" style="margin-top:8px"></div>
+        </div>
+        <div class="panel" id="panel-overview">
+          <div class="row" style="justify-content:flex-end">
+            <button id="btnToggleLabelsGrid" class="btn small">Etichette ON</button>
+            <button id="btnSaveCanvasGrid" class="btn small">Salva PNG</button>
+          </div>
+          <div id="gridScroll">
+            <canvas id="gridCanvas"></canvas> <!-- niente width/height in HTML -->
+          </div>
+        </div>
+
+        <div class="panel" id="panel-alternative">
+          <div style="padding:8px 0 14px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:10px;">
+            <div id="altSuggestion" style="font-size:14px;color:#93c5fd;"></div>
+          </div>
+          <!-- Sub-tabs alternativa -->
+          <div class="tabs" id="altSubTabs" style="margin-bottom:12px;">
+            <div class="tab active" data-alttab="alt-single">Visualizzazione Singola</div>
+            <div class="tab" data-alttab="alt-overview">Visualizzazione Panoramica</div>
+          </div>
+          <!-- Sub-panel: Singola -->
+          <div id="panel-alt-single" class="alt-subpanel active">
+            <div class="row" style="align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div class="grow">
+                <label>Seleziona container</label>
+                <div id="altSingleBar" class="pillbar"></div>
+              </div>
+              <div class="row">
+                <button id="btnToggleLabelsAlt" class="btn small">Etichette ON</button>
+                <button id="btnSaveCanvasAlt" class="btn small">Salva PNG</button>
+              </div>
+            </div>
+            <div class="canvas-wrap">
+              <canvas id="altSingleCanvas" width="1400" height="500"></canvas>
+            </div>
+            <div id="altSingleInfo" class="muted" style="margin-top:8px"></div>
+          </div>
+          <!-- Sub-panel: Panoramica -->
+          <div id="panel-alt-overview" class="alt-subpanel" style="display:none">
+            <div class="row" style="justify-content:flex-end;margin-bottom:6px">
+              <button id="btnSaveCanvasAltGrid" class="btn small">Salva PNG panoramica</button>
+            </div>
+            <div id="altGridScroll" style="overflow-x:auto">
+              <canvas id="altGridCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="panel-notplaced">
+          <table class="table" id="npTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Dimensioni</th>
+                <th>Descrizione</th>
+              </tr>
+            </thead>
+            <tbody id="npBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONFIG MODAL -->
+  <div id="configOverlay">
+    <div id="configPanel">
+      <div class="config-header">
+        <h2>💾 Configurazioni salvate</h2>
+        <button id="btnCloseConfig" class="btn small">✕</button>
+      </div>
+      <div class="config-save-row">
+        <input id="configNameInput" placeholder="Nome configurazione…" />
+        <button id="btnSaveConfig" class="btn primary small">Salva attuale</button>
+      </div>
+      <div id="configList"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+    <aside class="right">
+      <div class="card glass">
+        <h3>Catalogo codici</h3>
+        <input id="codesFilter" placeholder="Filtra…" />
+        <div class="code-list" id="codeList"></div>
+      </div>
+
+      <div class="card glass">
+        <h3>Stato</h3>
+        <div id="statusArea" class="muted">In attesa…</div>
+      </div>
+    </aside>
+
+  <!-- ===== CONFIRM DIALOG ===== -->
+  <div id="confirmDialog">
+    <div id="confirmBox">
+      <div class="confirm-icon">&#x26A0;&#xFE0F;</div>
+      <div class="confirm-msg" id="confirmMsg"></div>
+      <div class="confirm-sub" id="confirmSub"></div>
+      <div class="confirm-btns">
+        <button id="confirmNo">Annulla</button>
+        <button id="confirmYes">Elimina</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== IMPOSTAZIONI OVERLAY ===== -->
+  <div id="settingsOverlay">
+    <div id="settingsPanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <h2>&#9881; Impostazioni Packaging</h2>
+        <button id="btnCloseSettings" class="btn">&#x2715; Chiudi</button>
+      </div>
+      <div id="settingsBody"></div>
+      <div id="newCodeForm">
+        <h3>Aggiungi nuovo codice</h3>
+
+        <!-- Riga 1: codice + unità di misura -->
+        <div class="grid-new">
+          <div><label>Codice articolo</label><input id="ncCode" placeholder="es. MTA.999" /></div>
+          <div>
+            <label>Unità di misura</label>
+            <select id="ncUnit">
+              <option value="unità">unità</option>
+              <option value="sqm">sqm (m²)</option>
+              <option value="ml">ml (metri lineari)</option>
+              <option value="pz">pz</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Riga 2: cassa esistente o nuova -->
+        <div class="grid-cat" style="margin-top:12px">
+          <div>
+            <label>Cassa esistente</label>
+            <select id="ncCrateExisting"><option value="">-- seleziona cassa --</option></select>
+          </div>
+          <div>
+            <label>oppure cassa Nuova</label>
+            <input id="ncCrateNew" placeholder="es. CASSA_GRANDE" />
+          </div>
+          <div></div>
+        </div>
+
+        <!-- Info cassa selezionata -->
+        <div id="ncCrateInfo" class="nc-crate-info" style="display:none"></div>
+
+        <!-- Riga 3: dimensioni (solo se cassa nuova) -->
+        <div id="ncDimsSection" class="grid-dims">
+          <div><label>L (mm)</label><input id="ncL" type="number" placeholder="1200" /></div>
+          <div><label>W (mm)</label><input id="ncW" type="number" placeholder="800" /></div>
+          <div><label>H (mm)</label><input id="ncH" type="number" placeholder="1400" /></div>
+          <div><label>Capacità/cassa</label><input id="ncCap" type="number" placeholder="1" /></div>
+        </div>
+
+        <!-- Riga 4: categoria + aggiungi -->
+        <div class="grid-cat" style="margin-top:10px">
+          <div>
+            <label>Categoria catalogo esistente</label>
+            <select id="ncCatExisting"><option value="">-- seleziona --</option></select>
+          </div>
+          <div>
+            <label>oppure Nuova categoria</label>
+            <input id="ncCatNew" placeholder="es. ACCESSORI" />
+          </div>
+          <div style="display:flex;align-items:flex-end">
+            <button id="btnAddNewCode" class="btn primary" style="width:100%">Aggiungi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="footer">
+      <span>Engineered by ME</span>
+    </div>
+  </div>
+
+  <script>
+    /******************** STATE ********************/
+    const state = {
+      apiUrl: '',
+      optimizer: 'exact',
+      container: { length: 12036, width: 2340, height: 2280 },
+      articles: [], // {code, qty, type}
+      doors: [],    // {type,h,w,quantity}
+      visualsGroup: [], // temp items
+      visuals: [],  // [{code, visuals:[{length,width,quantity}]}]
+      optimization: null,
+    };
+
+    const $ = (s) => document.querySelector(s);
+    const el = (tag, attrs = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) { if (k === 'class') n.className = v; else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v) } kids.forEach(c => n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c)); return n };
+
+    /******************** CATALOG ********************/
+    const AVAILABLE_CODES = [
+      'SA.C.001   [SOTTOSTRUTTURA]', 'SS.C.001.A [SOTTOSTRUTTURA]', 'SS.C.002.A [SOTTOSTRUTTURA]',
+      'SL.C.04    [PANNELLO]', 'SL.C.03    [PANNELLO]',
+      'AS.004     [PERIMETRALE CTS]',
+      'AS.001     [ANGOLI]', 'AS.003     [ANGOLI]', 'AS.005     [ANGOLI]', 'AS.010     [ANGOLI]', 'AS.030     [ANGOLI]', 'AS.025     [ANGOLI]', 'AS.035     [ANGOLI]', 'AS.040     [ANGOLI]', 'AS.045     [ANGOLI]', 'AS.050     [ANGOLI]', 'AS.055     [ANGOLI]', 'AS.060     [ANGOLI]', 'AS.061     [ANGOLI]', 'AS.065     [ANGOLI]', 'AS.070     [ANGOLI]', 'AS.074     [ANGOLI]', 'AS.075     [ANGOLI]', 'AS.078     [ANGOLI]', 'AS.079     [ANGOLI]', 'AS.080     [ANGOLI]', 'AS.085     [ANGOLI]', 'AS.090     [ANGOLI]', 'AS.208     [ANGOLI]',
+      'AS.100     [PANN_ISOLANTE]',
+      'AS.114.02  [PIOMBATURA DELLA PARETE]', 'AS.114.03  [PIOMBATURA DELLA PARETE]', 'AS.115.02  [PIOMBATURA DELLA PARETE]', 'AS.115.03  [PIOMBATURA DELLA PARETE]', 'AS.120.02  [PIOMBATURA DELLA PARETE]', 'AS.120.03  [PIOMBATURA DELLA PARETE]', 'AS.121.02  [PIOMBATURA DELLA PARETE]', 'AS.121.03  [PIOMBATURA DELLA PARETE]',
+      'MTA.032.22.O [TCP]',
+      'MTA.091    [KIT TERMINALE FILTRANTE]', 'MTA.092    [KIT TERMINALE FILTRANTE]', 'MTA.093    [KIT TERMINALE FILTRANTE]', 'MTA.094    [KIT TERMINALE FILTRANTE]',
+      'MTA.292 [ARMADI]',
+      'MTA.113 [ACCESSORI A PARETE]', 'MTA.142 [ACCESSORI A PARETE]', 'MTA.172 [ACCESSORI A PARETE]', 'MTA.AVICS.OR [ACCESSORI A PARETE]', 'MTA.020 [ACCESSORI A PARETE]',
+      'MTA.330    [PLENUM E ANEMOSTATI]', 'MTA.331    [PLENUM E ANEMOSTATI]', 'MTA.332    [PLENUM E ANEMOSTATI]', 'MTA.333    [PLENUM E ANEMOSTATI]', 'MTA.334    [PLENUM E ANEMOSTATI]', 'MTA.335    [PLENUM E ANEMOSTATI]', 'MTA.336    [PLENUM E ANEMOSTATI]',
+      'CTS.001    [CTS]', 'CTS.002    [CTS]', 'CTS.003    [CTS]',
+      'CA.020     [PLAFONIERE]', 'CA.030     [PLAFONIERE]',
+      'AF.035     [LAVABI]', 'AF.036     [LAVABI]', 'AF.037     [LAVABI]', 'AF.038     [LAVABI]', 'AF.035.AC  [LAVABI]', 'AF.036.AC  [LAVABI]', 'AF.037.AC  [LAVABI]', 'AF.028.AC  [LAVABI]',
+      'XXX.3500_900   [GENERICA]', 'XXX.1500_900   [GENERICA]', 'XXX.2300_800   [GENERICA]', 'XXX.2290_500   [GENERICA]', 'XXX.1200_800   [GENERICA]'
+    ];
+    function renderCatalog(filter = "") {
+      const list = document.querySelector("#codeList");
+      if (!list) return;
+      list.innerHTML = "";
+
+      const f = (filter || "").toLowerCase();
+      const groups = {}; // { tag: [{code, full}] }
+
+      AVAILABLE_CODES.forEach((rowRaw) => {
+        const row = String(rowRaw);
+        if (!row.toLowerCase().includes(f)) return;
+
+        // CODE = primo token
+        const code = row.trim().split(/\s+/)[0];
+
+        // TAG = testo tra [ ] se presente, altrimenti "_Altro"
+        const i = row.indexOf("[");
+        const j = row.indexOf("]", i + 1);
+        const tag = i > -1 && j > -1 ? row.slice(i + 1, j).trim() : "_Altro";
+
+        (groups[tag] ||= []).push({ code, full: row });
+      });
+
+      // 👉 Ordine desiderato dei gruppi
+      const priority = [
+        "SOTTOSTRUTTURA",
+        "PANNELLO",
+        "PERIMETRALE CTS",
+        "ANGOLI",
+        "PANN_ISOLANTE",
+        "PIOMBATURA DELLA PARETE",
+        "TCP",
+        "KIT TERMINALE FILTRANTE",
+        "ARMADI",
+        "ACCESSORI A PARETE",
+        "PLENUM E ANEMOSTATI",
+        "CTS",
+        "PLAFONIERE",
+        "LAVABI",
+        "GENERICA",
+      ];
+
+      // Ordina i tag secondo priority, quelli non in lista restano dopo in ordine alfabetico
+      const tags = Object.keys(groups).sort((a, b) => {
+        const ia = priority.indexOf(a);
+        const ib = priority.indexOf(b);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.localeCompare(b);
+      });
+
+      if (!tags.length) {
+        list.innerHTML = `<div class="muted">Nessun codice trovato…</div>`;
+        return;
+      }
+
+      // Render gruppi + articoli
+      tags.forEach((tag, idx) => {
+        list.appendChild(el("div", { class: "group-title" }, tag));
+        groups[tag].forEach(({ code, full }) => {
+          list.appendChild(
+            el(
+              "div",
+              { class: "code" },
+              el("div", {},
+                el("div", {}, code),
+                el("small", {}, full.replace(code, "").replace(/\[.*?\]/, "").trim())
+              ),
+              el("button", {
+                class: "btn small",
+                onclick: () => {
+                  document.querySelector("#codeInput").value = code;
+                  document.querySelector("#qtyInput").focus();
+                }
+              }, "Usa")
+            )
+          );
+        });
+
+        // Divider tra categorie
+        if (idx < tags.length - 1) {
+          list.appendChild(el("div", { class: "divider" }));
+        }
+      });
+    }
+
+
+    /******************** CONFIRM DIALOG ********************/
+    let _confirmCallback = null;
+
+    function showConfirm(msg, sub, onConfirm) {
+      document.getElementById('confirmMsg').textContent = msg;
+      document.getElementById('confirmSub').textContent = sub;
+      _confirmCallback = onConfirm;
+      document.getElementById('confirmDialog').classList.add('open');
+    }
+
+    document.getElementById('confirmYes').addEventListener('click', () => {
+      document.getElementById('confirmDialog').classList.remove('open');
+      if (_confirmCallback) { _confirmCallback(); _confirmCallback = null; }
+    });
+
+    document.getElementById('confirmNo').addEventListener('click', () => {
+      document.getElementById('confirmDialog').classList.remove('open');
+      _confirmCallback = null;
+    });
+
+    document.getElementById('confirmDialog').addEventListener('click', e => {
+      if (e.target === document.getElementById('confirmDialog')) {
+        document.getElementById('confirmDialog').classList.remove('open');
+        _confirmCallback = null;
+      }
+    });
+
+    /******************** SETTINGS ********************/
+    const SETTINGS_PRIORITY = [
+      "SOTTOSTRUTTURA","PANNELLO","PERIMETRALE CTS","ANGOLI","PANN_ISOLANTE",
+      "PIOMBATURA DELLA PARETE","TCP","KIT TERMINALE FILTRANTE","ARMADI",
+      "ACCESSORI A PARETE","PLENUM E ANEMOSTATI","CTS","PLAFONIERE","LAVABI","GENERICA"
+    ];
+
+    function getApiBase() {
+      const v = document.getElementById('apiUrl').value.trim();
+      if (v) return v.replace(/\/$/, '');
+      // Usa la stessa origine della pagina (porta dinamica del launcher)
+      return window.location.origin.replace(/\/$/, '');
+    }
+
+    async function fetchCatalogFromApi() {
+      try {
+        const r = await fetch(getApiBase() + '/api/catalog');
+        if (r.ok) return await r.json();
+      } catch(e) {}
+      return {};
+    }
+
+    async function postOverrideToApi(code, L, W, H, cap) {
+      const r = await fetch(getApiBase() + '/api/catalog/override', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, L, W, H, cap })
+      });
+      if (!r.ok) throw new Error('Errore salvataggio');
+      return await r.json();
+    }
+
+    function buildCatalogGroups() {
+      const data = {};
+      AVAILABLE_CODES.forEach(rowRaw => {
+        const row = String(rowRaw);
+        const code = row.trim().split(/\s+/)[0];
+        const i = row.indexOf("["), j = row.indexOf("]", i + 1);
+        const tag = i > -1 && j > -1 ? row.slice(i + 1, j).trim() : "_Altro";
+        (data[tag] ||= []).push(code);
+      });
+      return data;
+    }
+
+    async function fetchCrateGroups() {
+      try {
+        const r = await fetch(getApiBase() + '/api/catalog/groups');
+        if (r.ok) return await r.json();
+      } catch(e) {}
+      return [];
+    }
+
+    async function syncDeletedCodes() {
+      try {
+        const r = await fetch(getApiBase() + '/api/catalog/deleted');
+        if (r.ok) {
+          const deleted = await r.json();
+          deleted.forEach(code => {
+            const idx = AVAILABLE_CODES.findIndex(row => row.trim().split(/\s+/)[0].toUpperCase() === code.toUpperCase());
+            if (idx !== -1) AVAILABLE_CODES.splice(idx, 1);
+          });
+        }
+      } catch(e) {}
+    }
+
+    async function renderSettings() {
+      const body = document.getElementById('settingsBody');
+      body.innerHTML = '<div class="muted" style="padding:16px">Caricamento dati dal backend…</div>';
+
+      await syncDeletedCodes();
+      const crateGroups = await fetchCrateGroups();
+
+      body.innerHTML = '';
+
+      // Popola select categorie per form nuovo codice
+      const catGroups = buildCatalogGroups();
+      const selCat = document.getElementById('ncCatExisting');
+      selCat.innerHTML = '<option value="">-- seleziona --</option>';
+      const allTags = Object.keys(catGroups).sort((a,b) => {
+        const ia = SETTINGS_PRIORITY.indexOf(a), ib = SETTINGS_PRIORITY.indexOf(b);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1; if (ib !== -1) return 1;
+        return a.localeCompare(b);
+      });
+      allTags.forEach(t => {
+        const o = document.createElement('option'); o.value = t; o.textContent = t;
+        selCat.appendChild(o);
+      });
+
+      populateCrateSelect(crateGroups);
+
+      if (!crateGroups.length) {
+        body.innerHTML = '<div class="muted" style="padding:16px">Nessun dato ricevuto dal backend. Verifica la connessione.</div>';
+        return;
+      }
+
+      const introHdr = document.createElement('div');
+      introHdr.className = 'crate-dims-header';
+      introHdr.innerHTML = '<span>L (mm)</span><span>W (mm)</span><span>H (mm)</span><span>Capacità/cassa</span><span></span>';
+      body.appendChild(introHdr);
+
+      crateGroups.forEach(group => {
+        const block = document.createElement('div');
+        block.className = 'crate-block';
+
+        // label codici contenuti (pills)
+        const codesLabel = document.createElement('div');
+        codesLabel.className = 'crate-label';
+        codesLabel.textContent = 'Codici in questa cassa:';
+        block.appendChild(codesLabel);
+
+        const pillsList = document.createElement('div');
+        pillsList.className = 'crate-codes-list';
+        group.codes.forEach(({ code, unit }) => {
+          const pill = document.createElement('span');
+          pill.className = 'crate-code-pill';
+
+          const codeSpan = document.createElement('span');
+          codeSpan.textContent = code;
+          const unitSpan = document.createElement('span');
+          unitSpan.className = 'pill-unit';
+          unitSpan.textContent = unit;
+          const delBtn = document.createElement('span');
+          delBtn.className = 'pill-del';
+          delBtn.title = `Elimina ${code}`;
+          delBtn.textContent = '×';
+          delBtn.onclick = (e) => {
+            e.stopPropagation();
+            showConfirm(
+              `Elimina ${code}`,
+              `Il codice non sarà più disponibile per i calcoli.`,
+              async () => {
+                try {
+                  const r = await fetch(getApiBase() + '/api/catalog/code/' + encodeURIComponent(code), { method: 'DELETE' });
+                  if (!r.ok) throw new Error();
+                  const idx = AVAILABLE_CODES.findIndex(row => row.trim().split(/\s+/)[0].toUpperCase() === code.toUpperCase());
+                  if (idx !== -1) AVAILABLE_CODES.splice(idx, 1);
+                  renderSettings();
+                  renderCatalog();
+                } catch(err) {
+                  alert('Errore durante l\'eliminazione.');
+                }
+              }
+            );
+          };
+
+          pill.append(codeSpan, ' ', unitSpan, delBtn);
+          pillsList.appendChild(pill);
+        });
+        block.appendChild(pillsList);
+
+        // riga dimensioni editabili
+        const dimsRow = document.createElement('div');
+        dimsRow.className = 'crate-dims-row';
+        dimsRow.style.marginTop = '10px';
+
+        const inL = document.createElement('input'); inL.className = 's-input'; inL.type = 'number'; inL.value = group.L; inL.title = 'Lunghezza mm';
+        const inW = document.createElement('input'); inW.className = 's-input'; inW.type = 'number'; inW.value = group.W; inW.title = 'Larghezza mm';
+        const inH = document.createElement('input'); inH.className = 's-input'; inH.type = 'number'; inH.value = group.H; inH.title = 'Altezza mm';
+        const inCap = document.createElement('input'); inCap.className = 's-input'; inCap.type = 'number'; inCap.value = group.cap;
+        inCap.title = `Capacità in ${group.cap_unit} per cassa`;
+
+        // placeholder con unità
+        inCap.placeholder = group.cap_unit;
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'btn s-save';
+        saveBtn.textContent = 'Salva';
+        saveBtn.onclick = async () => {
+          const L = parseInt(inL.value), W = parseInt(inW.value);
+          const H = parseInt(inH.value), cap = parseInt(inCap.value);
+          if (!L || !W || !H || !cap) { alert('Compila tutti i campi prima di salvare.'); return; }
+          saveBtn.textContent = '…'; saveBtn.disabled = true;
+          try {
+            // Salva con crate_id come chiave (identifica il gruppo)
+            const r = await fetch(getApiBase() + '/api/catalog/override', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ code: group.crate_id, crate_id: group.crate_id, L, W, H, cap })
+            });
+            if (!r.ok) throw new Error();
+            saveBtn.textContent = '✓';
+            setTimeout(() => { saveBtn.textContent = 'Salva'; saveBtn.disabled = false; }, 1800);
+          } catch(e) {
+            alert('Errore nel salvataggio. Controlla la connessione al backend.');
+            saveBtn.textContent = 'Salva'; saveBtn.disabled = false;
+          }
+        };
+
+        dimsRow.append(inL, inW, inH, inCap, saveBtn);
+        block.appendChild(dimsRow);
+        body.appendChild(block);
+      });
+    }
+
+    // Apertura / chiusura overlay
+    document.getElementById('btnSettings').addEventListener('click', () => {
+      document.getElementById('settingsOverlay').classList.add('open');
+      renderSettings();
+    });
+    document.getElementById('btnCloseSettings').addEventListener('click', () => {
+      document.getElementById('settingsOverlay').classList.remove('open');
+    });
+    document.getElementById('settingsOverlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('settingsOverlay'))
+        document.getElementById('settingsOverlay').classList.remove('open');
+    });
+
+    // Cache gruppi cassa per il form nuovo codice
+    let _crateGroupsCache = [];
+
+    function populateCrateSelect(groups) {
+      _crateGroupsCache = groups;
+      const sel = document.getElementById('ncCrateExisting');
+      sel.innerHTML = '<option value="">-- seleziona cassa --</option>';
+      groups.forEach(g => {
+        const o = document.createElement('option');
+        o.value = g.crate_id;
+        const codesList = g.codes.map(c => c.code).join(', ');
+        o.textContent = `${g.L}×${g.W}×${g.H} mm  |  cap. ${g.cap} ${g.cap_unit}  [${codesList}]`;
+        sel.appendChild(o);
+      });
+    }
+
+    // Mostra/nasconde sezione dims in base a selezione cassa
+    document.getElementById('ncCrateExisting').addEventListener('change', () => {
+      const val = document.getElementById('ncCrateExisting').value;
+      const dimsSection = document.getElementById('ncDimsSection');
+      const infoBox = document.getElementById('ncCrateInfo');
+      const crateNewInput = document.getElementById('ncCrateNew');
+
+      if (val) {
+        // Cassa esistente selezionata → nascondi dims, svuota "nuova cassa"
+        crateNewInput.value = '';
+        dimsSection.style.display = 'none';
+        const g = _crateGroupsCache.find(x => x.crate_id === val);
+        if (g) {
+          infoBox.style.display = 'block';
+          infoBox.textContent = `Cassa: ${g.L} × ${g.W} × ${g.H} mm — capacità ${g.cap} ${g.cap_unit}/cassa — già usata da: ${g.codes.map(c=>c.code).join(', ')}`;
+        }
+      } else {
+        infoBox.style.display = 'none';
+        // Mostra dims solo se anche "nuova cassa" è vuota
+        if (!crateNewInput.value.trim()) dimsSection.style.display = 'none';
+      }
+    });
+
+    document.getElementById('ncCrateNew').addEventListener('input', () => {
+      const val = document.getElementById('ncCrateNew').value.trim();
+      const dimsSection = document.getElementById('ncDimsSection');
+      const infoBox = document.getElementById('ncCrateInfo');
+      if (val) {
+        // Nuova cassa → mostra dims, deseleziona cassa esistente
+        document.getElementById('ncCrateExisting').value = '';
+        infoBox.style.display = 'none';
+        dimsSection.style.display = 'grid';
+      } else {
+        dimsSection.style.display = 'none';
+      }
+    });
+
+    // Aggiunta nuovo codice
+    document.getElementById('btnAddNewCode').addEventListener('click', async () => {
+      const code = document.getElementById('ncCode').value.trim().toUpperCase();
+      const unit = document.getElementById('ncUnit').value;
+      const crateExisting = document.getElementById('ncCrateExisting').value.trim();
+      const crateNew = document.getElementById('ncCrateNew').value.trim().toUpperCase();
+      const catExisting = document.getElementById('ncCatExisting').value.trim();
+      const catNew = document.getElementById('ncCatNew').value.trim().toUpperCase();
+      const cat = catNew || catExisting;
+
+      if (!code) { alert('Inserisci il codice.'); return; }
+      if (!crateExisting && !crateNew) { alert('Seleziona una cassa esistente o inserisci il nome di una nuova.'); return; }
+      if (!cat) { alert('Seleziona una categoria catalogo o inserisci una nuova.'); return; }
+      if (AVAILABLE_CODES.some(r => r.trim().split(/\s+/)[0].toUpperCase() === code)) {
+        alert('Codice già presente nel catalogo.'); return;
+      }
+
+      let L, W, H, cap, crateId;
+
+      if (crateExisting) {
+        // Usa la cassa esistente: recupera dims dalla cache
+        const g = _crateGroupsCache.find(x => x.crate_id === crateExisting);
+        if (!g) { alert('Cassa non trovata.'); return; }
+        L = g.L; W = g.W; H = g.H; cap = g.cap;
+        crateId = crateExisting;
+      } else {
+        // Nuova cassa: leggi dims dal form
+        L = parseInt(document.getElementById('ncL').value);
+        W = parseInt(document.getElementById('ncW').value);
+        H = parseInt(document.getElementById('ncH').value);
+        cap = parseInt(document.getElementById('ncCap').value);
+        if (!L || !W || !H || !cap) { alert('Inserisci tutte le dimensioni e la capacità per la nuova cassa.'); return; }
+        crateId = crateNew;
+      }
+
+      const btn = document.getElementById('btnAddNewCode');
+      btn.disabled = true; btn.textContent = '…';
+      try {
+        // Salva override per il codice con la cassa indicata
+        const r = await fetch(getApiBase() + '/api/catalog/override', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, crate_id: crateId, L, W, H, cap })
+        });
+        if (!r.ok) throw new Error();
+
+        AVAILABLE_CODES.push(`${code} [${cat}]`);
+
+        // Reset form
+        ['ncCode','ncL','ncW','ncH','ncCap','ncCatNew','ncCrateNew'].forEach(id => document.getElementById(id).value = '');
+        ['ncCatExisting','ncCrateExisting'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('ncDimsSection').style.display = 'none';
+        document.getElementById('ncCrateInfo').style.display = 'none';
+
+        renderSettings();
+        renderCatalog();
+        btn.textContent = '✓ Aggiunto';
+        setTimeout(() => { btn.textContent = 'Aggiungi'; btn.disabled = false; }, 1800);
+      } catch(e) {
+        alert('Errore nel salvataggio. Controlla la connessione al backend.');
+        btn.textContent = 'Aggiungi'; btn.disabled = false;
+      }
+    });
+
+    /******************** END SETTINGS ********************/
+
+    function buildDoorButtons() {
+      const types = ["scorrevole_singola", "scorrevole_doppia", "battente_singola", "battente_doppia"];
+      const bar = $("#doorBar");
+      if (!bar) return; // safety se non esiste l'elemento
+      bar.innerHTML = "";
+      types.forEach((t, i) => {
+        const b = el("div", {
+          class: "pill" + (i === 0 ? " active" : ""),
+          onclick: () => {
+            Array.from(bar.children).forEach(x => x.classList.remove("active"));
+            b.classList.add("active");
+            $("#doorType").value = t; // la select nascosta conserva il valore
+          }
+        }, t.replace("_", " "));
+        bar.appendChild(b);
+      });
+      // default selezionata la prima
+      $("#doorType").value = types[0];
+    }
+    // costruisce i bottoni all’avvio
+    buildDoorButtons();
+
+    /******************** UI RENDER ********************/
+    function renderArticles() { const body = $('#articlesBody'); body.innerHTML = ''; state.articles.forEach((a, i) => body.appendChild(el('tr', {}, el('td', {}, a.code), el('td', {}, String(a.qty)), el('td', {}, a.type || ''), el('td', {}, el('button', { class: 'btn small', onclick: () => { state.articles.splice(i, 1); renderArticles(); } }, 'Rimuovi'))))); state.doors.forEach((d, i) => body.appendChild(el('tr', {}, el('td', {}, `PORTA_${i + 1}`), el('td', {}, `${d.type} ${d.h}x${d.w} – ${d.quantity} pz`), el('td', {}, 'porte'), el('td', {}, el('button', { class: 'btn small', onclick: () => { state.doors.splice(i, 1); renderArticles(); } }, 'Rimuovi'))))); state.visuals.forEach((v, i) => body.appendChild(el('tr', {}, el('td', {}, v.code), el('td', {}, `${v.visuals.length} tipi`), el('td', {}, 'telai vetrati'), el('td', {}, el('button', { class: 'btn small', onclick: () => { state.visuals.splice(i, 1); renderArticles(); } }, 'Rimuovi'))))); }
+    function renderVisualsPreview() {
+      const box = document.querySelector('#visualsPreview');
+      if (!box) return;
+      if (!state.visualsGroup.length) {
+        box.innerHTML = "<i>Nessun telaio vetrato aggiunto…</i>";
+        return;
+      }
+      let html = "<b>Telai vetrati temporanei:</b><ul style='margin:6px 0;padding-left:18px'>";
+      state.visualsGroup.forEach((v, i) => {
+        html += `<li>${v.length}×${v.width} — ${v.quantity} pz</li>`;
+      });
+      html += "</ul>";
+      box.innerHTML = html;
+    }
+
+    /******************** DRAW ********************/
+    let _showLabels = true;
+
+    function mmToCanvas(v, scale) { return v * scale }
+    function formatLines(id, rotated) {
+      const rot = rotated ? ' (R)' : '';
+      // CTS.001/002/003 con suffisso _main/_profiles/_accessories
+      if (/^CTS\.(00[123])_/.test(id)) {
+        const suf = id.split('_').pop();
+        const map = { main: 'CTS_main', profiles: 'CTS_prof', accessories: 'CTS_acc' };
+        return [(map[suf] || id) + rot];
+      }
+      // Sottostruttura: codice_montanti / _traversi / _traccianti
+      const subMatch = id.match(/^(.+?)_(montanti|traversi|traccianti)$/);
+      if (subMatch) return [subMatch[1], subMatch[2] + rot];
+      // Qualsiasi id con suffisso mergeable: codice o codice1+codice2+..._crate/_pack/_crate_glass
+      const mergeMatch = id.match(/^(.+?)(_crate_glass|_crate|_pack)$/);
+      if (mergeMatch) {
+        const codes = mergeMatch[1].split('+');
+        return codes.map((c, i) => c + (i === codes.length - 1 ? rot : ''));
+      }
+      // AS.125 visiva: codice_visual_N
+      const visMatch = id.match(/^(.+?)_visual_(\d+)$/);
+      if (visMatch) return [visMatch[1], 'vis.' + visMatch[2] + rot];
+      // Porte e travi
+      const doorMatch = id.match(/^door_(\d+)_(.+)$/);
+      if (doorMatch) return ['Porta ' + doorMatch[1], doorMatch[2].replace(/_/g,' ') + rot];
+      const traveMatch = id.match(/^trave_(\d+)$/);
+      if (traveMatch) return ['Trave ' + traveMatch[1] + rot];
+      // CTS _perf, _lights ecc.
+      const suffMatch = id.match(/^(.+?)_(perf|lights|tcp|pack|cabinet)$/);
+      if (suffMatch) return [suffMatch[1] + rot];
+      // Generico: split su _ e mostra ogni parte su riga separata (max 3)
+      const parts = id.split('_').filter(Boolean);
+      if (parts.length > 1) return parts.slice(0, 3).map((p, i) => p + (i === parts.length - 1 ? rot : ''));
+      return [id + rot];
+    }
+    function drawContainerOnCanvas(canvas, cont, dims, fontSize = 12) {
+      const ctx = canvas.getContext('2d');
+      const pad = 20;
+      const availW = canvas.width - pad * 2;
+      const availH = canvas.height - pad * 2;
+      const scale = Math.min(availW / dims.length, availH / dims.width);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(pad, pad);
+
+      // bordo container (theme-aware)
+      const _isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      ctx.strokeStyle = _isLight ? 'rgba(37,99,235,.35)' : 'rgba(255,255,255,.25)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(0, 0, dims.length * scale, dims.width * scale);
+
+      const colors = cont.placed.map((_, i) => `hsl(${(i * 47) % 360} 70% 60% / .85)`);
+
+      // <<< font parametrico
+      ctx.font = fontSize + 'px system-ui';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      cont.placed.forEach((p, i) => {
+        const x = p.x * scale, y = p.y * scale, w = p.length * scale, h = p.width * scale;
+        ctx.fillStyle = colors[i];
+        ctx.fillRect(x, y, w, h);
+        ctx.strokeStyle = 'rgba(0,0,0,.45)';
+        ctx.strokeRect(x, y, w, h);
+
+        const lines = formatLines(p.package.id, p.rotated);
+        const cx = x + w / 2, cy = y + h / 2;
+        const lineH = fontSize + 3;
+        const padX = 8, padY = 5;
+
+        // larghezza = riga più lunga
+        const maxTw = Math.max(...lines.map(l => ctx.measureText(l).width));
+        const boxW = maxTw + padX * 2;
+        const boxH = lines.length * lineH + padY * 2;
+
+        // non disegnare se etichette disabilitate o cassa troppo piccola
+        if (_showLabels && boxW < w * 0.98 && boxH < h * 0.98) {
+          ctx.fillStyle = 'rgba(255,255,255,.88)';
+          ctx.beginPath();
+          const r = 3;
+          const bx = cx - boxW / 2, by = cy - boxH / 2;
+          ctx.roundRect(bx, by, boxW, boxH, r);
+          ctx.fill();
+
+          ctx.fillStyle = '#0b0f1d';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          lines.forEach((line, li) => {
+            const ly = cy - (lines.length - 1) * lineH / 2 + li * lineH;
+            ctx.fillText(line, cx, ly);
+          });
+        }
+      });
+
+      ctx.restore();
+    }
+
+    function drawOverviewGrid(canvas, containers, dims, dimsResolver) {
+      const ctx = canvas.getContext('2d');
+      const pad = 20;            // margine intorno
+      const gap = 10;            // spazio tra i container
+      const singleHeight = 300;  // altezza fissa per ogni container
+      const totalH = pad + containers.length * (singleHeight + gap);
+
+      canvas.height = totalH;
+      canvas.width = 1200; // larghezza fissa
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      containers.forEach((c, idx) => {
+        const y0 = pad + idx * (singleHeight + gap);
+
+        // titolo sopra il container
+        ctx.fillStyle = "#cfe0ff";
+        ctx.font = "24px system-ui";
+        ctx.textAlign = "left";
+        ctx.fillText(`#${c.container_index} – Efficienza ${(c.efficiency_area * 100).toFixed(1)}%`, 10, y0 + 20);
+
+        // canvas temporaneo per disegnare come nella vista singola
+        const tmpCanvas = document.createElement("canvas");
+        tmpCanvas.width = canvas.width - pad * 2;
+        tmpCanvas.height = singleHeight;
+
+        // usa font più grande solo qui (22px)
+        drawContainerOnCanvas(tmpCanvas, c, dimsResolver ? dimsResolver(idx) : dims, 22);
+
+        // incolla sul canvas principale
+        ctx.drawImage(tmpCanvas, pad, y0 + 30); // +30 per non coprire il titolo
+      });
+    }
+
+
+
+    /******************** RESULTS ********************/
+    function showResults() {
+      const card = $('#resultsCard');
+      card.style.display = 'block';
+      card.style.marginBottom = '40px'; // spazio fisso sopra il footer
+
+      const opt = state.optimization;
+      const dims = state.container;
+
+      /************ KPI ************/
+      const k = $('#kpi');
+      k.innerHTML = '';
+
+      // totale (pezzi posizionati / pezzi totali)
+      const totalEff = opt.total_units ? (opt.total_placed / opt.total_units * 100) : 0;
+
+      // media delle efficienze per container (media delle aree)
+      let avgEff = 0;
+      if (opt.containers.length) {
+        avgEff = opt.containers.reduce((s, c) => s + (c.efficiency_area || 0), 0) / opt.containers.length * 100;
+      }
+
+      const items = [
+        ['Packaging totali', String(opt.total_units)],
+        ['Posizionati', String(opt.total_placed)],
+        ['Non posizionati', String(opt.not_placed.length)],
+        ['N. container', String(opt.containers.length)],
+        // card unica “completa”: media + totale
+        ['Efficienza compl.', `${avgEff.toFixed(1)}%`],
+      ];
+
+      items.forEach(([t, v]) => {
+        k.appendChild(
+          el('div', { class: 'item' },
+            el('label', {}, t),
+            el('b', {}, v)
+          )
+        );
+      });
+
+      /************ ALTERNATIVA SUGGERITA ************/
+      if (opt.alternative) {
+        const altBox = el('div', {
+          class: 'alert info',
+          style: 'margin-top:16px;padding:12px 16px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);border-radius:8px;'
+        },
+          el('div', { style: 'font-weight:600;margin-bottom:6px;' }, '💡 Alternativa suggerita'),
+          el('div', {}, opt.alternative.suggestion),
+          el('div', { style: 'margin-top:8px;font-size:13px;opacity:.9;' },
+            el('button', {
+              class: 'btn small',
+              style: 'margin-right:8px;',
+              onclick: () => { switchTab('alternative'); }
+            }, 'Vai alla visualizzazione alternativa'),
+            'Risparmio: ', el('b', {}, opt.alternative.savings)
+          )
+        );
+        k.appendChild(altBox);
+      }
+
+      /************ DETTAGLIO PER CONTAINER ************/
+      const pc = $('#perContainer');
+      pc.innerHTML = '';
+
+      // blocchi dettaglio (uno per container) + divider tra i blocchi
+      opt.containers.forEach((c, idx) => {
+        const tbl = el(
+          'table',
+          { class: 'table' },
+          el('thead', {},
+            el('tr', {},
+              el('th', {}, `Container #${c.container_index}`),
+              el('th', {}, 'Dim.'),
+              el('th', {}, 'Posizione'),
+              el('th', {}, 'Rotato')
+            )
+          ),
+          el('tbody', {})
+        );
+
+        c.placed.forEach(p => {
+          tbl.lastChild.appendChild(
+            el('tr', {},
+              el('td', {}, p.package.id),
+              el('td', {}, `${p.package.length}×${p.package.width}×${p.package.height}`),
+              el('td', {}, `(${p.x}, ${p.y})`),
+              el('td', {}, p.rotated ? 'Sì' : 'No')
+            )
+          );
+        });
+
+        pc.appendChild(tbl);
+
+        // divider tra un container e il successivo
+        if (idx < opt.containers.length - 1) {
+          pc.appendChild(el('div', { class: 'divider' }));
+        }
+      });
+
+      // divider prima della tabella riepilogativa
+      pc.appendChild(el('div', { class: 'divider' }));
+
+      /************ TABELLA RIEPILOGATIVA COMPATTA ************/
+      const sumTable = el(
+        'table',
+        { class: 'table' },
+        el('thead', {},
+          el('tr', {},
+            el('th', {}, 'Container'),
+            el('th', {}, 'Efficienza'),
+            el('th', {}, 'Area usata'),
+            el('th', {}, 'Packaging')
+          )
+        ),
+        el('tbody', { id: 'perContainerBody' })
+      );
+      pc.appendChild(sumTable);
+
+      const body = $('#perContainerBody');
+      opt.containers.forEach(c => {
+        const eff = (c.efficiency_area * 100).toFixed(1) + '%';
+        const area = (c.area_used / 1_000_000).toFixed(2) + ' m²';
+        body.appendChild(
+          el('tr', {},
+            el('td', {}, `#${c.container_index}`),
+            el('td', {}, eff),
+            el('td', {}, area),
+            el('td', {}, String(c.placed.length))
+          )
+        );
+      });
+
+      /************ REPORT “EFFICIENZA” (nuova tab) ************/
+      const eb = $('#efficiencyBody');
+      if (eb) {
+        eb.innerHTML = '';
+        opt.containers.forEach(c => {
+          eb.appendChild(
+            el('tr', {},
+              el('td', {}, `#${c.container_index}`),
+              el('td', {}, (c.efficiency_area * 100).toFixed(1) + '%'),
+              el('td', {}, (c.area_used / 1_000_000).toFixed(2) + ' m²'),
+              el('td', {}, String(c.placed.length))
+            )
+          );
+        });
+      }
+
+      /************ TABS: SINGOLO / PANORAMICA / NON POSIZIONATI ************/
+      buildSingleButtons();
+      drawOverviewGrid($('#gridCanvas'), opt.containers, dims);
+
+      /************ TAB ALTERNATIVA ************/
+      const tabAlt = $('#tabAlternative');
+      if (opt.alternative) {
+        tabAlt.style.display = '';
+        // Aggiorna label col tipo effettivo
+        tabAlt.textContent = '\u{1F4A1} ' + (opt.alternative.savings ? opt.alternative.savings.split('\u2192')[1].trim() : "Alternativa");
+        $('#altSuggestion').textContent = opt.alternative.suggestion || '';
+        buildAltSingleButtons(opt.alternative);
+        // Panoramica: non disegnare ora (panel nascosto → clientWidth=0), verrà disegnata al click del sub-tab
+        document.getElementById('panel-alt-single').style.display = '';
+        document.getElementById('panel-alt-overview').style.display = 'none';
+        $('#altSubTabs').querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        $('#altSubTabs').querySelector('[data-alttab="alt-single"]').classList.add('active');
+      } else {
+        tabAlt.style.display = 'none';
+        // Se ero sul tab alternativa, torno a riepilogo
+        if ($('#panel-alternative').classList.contains('active')) {
+          switchTab('summary');
+        }
+      }
+
+      const np = $('#npBody');
+      np.innerHTML = '';
+      opt.not_placed.forEach(p => {
+        np.appendChild(
+          el('tr', {},
+            el('td', {}, p.id),
+            el('td', {}, `${p.length}×${p.width}×${p.height}`),
+            el('td', {}, p.description)
+          )
+        );
+      });
+    }
+
+    function _altContainerDims(alt, idx) {
+      // I container prima di alt_starts_at usano dims originali, l'ultimo usa alt_container
+      if (alt.alt_starts_at != null && idx >= alt.alt_starts_at && alt.alt_container) {
+        return alt.alt_container;
+      }
+      return alt.original_container || state.container;
+    }
+
+    function buildAltSingleButtons(alt) {
+      const bar = $('#altSingleBar');
+      bar.innerHTML = '';
+      if (!alt || !alt.containers.length) return;
+      alt.containers.forEach((c, i) => {
+        const dims = _altContainerDims(alt, i);
+        const label = String(i + 1);   // numerazione sequenziale 1,2,3…
+        const b = el('div', {
+          class: 'pill' + (i === 0 ? ' active' : ''), onclick: () => {
+            Array.from(bar.children).forEach(x => x.classList.remove('active'));
+            b.classList.add('active');
+            drawContainerOnCanvas($('#altSingleCanvas'), c, dims);
+            $('#altSingleInfo').textContent = `Container #${i + 1} \u2022 Packaging: ${c.placed.length} \u2022 Efficienza: ${(c.efficiency_area * 100).toFixed(1)}%`;
+          }
+        }, label);
+        bar.appendChild(b);
+      });
+      const dims0 = _altContainerDims(alt, 0);
+      drawContainerOnCanvas($('#altSingleCanvas'), alt.containers[0], dims0);
+      $('#altSingleInfo').textContent = `Container #1 \u2022 Packaging: ${alt.containers[0].placed.length} \u2022 Efficienza: ${(alt.containers[0].efficiency_area * 100).toFixed(1)}%`;
+    }
+
+    function switchAltTab(id) {
+      $('#altSubTabs').querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      $('#altSubTabs').querySelector(`[data-alttab="${id}"]`).classList.add('active');
+      document.querySelectorAll('.alt-subpanel').forEach(p => p.style.display = 'none');
+      document.getElementById('panel-' + id).style.display = '';
+      if (id === 'alt-overview' && state.optimization?.alternative) {
+        const alt = state.optimization.alternative;
+        const wrap = document.getElementById('altGridScroll');
+        const canvas = document.getElementById('altGridCanvas');
+        canvas.width = Math.max(600, wrap.clientWidth - 16);
+        drawOverviewGrid(canvas, alt.containers, state.container, idx => _altContainerDims(alt, idx));
+      }
+    }
+
+    function buildSingleButtons() {
+      const bar = $("#singleBar");
+      bar.innerHTML = "";
+      const opt = state.optimization;
+      if (!opt || !opt.containers.length) return;
+      opt.containers.forEach((c, i) => {
+        const b = el("div", {
+          class: "pill" + (i === 0 ? " active" : ""), onclick: () => {
+            Array.from(bar.children).forEach(x => x.classList.remove("active"));
+            b.classList.add("active");
+            drawContainerOnCanvas($("#singleCanvas"), c, state.container);
+            $("#singleInfo").textContent = `Container #${c.container_index} • Packaging: ${c.placed.length} • Efficienza: ${(c.efficiency_area * 100).toFixed(1)}%`;
+          }
+        }, String(c.container_index));
+        bar.appendChild(b);
+      });
+      // disegna il primo
+      drawContainerOnCanvas($("#singleCanvas"), opt.containers[0], state.container);
+      $("#singleInfo").textContent = `Container #${opt.containers[0].container_index} • Packaging: ${opt.containers[0].placed.length} • Efficienza: ${(opt.containers[0].efficiency_area * 100).toFixed(1)}%`;
+    }
+    function setGridCanvasWidth() {
+      const wrap = document.getElementById('gridScroll');
+      const canvas = document.getElementById('gridCanvas');
+      if (!wrap || !canvas) return;
+      // larghezza = larghezza interna del contenitore scrollabile
+      const w = Math.max(600, wrap.clientWidth - 16); // margine di sicurezza
+      canvas.width = w;
+    }
+
+    function redrawOverviewIfNeeded() {
+      if (!state.optimization) return;
+      setGridCanvasWidth();
+      drawOverviewGrid(
+        document.getElementById('gridCanvas'),
+        state.optimization.containers,
+        state.container
+      );
+    }
+    window.addEventListener('resize', () => {
+      const over = document.getElementById('panel-overview');
+      if (over && over.classList.contains('active')) {
+        redrawOverviewIfNeeded();
+      }
+    });
+
+    /******************** BACKEND CALL ********************/
+    async function callBackendCalc() {
+      const url = getApiBase() + '/api/calc-optimize';
+      const payload = { container: state.container, articles: state.articles.map(a => ({ code: a.code, qty: a.qty })), doors: state.doors.map(d => ({ type: d.type, h: d.h, w: d.w, quantity: d.quantity })), visuals: state.visuals.map(v => ({ code: v.code, visuals: v.visuals })), optimizer: state.optimizer };
+      $('#statusArea').textContent = 'Chiamo ' + url + ' …';
+      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) { const t = await res.text(); throw new Error('Errore backend: ' + res.status + ' ' + t); }
+      return await res.json();
+    }
+
+
+    /******************** EVENTS ********************/
+    // Connection
+
+    // Container
+    $('#containerSelect').addEventListener('change', e => { const v = JSON.parse(e.target.value); state.container = { length: v.length, width: v.width, height: v.height }; $('#containerDims').value = `${v.length} × ${v.width} × ${v.height}`; });
+    $('#btnEditDims').addEventListener('click', () => { const f = $('#containerDims'); f.disabled = false; f.focus(); $('#btnApplyDims').style.display = 'inline-block'; });
+    $('#btnApplyDims').addEventListener('click', () => { const f = $('#containerDims').value; const m = f.match(/(\d+)\D+(\d+)\D+(\d+)/); if (!m) return alert('Formato atteso: L × W × H'); const [_, L, W, H] = m; state.container = { length: +L, width: +W, height: +H }; $('#btnApplyDims').style.display = 'none'; $('#containerDims').disabled = true; });
+
+    // Articles
+    function guessType(code) {
+      const up = (code || '').trim().toUpperCase();
+      const unitaCodes = ['MTA.330','MTA.331','MTA.332','MTA.333','MTA.334','MTA.335','MTA.336',
+        'MTA.091','MTA.092','MTA.093','MTA.094','MTA.113','MTA.142','MTA.172',
+        'MTA.AVICS','MTA.020','CA.020','CA.030','AF.035','AF.036','AF.037','AF.038',
+        'AF.028','TCP','MTA.032'];
+      if (unitaCodes.some(p => up.startsWith(p))) return 'unità';
+      if (up.startsWith('LAVABO_') || up.startsWith('AF.')) return 'unità';
+      const sqmPrefixes = ['SL.C','SA.C','SS.C','AS.100','AS.114','AS.115','AS.120','AS.121',
+        'CTS.001','CTS.002','CTS.003','CA.PLAFONIERE'];
+      if (sqmPrefixes.some(p => up.startsWith(p))) return 'sqm';
+      if (['AS.001','AS.003','AS.004','AS.005','AS.010','AS.025','AS.030','AS.035',
+           'AS.040','AS.045','AS.050','AS.055','AS.060','AS.061','AS.065','AS.070',
+           'AS.074','AS.075','AS.078','AS.079','AS.080','AS.085','AS.090','AS.208'
+          ].some(p => up.startsWith(p))) return 'unità';
+      return 'unità';
+    }
+    $('#btnAddArticle').addEventListener('click', () => {
+      const code = $('#codeInput').value.trim();
+      const qty = parseFloat($('#qtyInput').value);
+      if (!code) return alert('Inserire il codice articolo');
+      if (isNaN(qty) || qty <= 0) return alert('La quantità deve essere un numero maggiore di 0');
+      const type = guessType(code);
+      state.articles.push({ code, qty, type });
+      $('#codeInput').value = ''; $('#qtyInput').value = '';
+      renderArticles();
+    });
+    $('#btnClear').addEventListener('click', () => { state.articles = []; state.doors = []; state.visuals = []; state.visualsGroup = []; renderArticles(); $('#resultsCard').style.display = 'none'; });
+
+    // Doors
+    $("#btnAddDoor").addEventListener('click', () => {
+      const type = $("#doorType").value;
+      const h = +$("#doorH").value;
+      const w = +$("#doorW").value;
+      const q = +$("#doorQ").value;
+      if (!type) return alert('Seleziona il tipo di porta');
+      if (!h || h <= 0 || !w || w <= 0 || !q || q <= 0) return alert('Altezza, larghezza e quantità devono essere numeri maggiori di 0');
+
+      state.doors.push({ type, h, w, quantity: q });
+
+      // pulizia campi numerici; il tipo resta quello selezionato (pill attiva)
+      $("#doorH").value = '';
+      $("#doorW").value = '';
+      $("#doorQ").value = '';
+
+      renderArticles();
+    });
+
+    // Visuals
+    $('#btnAddVisual').addEventListener('click', () => {
+      const code = $('#visCode').value.trim() || 'AS.125';
+      const L = +$('#visL').value;
+      const W = +$('#visW').value;
+      const Q = +$('#visQ').value;
+      if (!L || L <= 0 || !W || W <= 0 || !Q || Q <= 0) return alert('L, W e Q devono essere numeri maggiori di 0');
+
+      state.visualsGroup.push({ length: L, width: W, quantity: Q });
+
+      // pulizia campi
+      $('#visL').value = ''; $('#visW').value = ''; $('#visQ').value = '';
+
+      renderVisualsPreview();
+    });
+    $('#btnCommitVisuals').addEventListener('click', () => {
+      const code = $('#visCode').value.trim() || 'AS.125';
+      if (!state.visualsGroup.length) return alert('Aggiungi almeno un telaio vetrato');
+
+      state.visuals.push({ code, visuals: [...state.visualsGroup] });
+      state.visualsGroup = [];
+      $('#visCode').value = 'AS.125';
+
+      renderArticles();
+      renderVisualsPreview(); // svuota l’elenco
+    });
+
+    function switchTab(id) {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      const t = document.querySelector(`.tab[data-tab="${id}"]`);
+      if (t) t.classList.add('active');
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('#panel-' + id).classList.add('active');
+      if (id === 'overview' && state.optimization) {
+        drawOverviewGrid($('#gridCanvas'), state.optimization.containers, state.container);
+      }
+      if (id === 'single' && state.optimization) {
+        buildSingleButtons();
+      }
+      if (id === 'alternative' && state.optimization?.alternative) {
+        buildAltSingleButtons(state.optimization.alternative);
+      }
+    }
+
+    // Tabs principali
+    Array.from(document.querySelectorAll('.tab[data-tab]')).forEach(t => t.addEventListener('click', () => {
+      switchTab(t.getAttribute('data-tab'));
+    }));
+    // Sub-tabs alternativa
+    Array.from(document.querySelectorAll('#altSubTabs .tab[data-alttab]')).forEach(t => t.addEventListener('click', () => {
+      switchAltTab(t.getAttribute('data-alttab'));
+    }));
+
+    // Toggle etichette
+    function _toggleLabels(btnId) {
+      _showLabels = !_showLabels;
+      const label = _showLabels ? 'Etichette ON' : 'Etichette OFF';
+      ['btnToggleLabelsSingle','btnToggleLabelsGrid','btnToggleLabelsAlt'].forEach(id => {
+        const el2 = document.getElementById(id); if (el2) el2.textContent = label;
+      });
+      if (state.optimization) {
+        const activeSingle = $('#panel-single').classList.contains('active');
+        const activeGrid   = $('#panel-overview').classList.contains('active');
+        const activeAlt    = $('#panel-alternative').classList.contains('active');
+        if (activeSingle) buildSingleButtons();
+        if (activeGrid)   drawOverviewGrid($('#gridCanvas'), state.optimization.containers, state.container);
+        if (activeAlt && state.optimization.alternative) {
+          const altOverviewVisible = document.getElementById('panel-alt-overview').style.display !== 'none';
+          buildAltSingleButtons(state.optimization.alternative);
+          if (altOverviewVisible) {
+            const alt = state.optimization.alternative;
+            const wrap = document.getElementById('altGridScroll');
+            const canvas = document.getElementById('altGridCanvas');
+            canvas.width = Math.max(600, wrap.clientWidth - 16);
+            drawOverviewGrid(canvas, alt.containers, state.container, idx => _altContainerDims(alt, idx));
+          }
+        }
+      }
+    }
+    $('#btnToggleLabelsSingle').addEventListener('click', () => _toggleLabels('btnToggleLabelsSingle'));
+    $('#btnToggleLabelsGrid').addEventListener('click',   () => _toggleLabels('btnToggleLabelsGrid'));
+    $('#btnToggleLabelsAlt').addEventListener('click',    () => _toggleLabels('btnToggleLabelsAlt'));
+
+    // Save PNG
+    function saveCanvasPNG(canvas, name) { const a = document.createElement('a'); a.download = name; a.href = canvas.toDataURL('image/png'); a.click(); }
+    $('#btnSaveCanvasSingle').addEventListener('click', () => saveCanvasPNG($('#singleCanvas'), 'container.png'));
+    $('#btnSaveCanvasGrid').addEventListener('click', () => {
+      const grid = $('#gridCanvas');
+      drawOverviewGrid(grid, state.optimization?.containers || [], state.container);
+      saveCanvasPNG(grid, 'panoramica_completa.png');
+    });
+    $('#btnSaveCanvasAlt').addEventListener('click', () => saveCanvasPNG($('#altSingleCanvas'), 'alternativa_container.png'));
+    $('#btnSaveCanvasAltGrid').addEventListener('click', () => {
+      const grid = $('#altGridCanvas');
+      if (state.optimization?.alternative) drawOverviewGrid(grid, state.optimization.alternative.containers, state.container, idx => _altContainerDims(state.optimization.alternative, idx));
+      saveCanvasPNG(grid, 'alternativa_panoramica.png');
+    });
+
+    // Export JSON (input + risultati backend)
+    $('#btnSaveJson').addEventListener('click', () => { const data = { timestamp: new Date().toISOString(), input: { container: state.container, articles: state.articles, doors: state.doors, visuals: state.visuals, optimizer: state.optimizer }, optimization: state.optimization }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.download = 'risultati_backend.json'; a.href = URL.createObjectURL(blob); a.click(); URL.revokeObjectURL(a.href); });
+
+    // Reset
+    $('#btnReset').addEventListener('click', () => {
+      showConfirm('Pulire tutto?', 'Articoli, porte e telai vetrati verranno rimossi.', () => {
+        state.articles = []; state.doors = []; state.visuals = []; state.visualsGroup = []; state.optimization = null;
+        renderArticles(); $('#resultsCard').style.display = 'none';
+      });
+    });
+
+    // Calculate (Python backend)
+    $('#btnCalc').addEventListener('click', async () => {
+      try {
+        $('#statusArea').textContent = 'Calcolo in corso…';
+        const data = await callBackendCalc();
+        state.optimization = data;
+        let status = 'Calcolo completato';
+        if (data.warnings && data.warnings.length) {
+          status += ` — ${data.warnings.length} avviso${data.warnings.length > 1 ? 'i' : ''}`;
+          alert('⚠️ Avvisi:\n\n' + data.warnings.map(w => '• ' + w).join('\n'));
+        }
+        $('#statusArea').textContent = status;
+        showResults();
+      } catch (err) {
+        $('#statusArea').textContent = 'Errore: ' + err.message;
+        alert(err.message);
+      }
+    });
+
+    // ==================== THEME TOGGLE ====================
+    const _html = document.documentElement;
+    function _applyTheme(t) {
+      if (t === 'light') {
+        _html.setAttribute('data-theme', 'light');
+        $('#btnTheme').textContent = '☀️';
+        $('#btnTheme').title = 'Passa al tema scuro';
+      } else {
+        _html.removeAttribute('data-theme');
+        $('#btnTheme').textContent = '🌙';
+        $('#btnTheme').title = 'Passa al tema chiaro';
+      }
+      localStorage.setItem('shd_theme', t);
+      // Ridisegna canvas attivi con i nuovi colori
+      if (state.optimization) {
+        const activeSingle = $('#panel-single').classList.contains('active');
+        const activeGrid   = $('#panel-overview').classList.contains('active');
+        const activeAlt    = $('#panel-alternative').classList.contains('active');
+        if (activeSingle) buildSingleButtons();
+        if (activeGrid)   drawOverviewGrid($('#gridCanvas'), state.optimization.containers, state.container);
+        if (activeAlt && state.optimization.alternative) {
+          buildAltSingleButtons(state.optimization.alternative);
+          drawOverviewGrid($('#altGridCanvas'), state.optimization.alternative.containers, state.container, idx => _altContainerDims(state.optimization.alternative, idx));
+        }
+      }
+    }
+    // Init tema da localStorage
+    _applyTheme(localStorage.getItem('shd_theme') || 'dark');
+    $('#btnTheme').addEventListener('click', () => {
+      _applyTheme(_html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    });
+
+    // ==================== SAVE / LOAD CONFIG (server-side) ====================
+
+    function _applyConfig(cfg) {
+      state.articles = cfg.articles || [];
+      state.doors    = cfg.doors    || [];
+      state.visuals  = cfg.visuals  || [];
+      if (cfg.container) state.container = cfg.container;
+      const sel = $('#containerSelect');
+      if (sel && cfg.container) {
+        Array.from(sel.options).forEach(o => {
+          try {
+            const v = JSON.parse(o.value);
+            if (v.length === cfg.container.length && v.width === cfg.container.width && v.height === cfg.container.height) sel.value = o.value;
+          } catch {}
+        });
+        $('#containerDims').value = `${cfg.container.length} × ${cfg.container.width} × ${cfg.container.height}`;
+      }
+      renderArticles();
+      $('#configOverlay').classList.remove('open');
+      $('#statusArea').textContent = `Configurazione "${cfg.name}" caricata.`;
+    }
+
+    async function _renderConfigList() {
+      const el2 = $('#configList');
+      el2.innerHTML = '<div class="config-empty">Caricamento…</div>';
+      let list = [];
+      try {
+        const r = await fetch('/api/configs');
+        list = await r.json();
+      } catch { list = []; }
+      el2.innerHTML = '';
+      if (!list.length) {
+        el2.innerHTML = '<div class="config-empty">Nessuna configurazione salvata</div>';
+        return;
+      }
+      list.slice().reverse().forEach((cfg) => {
+        const item = document.createElement('div');
+        item.className = 'config-item';
+        item.innerHTML = `
+          <div class="config-item-info">
+            <div class="config-item-name">${cfg.name}</div>
+            <div class="config-item-meta">${cfg.date} &nbsp;·&nbsp; ${cfg.articleCount} articoli &nbsp;·&nbsp; ${cfg.containerType}</div>
+          </div>
+          <button class="btn small" data-load="${cfg.id}">Carica</button>
+          <button class="btn small" style="color:var(--err);border-color:var(--err);" data-del="${cfg.id}">&times;</button>
+        `;
+        el2.appendChild(item);
+      });
+      el2.querySelectorAll('[data-load]').forEach(b => b.addEventListener('click', () => {
+        const cfg = list.find(c => c.id === b.dataset.load);
+        if (cfg) _applyConfig(cfg);
+      }));
+      el2.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+        showConfirm('Elimina configurazione?', 'L\'operazione non è reversibile.', async () => {
+          await fetch(`/api/configs/${b.dataset.del}`, { method: 'DELETE' });
+          _renderConfigList();
+        });
+      }));
+    }
+
+    $('#btnConfig').addEventListener('click', () => {
+      _renderConfigList();
+      $('#configOverlay').classList.add('open');
+    });
+    $('#btnCloseConfig').addEventListener('click', () => $('#configOverlay').classList.remove('open'));
+    $('#configOverlay').addEventListener('click', e => { if (e.target === $('#configOverlay')) $('#configOverlay').classList.remove('open'); });
+
+    $('#btnSaveConfig').addEventListener('click', async () => {
+      const name = $('#configNameInput').value.trim();
+      if (!name) { $('#configNameInput').focus(); return; }
+      if (!state.articles.length && !state.doors.length && !state.visuals.length) {
+        alert('Nessun articolo da salvare. Aggiungi almeno un articolo prima.');
+        return;
+      }
+      const sel = $('#containerSelect');
+      let containerLabel = '';
+      try { containerLabel = sel.options[sel.selectedIndex]?.text || ''; } catch {}
+      const cfg = {
+        id: Date.now().toString(36),
+        name,
+        date: new Date().toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }),
+        articleCount: state.articles.length + state.doors.length + state.visuals.length,
+        containerType: containerLabel,
+        container: { ...state.container },
+        articles: JSON.parse(JSON.stringify(state.articles)),
+        doors: JSON.parse(JSON.stringify(state.doors)),
+        visuals: JSON.parse(JSON.stringify(state.visuals)),
+      };
+      await fetch('/api/configs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cfg)
+      });
+      $('#configNameInput').value = '';
+      _renderConfigList();
+    });
+
+    // Init UI
+    renderCatalog('');
+    document.querySelector('#codesFilter').addEventListener('input', e => renderCatalog(e.target.value));
+
+  </script>
+</body>
+
+</html>

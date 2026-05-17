@@ -37,6 +37,8 @@ export function Scene() {
         style={{ background: '#f4f6fb' }}
       >
         <Suspense fallback={null}>
+          {/* Set WebGL clear color — CSS background alone is overridden by WebGL */}
+          <color attach="background" args={['#f4f6fb']} />
           <Lighting />
           <FluidDNA />
           <CameraRig />

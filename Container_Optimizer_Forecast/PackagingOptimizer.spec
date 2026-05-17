@@ -1,0 +1,63 @@
+# -*- mode: python ; coding: utf-8 -*-
+
+
+a = Analysis(
+    ['launcher.py'],
+    pathex=[],
+    binaries=[],
+    datas=[
+        ('web', 'web'),
+        ('backend', 'backend'),
+    ],
+    hiddenimports=[
+        'uvicorn.logging',
+        'uvicorn.loops',
+        'uvicorn.loops.auto',
+        'uvicorn.protocols',
+        'uvicorn.protocols.http',
+        'uvicorn.protocols.http.auto',
+        'uvicorn.protocols.http.h11_impl',
+        'uvicorn.protocols.http.httptools_impl',
+        'uvicorn.protocols.websockets',
+        'uvicorn.protocols.websockets.auto',
+        'uvicorn.protocols.websockets.websockets_impl',
+        'uvicorn.lifespan',
+        'uvicorn.lifespan.on',
+        'uvicorn.config',
+        'uvicorn.main',
+        'anyio',
+        'anyio._backends._asyncio',
+        'starlette.routing',
+        'starlette.staticfiles',
+        'starlette.middleware.cors',
+    ],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
+    noarchive=False,
+    optimize=0,
+)
+pyz = PYZ(a.pure)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    a.binaries,
+    a.datas,
+    [],
+    name='PackagingOptimizer',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon='web/Container_Red_icon-icons.com_54903.ico',
+)
