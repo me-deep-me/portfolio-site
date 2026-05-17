@@ -15,7 +15,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useSceneStore } from '@/store/sceneStore';
 
-const N = 18_000;
+const N = 6_500;
 
 /* ── Vertex shader ── */
 const VERT = /* glsl */`
@@ -36,9 +36,9 @@ const VERT = /* glsl */`
   const float BOT     = -1.0;
 
   void main() {
-    /* ── Pitch opens with scroll: 5.8 turns → 2.4 turns ── */
-    float turns   = mix(5.8, 2.4, uScroll);
-    float helixR  = mix(0.44, 0.60, uScroll); // radius grows slightly too
+    /* ── Pitch opens with scroll: 4.0 turns → 1.6 turns (max 4 at start) ── */
+    float turns   = mix(4.0, 1.6, uScroll);
+    float helixR  = mix(0.90, 1.45, uScroll); // form widens significantly
 
     /* ── World Y ── */
     float yWorld = BOT + aT * HEIGHT;
@@ -81,10 +81,10 @@ const VERT = /* glsl */`
     float coreA    = clamp(0.88 - distCore * 2.2, 0.0, 1.0);
     vAlpha = coreA * clipFade * botFade;
 
-    /* ── Point size: perspective-scaled, bigger as camera zooms in ── */
-    float sz     = mix(6.5, 2.2, distCore * 2.8);
+    /* ── Bigger softer particles (fewer total → each one matters more) ── */
+    float sz     = mix(9.0, 3.5, distCore * 2.5);
     vec4  mvPos  = modelViewMatrix * vec4(x, y, z, 1.0);
-    gl_PointSize = clamp(sz * 9.0 / -mvPos.z, 1.5, 18.0);
+    gl_PointSize = clamp(sz * 11.0 / -mvPos.z, 2.0, 26.0);
     gl_Position  = projectionMatrix * mvPos;
   }
 `;
