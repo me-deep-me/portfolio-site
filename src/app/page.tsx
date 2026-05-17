@@ -6,20 +6,18 @@ import { useIsMobile }      from '@/hooks/useMediaQuery';
 import { Nav }              from '@/components/overlay/Nav';
 import { HeroSection }      from '@/components/overlay/HeroSection';
 import { AboutSection }     from '@/components/overlay/AboutSection';
-import { ProjectsSection }  from '@/components/overlay/ProjectsSection';
 import { SkillsSection }    from '@/components/overlay/SkillsSection';
 import { ContactSection }   from '@/components/overlay/ContactSection';
+import { ProjectCards }     from '@/components/overlay/ProjectCards';
 import { ProjectModal }     from '@/components/overlay/ProjectModal';
 import { MobileLayout }     from '@/components/mobile/MobileLayout';
+import { useSceneStore }    from '@/store/sceneStore';
 
 /** Dynamic import: Three.js is ~380KB, skip SSR */
 const Scene = dynamic(
   () => import('@/components/canvas/Scene').then((m) => ({ default: m.Scene })),
   { ssr: false, loading: () => null }
 );
-
-/** Scroll progress bar driven by Zustand store */
-import { useSceneStore } from '@/store/sceneStore';
 
 function ScrollProgressBar() {
   const progress = useSceneStore((s) => s.scrollProgress);
@@ -43,7 +41,7 @@ function ScrollProgressBar() {
 
 export default function Home() {
   const isMobile = useIsMobile();
-  useLenis(); // Initialises smooth scroll + syncs store (no-op on mobile until refactored)
+  useLenis();
 
   if (isMobile) {
     return <MobileLayout />;
@@ -58,20 +56,50 @@ export default function Home() {
       <Nav />
       <ScrollProgressBar />
 
+      {/* ── Project cards: fixed overlay alongside DNA ── */}
+      <ProjectCards />
+
       {/* ── Scrollable overlay content ── */}
       <main
         style={{
           position: 'relative',
           zIndex: 10,
-          /* Tall enough to drive the camera through all 5 stations */
           minHeight: '500vh',
+          /* Center column for text — DNA fills side space */
+          pointerEvents: 'none',
         }}
       >
-        <HeroSection />
-        <AboutSection />
-        <ProjectsSection />
-        <SkillsSection />
-        <ContactSection />
+        {/* Hero: full-width bottom-left */}
+        <div style={{ pointerEvents: 'auto' }}>
+          <HeroSection />
+        </div>
+
+        {/* About: appears after ~30% scroll, centered with margins */}
+        <div
+          style={{
+            pointerEvents: 'auto',
+            maxWidth: 500,
+            margin: '0 auto',
+            paddingTop: '30vh',
+          }}
+        >
+          <AboutSection />
+        </div>
+
+        {/* Spacer: DNA + cards zone (~200vh) */}
+        <div style={{ height: '200vh' }} />
+
+        {/* Skills + Contact: centered */}
+        <div
+          style={{
+            pointerEvents: 'auto',
+            maxWidth: 600,
+            margin: '0 auto',
+          }}
+        >
+          <SkillsSection />
+          <ContactSection />
+        </div>
       </main>
 
       {/* ── Project detail modal ── */}

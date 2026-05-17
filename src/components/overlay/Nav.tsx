@@ -18,7 +18,7 @@ export function Nav() {
     if (!navRef.current) return;
     const scrolled = scrollProgress > 0.02;
     navRef.current.style.borderBottomColor = scrolled
-      ? 'rgba(106,174,232,0.09)'
+      ? 'rgba(58,143,212,0.14)'
       : 'transparent';
   }, [scrollProgress]);
 
@@ -35,8 +35,8 @@ export function Nav() {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '1.35rem 3.5rem',
-        background: 'rgba(7,16,28,0.78)',
-        backdropFilter: 'blur(18px)',
+        background: 'rgba(240,244,252,0.80)',
+        backdropFilter: 'blur(20px) saturate(160%)',
         borderBottom: '1px solid transparent',
         transition: 'border-color 0.4s ease',
       }}

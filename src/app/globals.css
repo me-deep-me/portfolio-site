@@ -1,18 +1,22 @@
 @import "tailwindcss";
 
-/* ── Design tokens ── */
+/* ── Design tokens — light / glass theme ── */
 :root {
-  --bg:      #07101c;
-  --bg2:     #0b1724;
-  --bg3:     #0f1e2e;
-  --ink:     #dde6f2;
-  --ink2:    rgba(221,230,242,0.52);
-  --ink3:    rgba(221,230,242,0.28);
-  --sky:     #6aaee8;
-  --sky2:    #3d85c8;
-  --skydim:  rgba(106,174,232,0.11);
-  --border:  rgba(106,174,232,0.09);
-  --border2: rgba(106,174,232,0.18);
+  --bg:      #f0f4fc;
+  --bg2:     #e8eef8;
+  --bg3:     #fafcff;
+  --ink:     #0d1a2e;
+  --ink2:    rgba(13,26,46,0.58);
+  --ink3:    rgba(13,26,46,0.36);
+  --sky:     #3a8fd4;
+  --sky2:    #2070b8;
+  --skydim:  rgba(58,143,212,0.08);
+  --border:  rgba(58,143,212,0.14);
+  --border2: rgba(58,143,212,0.22);
+  /* Glass morphism */
+  --glass-bg:     rgba(255,255,255,0.55);
+  --glass-border: rgba(255,255,255,0.82);
+  --glass-shadow: 0 4px 24px rgba(30,60,120,0.08);
   --fd: var(--font-dm-serif), Georgia, serif;
   --fb: var(--font-plus-jakarta), system-ui, sans-serif;
 }
@@ -39,7 +43,7 @@
 html {
   scroll-behavior: smooth;
   height: 100%;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -50,14 +54,13 @@ body {
   line-height: 1.65;
   font-weight: 300;
   overflow-x: hidden;
-  /* Lenis needs this */
   height: auto;
 }
 
 /* ── Keyframes ── */
 @keyframes breathe {
-  0%, 100% { opacity: 0.25; }
-  50%       { opacity: 0.85; }
+  0%, 100% { opacity: 0.22; }
+  50%       { opacity: 0.80; }
 }
 
 @keyframes fadeUp {
@@ -70,6 +73,16 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-36px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(36px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 /* ── Scroll progress bar ── */
 .scroll-progress-bar {
   position: fixed;
@@ -80,6 +93,16 @@ body {
   z-index: 999;
   transform-origin: left;
   transition: transform 0.1s linear;
+}
+
+/* ── Glass card ── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow), 0 0 0 0.5px rgba(255,255,255,0.7) inset;
 }
 
 /* ── Section reveal ── */

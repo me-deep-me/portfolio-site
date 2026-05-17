@@ -1,25 +1,25 @@
 import * as THREE from 'three';
 
 /**
- * Camera positions at each of the 5 stations.
- * The tree sits at origin (x=0, z=0), grows from y=-0.45 to ~y+2.
- * We orbit the camera around it so different stations reveal different facets.
+ * Camera path orbiting the DNA helix.
+ * DNA grows from y=-1.0 to y=6.7, visual center tracks upward with scroll.
+ * Camera arcs: front → right → front-high → left → front-pullback.
  */
 const POSITIONS = [
-  new THREE.Vector3(0,    1.6,  7.5),   // 0 HERO  — front, mid-height → tree fills frame
-  new THREE.Vector3(-4.0, 1.4,  4.0),   // 1 ABOUT — left arc, same height band
-  new THREE.Vector3(-1.5, 1.2, -5.5),   // 2 PROJECTS — behind tree, raised so tree stays center
-  new THREE.Vector3( 4.5, 2.8,  2.5),   // 3 SKILLS — right, elevated but less extreme
-  new THREE.Vector3( 0,   1.4,  9.0),   // 4 CONTACT — front wide shot
+  new THREE.Vector3( 0.0,  0.5, 5.5),   // 0 HERO  — front, lower DNA in frame
+  new THREE.Vector3( 3.0,  1.5, 4.5),   // 1 ABOUT — right orbit
+  new THREE.Vector3( 0.0,  2.8, 5.0),   // 2 PROJ  — front, mid-height
+  new THREE.Vector3(-3.0,  3.5, 4.5),   // 3 SKILLS — left orbit, higher
+  new THREE.Vector3( 0.0,  3.2, 7.0),   // 4 CONTACT — front, pulled back
 ];
 
-/** LookAt targets — tracking the tree's visual center (~y=1.4) consistently */
+/** LookAt targets tracking the growing DNA center */
 const LOOKAT_TARGETS = [
-  new THREE.Vector3(0,   1.4, 0),       // 0 HERO
-  new THREE.Vector3(0,   1.3, 0),       // 1 ABOUT
-  new THREE.Vector3(0,   1.4, 0),       // 2 PROJECTS
-  new THREE.Vector3(0,   1.5, 0),       // 3 SKILLS
-  new THREE.Vector3(0,   1.3, 0),       // 4 CONTACT
+  new THREE.Vector3(0,  1.0, 0),   // lower DNA visible
+  new THREE.Vector3(0,  2.0, 0),   // mid DNA
+  new THREE.Vector3(0,  2.8, 0),   // mid-upper DNA
+  new THREE.Vector3(0,  3.2, 0),   // upper DNA
+  new THREE.Vector3(0,  3.0, 0),   // full DNA
 ];
 
 export const POSITION_CURVE = new THREE.CatmullRomCurve3(POSITIONS, false, 'catmullrom', 0.5);

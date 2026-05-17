@@ -1,46 +1,38 @@
 'use client';
 
-import { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense } from 'react';
-import * as THREE from 'three';
-import { Bloom, DepthOfField, Vignette, EffectComposer } from '@react-three/postprocessing';
-import { CameraRig }     from './CameraRig';
-import { GridFloor }     from './GridFloor';
-import { TubeTree }      from './TubeTree';
-import { ParticleField } from './ParticleField';
-import { useSceneStore }  from '@/store/sceneStore';
+import { Canvas } from '@react-three/fiber';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { CameraRig }  from './CameraRig';
+import { DNAHelix }   from './DNAHelix';
 
 function Lighting() {
   return (
     <>
-      {/* Ambient: dim blue tint */}
-      <ambientLight intensity={0.18} color="#1a3a5c" />
-      {/* Key: sky-blue fill */}
-      <directionalLight position={[3, 5, 4]} intensity={0.6} color="#6aaee8" />
-      {/* Rim: subtle back-left */}
-      <directionalLight position={[-4, 2, -3]} intensity={0.25} color="#3d85c8" />
+      {/* Strong ambient for bright white bg */}
+      <ambientLight intensity={1.4} color="#ffffff" />
+      {/* Key light — top-right, creates glass highlights */}
+      <directionalLight position={[4, 8, 4]} intensity={2.2} color="#ffffff" />
+      {/* Fill — left-back, cool blue tint */}
+      <directionalLight position={[-5, 3, -3]} intensity={0.9} color="#cce4ff" />
+      {/* Rim — top-center-back for glass edge glow */}
+      <pointLight position={[0, 7, -4]} intensity={2.0} color="#aaccff" />
+      {/* Ground bounce */}
+      <pointLight position={[0, -3, 3]} intensity={0.6} color="#e8f2ff" />
     </>
   );
 }
 
 function PostFX() {
-  const bloomIntensity = useSceneStore((s) => s.bloomIntensity);
   return (
     <EffectComposer>
       <Bloom
-        intensity={bloomIntensity}
-        luminanceThreshold={0.35}
-        luminanceSmoothing={0.82}
+        intensity={0.35}
+        luminanceThreshold={0.78}
+        luminanceSmoothing={0.6}
         mipmapBlur
-        radius={0.65}
+        radius={0.5}
       />
-      <DepthOfField
-        focusDistance={0.01}
-        focalLength={0.2}
-        bokehScale={1.2}
-      />
-      <Vignette eskil={false} offset={0.28} darkness={0.62} />
     </EffectComposer>
   );
 }
@@ -57,42 +49,23 @@ export function Scene() {
       aria-hidden="true"
     >
       <Canvas
-        camera={{ position: [0, 1.2, 6.0], fov: 60, near: 0.1, far: 120 }}
+        camera={{ position: [0, 0.5, 5.5], fov: 55, near: 0.1, far: 100 }}
         dpr={[1, 1.5]}
         gl={{
           alpha: false,
           stencil: false,
           powerPreference: 'high-performance',
-          antialias: false,
+          antialias: true,
         }}
-        style={{ background: '#07101c' }}
+        style={{ background: '#f0f4fc' }}
       >
         <Suspense fallback={null}>
           <Lighting />
-          <FogLayer />
-          <GridFloor />
-          <TubeTree />
-          <ParticleField />
+          <DNAHelix />
           <CameraRig />
           <PostFX />
         </Suspense>
       </Canvas>
     </div>
   );
-}
-
-/** Smoothly mutates fog.far each frame — avoids creating new Fog objects */
-function FogLayer() {
-  const fogFarRef = useRef(18);
-  const fogFar    = useSceneStore((s) => s.fogFar);
-  fogFarRef.current = fogFar;
-
-  useFrame(({ scene }) => {
-    if (scene.fog) {
-      const fog = scene.fog as THREE.Fog;
-      fog.far = THREE.MathUtils.lerp(fog.far, fogFarRef.current, 0.05);
-    }
-  });
-
-  return <fog attach="fog" args={['#07101c', 4, 18]} />;
 }
