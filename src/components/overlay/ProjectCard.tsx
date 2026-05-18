@@ -42,7 +42,7 @@ export function ProjectCard({ project, index, total, progress, onOpen }: Props) 
   return (
     <motion.article
       onClick={visible > 0.45 ? onOpen : undefined}
-      className={`absolute top-1/2 z-20 w-[min(280px,30vw)] xl:w-[min(340px,32vw)] overflow-hidden cursor-pointer rounded-3xl border border-white/80 bg-white/65 px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-xl transition-shadow hover:shadow-[0_30px_90px_rgba(0,0,0,0.14)] ${
+      className={`absolute top-1/2 z-20 w-[min(300px,32vw)] xl:w-[min(360px,32vw)] cursor-pointer rounded-2xl border border-white/80 bg-white/65 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-xl transition-shadow hover:shadow-[0_30px_90px_rgba(0,0,0,0.14)] ${
         isLeft
           ? 'right-[calc(50%+80px)] xl:right-[calc(50%+112px)]'
           : 'left-[calc(50%+80px)] xl:left-[calc(50%+112px)]'

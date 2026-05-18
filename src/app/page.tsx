@@ -80,7 +80,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.16, ease: 'easeOut' }}
-            className="mx-auto mt-7 max-w-xl text-pretty text-[15px] leading-relaxed text-neutral-600 md:mt-8 md:max-w-2xl md:text-lg md:leading-7"
+            className="mx-auto mt-7 max-w-2xl text-balance text-[15px] leading-relaxed text-neutral-600 md:mt-8 md:text-lg md:leading-8"
           >
             I turn industrial complexity into software that works. From combinatorial
             optimization to AI-assisted pipelines — I build tools that make hard
@@ -164,55 +164,77 @@ export default function Home() {
       {/* ── About ── */}
       <section
         id="about"
-        className="relative z-20 mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-5 py-20 text-center md:py-24"
+        className="relative z-20 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-5 py-20 text-center md:py-28"
       >
-        <p className="text-[10px] uppercase tracking-[0.34em] text-neutral-500">about</p>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="w-full"
+        >
+          <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-neutral-500">about</p>
 
-        <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.035em] text-neutral-950 md:mt-6 md:text-5xl md:tracking-[-0.04em]">
-          Engineer who ships.
-        </h2>
+          <h2 className="mt-6 text-balance text-4xl font-semibold tracking-[-0.04em] text-neutral-950 md:mt-7 md:text-6xl lg:text-7xl">
+            Engineer who{' '}
+            <span className="font-normal italic text-neutral-400">ships</span>.
+          </h2>
 
-        <p className="mx-auto mt-7 max-w-2xl text-pretty text-[15px] leading-relaxed text-neutral-600 md:mt-8 md:text-lg md:leading-8">
-          I&apos;m a Management Engineer with a strong lean toward{' '}
-          <span className="font-medium text-neutral-950">
-            process digitalization, operations research and AI
-          </span>
-          . My work sits at the intersection of industrial logic and software craft — I analyse how
-          things actually work, find where the friction is, and build tools that remove it.
-        </p>
-
-        <p className="mx-auto mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-neutral-600 md:mt-5 md:text-lg md:leading-8">
-          Over the past year I independently designed and deployed a full suite of industrial
-          applications in a real healthcare infrastructure company — solving NP-hard optimization
-          problems, automating logistics planning, structuring a 85,000-record database, and
-          experimenting with local LLM and RAG architectures.
-        </p>
-
-        <div className="mx-auto mt-10 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
-          {['Process Automation', 'Operations Research', 'AI Workflows'].map((item) => (
-            <div
-              key={item}
-              className="rounded-2xl border border-neutral-100 bg-white/70 p-4 text-center shadow-[0_18px_60px_rgba(0,0,0,0.045)]"
-            >
-              <p className="text-sm font-medium text-neutral-950">{item}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mx-auto mt-8 flex max-w-2xl flex-wrap justify-center gap-1.5 md:gap-2">
-          {[
-            'Python', 'Operations Research', 'FastAPI', 'Excel · VBA', 'HTML · CSS · JS',
-            '2D/3D Bin Packing', 'LLM · RAG', 'Data Quality', 'BIM · Revit',
-            'Process Design', 'Lean Digital Engineering', 'Prompt Engineering',
-          ].map((chip) => (
-            <span
-              key={chip}
-              className="rounded-full border border-neutral-200 bg-white/60 px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-neutral-600 md:px-3 md:py-1 md:text-[11px]"
-            >
-              {chip}
+          <p className="mx-auto mt-8 max-w-2xl text-balance text-[15px] leading-relaxed text-neutral-600 md:mt-10 md:text-lg md:leading-8">
+            I&apos;m a Management Engineer with a strong lean toward{' '}
+            <span className="font-medium text-neutral-950">
+              process digitalization, operations research and AI
             </span>
-          ))}
-        </div>
+            . My work sits at the intersection of industrial logic and software craft — I analyse how
+            things actually work, find where the friction is, and build tools that remove it.
+          </p>
+
+          <p className="mx-auto mt-5 max-w-2xl text-balance text-[15px] leading-relaxed text-neutral-600 md:mt-6 md:text-lg md:leading-8">
+            Over the past year I independently designed and deployed a full suite of industrial
+            applications in a real healthcare infrastructure company — solving NP-hard optimization
+            problems, automating logistics planning, structuring a 85,000-record database, and
+            experimenting with local LLM and RAG architectures.
+          </p>
+
+          {/* Numbered focus cards — same visual language as project cards */}
+          <div className="mx-auto mt-12 grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3 md:mt-14">
+            {[
+              { num: '01', label: 'Process Automation',   sub: 'Workflows that scale' },
+              { num: '02', label: 'Operations Research',  sub: 'Optimization & heuristics' },
+              { num: '03', label: 'AI Workflows',         sub: 'LLM · RAG · local inference' },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="group rounded-2xl border border-neutral-200/80 bg-white/70 p-5 text-left backdrop-blur-xl transition hover:border-neutral-900/30 hover:shadow-[0_24px_80px_rgba(0,0,0,0.06)]"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[10px] tracking-[0.22em] text-neutral-400">
+                    {item.num}
+                  </span>
+                  <span className="h-px flex-1 bg-neutral-200" />
+                </div>
+                <p className="mt-3 text-sm font-medium text-neutral-950">{item.label}</p>
+                <p className="mt-1 text-[12px] leading-snug text-neutral-500">{item.sub}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Tech stack chips */}
+          <div className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-1.5 md:mt-12 md:gap-2">
+            {[
+              'Python', 'Operations Research', 'FastAPI', 'Excel · VBA', 'HTML · CSS · JS',
+              '2D/3D Bin Packing', 'LLM · RAG', 'Data Quality', 'BIM · Revit',
+              'Process Design', 'Lean Digital Engineering', 'Prompt Engineering',
+            ].map((chip) => (
+              <span
+                key={chip}
+                className="rounded-full border border-neutral-200 bg-white/60 px-3 py-1 text-[10px] uppercase tracking-wide text-neutral-600 md:text-[11px]"
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+        </motion.div>
       </section>
 
       {/* ── Contact ── */}

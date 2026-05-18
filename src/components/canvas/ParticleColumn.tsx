@@ -97,8 +97,11 @@ export function ParticleColumn({ progress }: Props) {
     const draw = (timeMs: number) => {
       const time         = timeMs * 0.001;
       const p            = progressRef.current;
-      /* DNA appears immediately upon entering pinned section, fully grown just before first card (trigger 0.06) */
-      const growth       = smoothstep(0.005, 0.05, p);
+      /* DNA appears immediately on enter (full just before first card 0.06),
+         then dissolves after the last card finishes (~0.93) so About appears clean. */
+      const growIn       = smoothstep(0.005, 0.05, p);
+      const growOut      = 1 - smoothstep(0.93, 0.99, p);
+      const growth       = growIn * growOut;
       const centerX      = width / 2;
       const centerY      = height / 2;
       const columnHeight = Math.min(height * 0.88, 820);
