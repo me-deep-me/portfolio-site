@@ -54,10 +54,7 @@ const jsonLd = {
   jobTitle: 'Management Engineer',
   description: 'Management Engineer specialising in process digitalization, operations research and AI.',
   email: 'mattiaerigoni99@gmail.com',
-  sameAs: [
-    'https://linkedin.com/in/mattia-erigoni',
-    'https://github.com/mattia-erigoni',
-  ],
+  sameAs: ['https://www.linkedin.com/in/mattia-erigoni-b87614183/'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

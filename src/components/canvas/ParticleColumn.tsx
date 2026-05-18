@@ -2,57 +2,44 @@
 
 import { useEffect, useRef } from 'react';
 
+function clamp(v: number, min = 0, max = 1) {
+  return Math.max(min, Math.min(max, v));
+}
+
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
+
 interface Particle {
-  strand: number;
-  y: number;
-  jitter: number;
-  radial: number;
-  phase: number;
-  size: number;
-  opacity: number;
-  drift: number;
-}
-
-interface Vortex {
-  y: number;
-  phase: number;
-  strength: number;
+  seed: number;
+  strand: number;        // -1 or +1
+  yBase: number;
   radius: number;
-}
-
-interface FrameParticle {
-  x: number;
-  y: number;
-  size: number;
-  alpha: number;
+  speed: number;
+  phase: number;
+  cylinderAngle: number;
+  cylinderRadius: number;
   depth: number;
-}
-
-function clamp(value: number, min = 0, max = 1) {
-  return Math.max(min, Math.min(max, value));
-}
-
-function smoothstep(edge0: number, edge1: number, value: number) {
-  const x = clamp((value - edge0) / (edge1 - edge0));
-  return x * x * (3 - 2 * x);
-}
-
-function seededRandom(seed: number) {
-  const x = Math.sin(seed) * 10000;
-  return x - Math.floor(x);
+  accent: 'black' | 'blue' | 'cyan';
 }
 
 interface Props {
   progress: number;
+  projectsActive: boolean;
 }
 
-export function ParticleColumn({ progress }: Props) {
-  const canvasRef   = useRef<HTMLCanvasElement>(null);
-  const progressRef = useRef(progress);
+export function ParticleColumn({ progress, projectsActive }: Props) {
+  const canvasRef         = useRef<HTMLCanvasElement | null>(null);
+  const targetProgressRef = useRef(progress);
+  const projectsActiveRef = useRef(projectsActive);
 
   useEffect(() => {
-    progressRef.current = progress;
+    targetProgressRef.current = progress;
   }, [progress]);
+
+  useEffect(() => {
+    projectsActiveRef.current = projectsActive;
+  }, [projectsActive]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -60,33 +47,37 @@ export function ParticleColumn({ progress }: Props) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrame = 0;
     let width  = 0;
     let height = 0;
-    let dpr    = 1;
+    let raf    = 0;
+    let dnaMorph = projectsActiveRef.current ? 1 : 0;
+    let visualProgress = targetProgressRef.current;
+    const dpr  = Math.min(window.devicePixelRatio || 1, 2);
 
-    const particles: Particle[] = Array.from({ length: 980 }, (_, i) => ({
-      strand: i % 2,
-      y:       seededRandom(i * 7.13 + 3.7),
-      jitter:  seededRandom(i * 11.91 + 8.2),
-      radial:  seededRandom(i * 17.41 + 2.5),
-      phase:   seededRandom(i * 19.17 + 9.9) * Math.PI * 2,
-      size:    0.55 + seededRandom(i * 23.3 + 4.4) * 1.35,
-      opacity: 0.28 + seededRandom(i * 29.3 + 1.2) * 0.62,
-      drift:   seededRandom(i * 31.3 + 6.9) - 0.5,
-    }));
+    const particles: Particle[] = Array.from({ length: 680 }, (_, i) => {
+      const strand    = i % 2 === 0 ? -1 : 1;
+      const blueRoll  = Math.random();
+      const accent: Particle['accent'] =
+        blueRoll > 0.94 ? 'blue' :
+        blueRoll > 0.88 ? 'cyan' : 'black';
 
-    const vortices: Vortex[] = Array.from({ length: 18 }, (_, i) => ({
-      y:        seededRandom(i * 13.77 + 1.4),
-      phase:    seededRandom(i * 9.31 + 2.8) * Math.PI * 2,
-      strength: 0.5 + seededRandom(i * 6.71 + 8.1) * 0.9,
-      radius:   0.04 + seededRandom(i * 14.44 + 5.2) * 0.05,
-    }));
+      return {
+        seed: Math.random() * 1000,
+        strand,
+        yBase: Math.random(),
+        radius: 0.55 + Math.random() * 1.45,
+        speed: 0.35 + Math.random() * 0.75,
+        phase: Math.random() * Math.PI * 2,
+        cylinderAngle: Math.random() * Math.PI * 2,
+        cylinderRadius: 0.34 + Math.random() * 0.82,
+        depth: 0.35 + Math.random() * 0.9,
+        accent,
+      };
+    });
 
     const resize = () => {
-      dpr           = Math.min(window.devicePixelRatio || 1, 2);
-      width         = window.innerWidth;
-      height        = window.innerHeight;
+      width  = window.innerWidth;
+      height = window.innerHeight;
       canvas.width  = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width  = `${width}px`;
@@ -94,122 +85,109 @@ export function ParticleColumn({ progress }: Props) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    const draw = (timeMs: number) => {
-      const time         = timeMs * 0.001;
-      const p            = progressRef.current;
-      /* DNA appears immediately on enter (full just before first card 0.06),
-         then dissolves after the last card finishes (~0.93) so About appears clean. */
-      const growIn       = smoothstep(0.005, 0.05, p);
-      const growOut      = 1 - smoothstep(0.93, 0.99, p);
-      const growth       = growIn * growOut;
-      const centerX      = width / 2;
-      const centerY      = height / 2;
-      const columnHeight = Math.min(height * 0.88, 820);
-      const topY         = centerY - columnHeight / 2;
-      const bottomY      = centerY + columnHeight / 2;
-      const revealTop    = bottomY - columnHeight * growth;
-      const baseRadius   = Math.max(38, Math.min(78, width * 0.055));
-
-      // Camera orbit: the helix stays conceptually central, the viewpoint circles around it.
-      const cameraOrbit = time * 0.22 + p * Math.PI * 1.45;
-      const cosCamera   = Math.cos(cameraOrbit);
-      const sinCamera   = Math.sin(cameraOrbit);
-      const focalLength = baseRadius * 5.9;
+    const draw = (time: number) => {
+      const t        = time * 0.001;
+      visualProgress += (targetProgressRef.current - visualProgress) * 0.075;
+      const p        = visualProgress;
+      const targetMorph = projectsActiveRef.current ? 1 : 0;
+      dnaMorph += (targetMorph - dnaMorph) * 0.072;
+      const cx       = width * 0.5;
+      const dnaPull  = dnaMorph * dnaMorph;
+      const columnH  = height * lerp(0.8, 0.94, dnaPull);
+      const top      = (height - columnH) * 0.5;
+      const cylinderAmp = Math.min(width * 0.092, 86);
+      const dnaAmp      = Math.min(width * 0.075, 68);
+      const amp         = lerp(cylinderAmp, dnaAmp, dnaPull);
+      const twist       = lerp(2.3, 4.2, dnaPull);
+      const cameraOrbit = t * lerp(0.13, 0.16, dnaPull) + p * Math.PI * 1.55;
 
       ctx.clearRect(0, 0, width, height);
 
-      const frameParticles: FrameParticle[] = [];
-
-      for (const particle of particles) {
-        const yNorm = particle.y;
-        const yBase = topY + yNorm * columnHeight;
-        if (yBase < revealTop) continue;
-
-        const revealFade = smoothstep(revealTop, revealTop + 120, yBase);
-        const edgeFade   = smoothstep(0, 0.08, yNorm) * (1 - smoothstep(0.93, 1, yNorm));
-        const helixTurns = Math.PI * 2 * 2.65;
-        const helixPhase = particle.strand === 0 ? 0 : Math.PI;
-
-        // Slow internal drift keeps the ink alive without looking spun.
-        const internalFlow = time * 0.055;
-        const angle        = yNorm * helixTurns + helixPhase + internalFlow + particle.phase * 0.08;
-
-        const breathing   = 1 + 0.17 * Math.sin(time * 1.4 + yNorm * 18) + 0.06 * Math.sin(time * 2.7 + yNorm * 37);
-        const localRadius = baseRadius * breathing * (0.72 + particle.radial * 0.62);
-
-        let vortexX = 0, vortexY = 0, vortexZ = 0;
-        for (const vortex of vortices) {
-          const dy        = yNorm - vortex.y;
-          const influence = Math.exp(-(dy * dy) / (vortex.radius * vortex.radius));
-          if (influence > 0.001) {
-            const va  = time * (1.2 + vortex.strength) + vortex.phase + dy * 46;
-            vortexX  += Math.cos(va) * influence * 10 * vortex.strength;
-            vortexY  += Math.sin(va) * influence * 7  * vortex.strength;
-            vortexZ  += Math.sin(va * 0.8 + particle.phase) * influence * 9 * vortex.strength;
+      if (dnaMorph > 0.2) {
+        for (let strand = 0; strand < 2; strand += 1) {
+          ctx.beginPath();
+          for (let i = 0; i <= 84; i += 1) {
+            const yNorm = i / 84;
+            const angle = yNorm * Math.PI * twist + (strand === 0 ? 0 : Math.PI) + cameraOrbit;
+            const x = cx + Math.cos(angle) * amp;
+            const y = top + yNorm * columnH;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
           }
+          ctx.strokeStyle = `rgba(15, 23, 42, ${0.08 * dnaPull})`;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
         }
 
-        const liquidNoiseX = Math.sin(time * 0.85 + particle.phase + yNorm * 31)         * 7 * particle.jitter;
-        const liquidNoiseY = Math.cos(time * 0.65 + particle.phase * 1.7 + yNorm * 19)   * 5 * particle.drift;
-        const liquidNoiseZ = Math.sin(time * 0.72 + particle.phase * 1.3 + yNorm * 23)   * 8 * particle.jitter;
+        const bridges = 26;
+        for (let i = 0; i < bridges; i += 1) {
+          const yNorm  = i / Math.max(bridges - 1, 1);
+          const angle  = yNorm * Math.PI * twist + cameraOrbit;
+          const z      = (Math.sin(angle) + 1) * 0.5;
+          const y      = top + yNorm * columnH;
+          const x1     = cx + Math.cos(angle) * amp;
+          const x2     = cx - Math.cos(angle) * amp;
+          const bridgeAlpha = clamp((0.035 + z * 0.11) * dnaPull, 0, 0.16);
 
-        // 3D helix, then rotate camera around vertical axis.
-        const objectX = Math.sin(angle) * localRadius + liquidNoiseX + vortexX;
-        const objectZ = Math.cos(angle) * localRadius + liquidNoiseZ + vortexZ;
-        const cameraX = objectX * cosCamera - objectZ * sinCamera;
-        const cameraZ = objectX * sinCamera + objectZ * cosCamera;
-
-        // Perspective projection
-        const perspective = clamp(focalLength / Math.max(focalLength - cameraZ, focalLength * 0.42), 0.68, 1.42);
-        const depth01     = clamp((cameraZ / baseRadius + 1.65) / 3.3);
-        const x           = centerX + cameraX * perspective;
-        const y           = yBase + liquidNoiseY + vortexY + cameraZ * 0.025;
-
-        const alpha = particle.opacity * revealFade * edgeFade * (0.32 + depth01 * 0.72);
-        const size  = particle.size * perspective * (0.82 + depth01 * 0.26);
-
-        frameParticles.push({ x, y, size, alpha, depth: cameraZ });
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(15, 23, 42, ${bridgeAlpha})`;
+          ctx.lineWidth   = 0.8;
+          ctx.moveTo(x1, y);
+          ctx.lineTo(x2, y);
+          ctx.stroke();
+        }
       }
 
-      // Back-to-front draw for depth perception.
-      frameParticles.sort((a, b) => a.depth - b.depth);
+      for (const particle of particles) {
+        const yNorm         = (particle.yBase + t * 0.018 * particle.speed) % 1;
+        const cylinderAngle = particle.cylinderAngle + cameraOrbit * 0.72 +
+                              Math.sin(t * 0.2 + particle.seed) * 0.12;
+        const strandPhase   = particle.strand > 0 ? 0 : Math.PI;
+        const dnaAngle      = yNorm * Math.PI * twist + strandPhase + cameraOrbit +
+                              Math.sin(t * 0.28 + particle.seed) * 0.045;
 
-      for (const fp of frameParticles) {
+        const cylinderX = Math.cos(cylinderAngle) * amp * particle.cylinderRadius;
+        const dnaX      = Math.cos(dnaAngle) * amp +
+                          Math.sin(particle.phase + t * 0.32) * 2.4;
+        const noise     = Math.sin(t * particle.speed + particle.seed + yNorm * 14) * lerp(13, 1.4, dnaPull);
+
+        const cylinderZ = (Math.sin(cylinderAngle) + 1) * 0.5;
+        const dnaZ      = (Math.sin(dnaAngle) + 1) * 0.5;
+        const z         = lerp(cylinderZ, dnaZ, dnaPull);
+
+        const x     = cx + lerp(cylinderX, dnaX, dnaPull) + noise;
+        const y     = top + yNorm * columnH + Math.sin(t * particle.speed + particle.seed) * lerp(6, 1.1, dnaPull);
+        const alpha = clamp(0.15 + z * 0.46 + dnaPull * 0.16, 0.11, 0.86);
+        const size  = particle.radius * lerp(0.75, 1.35, z) * particle.depth;
+
+        let fill = `rgba(18, 18, 18, ${alpha})`;
+        if (particle.accent === 'blue') fill = `rgba(37, 99, 235, ${alpha * 0.72})`;
+        if (particle.accent === 'cyan') fill = `rgba(14, 165, 233, ${alpha * 0.55})`;
+
         ctx.beginPath();
-        ctx.fillStyle = `rgba(0, 0, 0, ${fp.alpha})`;
-        ctx.arc(fp.x, fp.y, fp.size, 0, Math.PI * 2);
+        ctx.fillStyle = fill;
+        ctx.arc(x, y, size, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // Liquid surface line at growth frontier
-      const liquidLineAlpha = clamp((growth - 0.02) / 0.2) * 0.08;
-      if (liquidLineAlpha > 0) {
-        const gradient = ctx.createLinearGradient(0, revealTop - 22, 0, revealTop + 34);
-        gradient.addColorStop(0,   'rgba(0,0,0,0)');
-        gradient.addColorStop(0.5, `rgba(0,0,0,${liquidLineAlpha})`);
-        gradient.addColorStop(1,   'rgba(0,0,0,0)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(centerX - baseRadius * 1.9, revealTop - 24, baseRadius * 3.8, 58);
-      }
-
-      animationFrame = requestAnimationFrame(draw);
+      raf = window.requestAnimationFrame(draw);
     };
 
     resize();
     window.addEventListener('resize', resize);
-    animationFrame = requestAnimationFrame(draw);
+    raf = window.requestAnimationFrame(draw);
 
     return () => {
+      window.cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrame);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-0 pointer-events-none"
       aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-0 opacity-75"
     />
   );
 }

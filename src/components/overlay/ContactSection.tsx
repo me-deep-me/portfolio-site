@@ -2,8 +2,7 @@
 
 const CONTACT_LINES = [
   { label: 'Email',        href: 'mailto:mattiaerigoni99@gmail.com', text: 'mattiaerigoni99@gmail.com' },
-  { label: 'LinkedIn',     href: 'https://linkedin.com/in/mattia-erigoni', text: 'linkedin.com/in/mattia-erigoni', external: true },
-  { label: 'GitHub',       href: 'https://github.com/mattia-erigoni', text: 'github.com/mattia-erigoni', external: true },
+  { label: 'LinkedIn',     href: 'https://www.linkedin.com/in/mattia-erigoni-b87614183/', text: 'linkedin.com/in/mattia-erigoni-b87614183', external: true },
   { label: 'Languages',    href: null, text: 'Italian · English · Spanish' },
   { label: 'Availability', href: null, text: 'Open to opportunities' },
 ];
@@ -118,14 +117,14 @@ export function ContactSection() {
         <span>© 2026 Mattia Erigoni</span>
         <span>Management Engineer · Digital Builder</span>
         <a
-          href="https://github.com/mattia-erigoni"
+          href="https://www.linkedin.com/in/mattia-erigoni-b87614183/"
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: 'var(--ink3)', textDecoration: 'none', transition: 'color 0.2s' }}
           onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sky)')}
           onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ink3)')}
         >
-          GitHub ↗
+          LinkedIn ↗
         </a>
       </footer>
     </section>
