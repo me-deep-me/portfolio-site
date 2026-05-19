@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     'process digitalization',
   ],
   robots: { index: true, follow: true },
+  verification: {
+    google: 'tN29w67-KRAZFoXqL6hJGPQ0fM6wziVb7CwHz-csgqM',
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -74,8 +77,8 @@ const jsonLd = {
   '@type': 'Person',
   name: 'Mattia Erigoni',
   url: 'https://mattiaerigoni.com',
-  jobTitle: 'Management Engineer',
-  description: 'Management Engineer specialising in process digitalization, operations research and AI.',
+  jobTitle: 'Management Engineer and Digital Builder',
+  description: 'Builder of operational software, optimization tools, data-quality systems and private AI workflows.',
   email: 'mattiaerigoni99@gmail.com',
   sameAs: ['https://www.linkedin.com/in/mattia-erigoni-b87614183/'],
 };
