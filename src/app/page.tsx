@@ -426,7 +426,7 @@ export default function Home() {
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="mb-5 text-[9px] uppercase tracking-[0.32em] text-neutral-500 sm:text-xs sm:tracking-[0.38em]"
           >
-            Management Engineer · Digital Builder · AI
+            Mattia Erigoni · Management Engineer
           </motion.p>
 
           <motion.h1
@@ -445,11 +445,11 @@ export default function Home() {
             className="mx-auto mt-7 max-w-[330px] text-balance text-center text-[14px] font-medium leading-7 text-neutral-700 md:mt-8 md:max-w-[760px] md:text-xl md:font-normal md:leading-9 md:text-neutral-600"
           >
             <span className="md:hidden">
-              Industrial complexity, translated into tools for faster planning, cleaner data and private AI workflows.
+              Mattia Erigoni builds operational software and AI tools for planning, logistics and data quality.
             </span>
             <span className="hidden md:inline">
-              I turn industrial complexity into software that works. From combinatorial optimization to AI-assisted
-              pipelines — I build tools that make hard operational problems disappear.
+              Mattia Erigoni is a Management Engineer building operational software and AI tools for logistics,
+              planning, data quality and private knowledge workflows.
             </span>
           </motion.p>
         </div>
