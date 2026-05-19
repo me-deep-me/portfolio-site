@@ -380,13 +380,13 @@ export function ProjectModal({ openId, onClose }: Props) {
               className="flex max-h-[92dvh] w-full max-w-[1120px] flex-col overflow-hidden rounded-t-[1.5rem] border border-white/80 bg-white text-left shadow-[0_35px_140px_rgba(0,0,0,0.22)] md:max-h-[calc(100dvh-3rem)] md:rounded-[1.75rem]"
               onClick={(e) => e.stopPropagation()}
             >
-            <div className="relative shrink-0 overflow-hidden bg-slate-950 p-4 pt-3 text-white sm:p-5 md:p-6">
+            <div className="relative shrink-0 overflow-hidden bg-slate-950 p-3 text-white sm:p-5 md:p-6">
               <div className={`pointer-events-none absolute inset-0 ${study.glow}`} />
               <span className="relative mx-auto mb-3 block h-1 w-11 rounded-full bg-white/22 md:hidden" />
               <div className="relative grid gap-4 sm:gap-5 lg:grid-cols-[1fr_0.9fr] lg:items-stretch">
-                <div className="flex min-h-[158px] flex-col justify-between sm:min-h-[230px]">
+                <div className="flex min-h-0 flex-col justify-between md:min-h-[230px]">
                   <div>
-                    <div className="mb-4 flex items-start justify-between gap-4 sm:mb-5">
+                    <div className="mb-3 flex items-start justify-between gap-4 sm:mb-5">
                       <div>
                         <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/48">
                           case study · {project.number} · {project.cat}
@@ -413,12 +413,12 @@ export function ProjectModal({ openId, onClose }: Props) {
                       </button>
                     </div>
 
-                    <h3 className="max-w-2xl text-balance text-[2rem] font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                    <h3 className="max-w-2xl text-balance text-[1.75rem] font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
                       {project.title}
                     </h3>
                   </div>
 
-                  <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4">
+                  <div className="mt-5 hidden grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4 md:grid">
                     {study.metrics.map((metric) => (
                       <div key={metric.label} className="rounded-2xl border border-white/10 bg-white/[0.055] p-2.5 sm:p-3">
                         <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white md:text-[13px]">{metric.value}</p>
@@ -428,12 +428,25 @@ export function ProjectModal({ openId, onClose }: Props) {
                   </div>
                 </div>
 
-                <VisualPanel kind={study.visual} />
+                <div className="hidden md:block">
+                  <VisualPanel kind={study.visual} />
+                </div>
               </div>
             </div>
 
             <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto bg-neutral-50/60 p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
               <div className="grid gap-3 md:gap-4">
+                <div className="md:hidden">
+                  <VisualPanel kind={study.visual} />
+                </div>
+                <div className="grid grid-cols-3 gap-2 md:hidden">
+                  {study.metrics.map((metric) => (
+                    <div key={metric.label} className="rounded-2xl border border-neutral-200/80 bg-white p-2.5 shadow-[0_12px_34px_rgba(0,0,0,0.035)]">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-neutral-950">{metric.value}</p>
+                      <p className="mt-1 text-[8px] leading-snug uppercase tracking-[0.12em] text-neutral-500">{metric.label}</p>
+                    </div>
+                  ))}
+                </div>
                 <CaseStepBlock number="01" label="Problem" text={study.problem} />
                 <CaseStepBlock number="02" label="Approach" text={study.system} />
                 <CaseStepBlock number="03" label="Result" text={study.output} />

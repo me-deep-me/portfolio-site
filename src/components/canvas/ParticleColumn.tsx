@@ -54,9 +54,13 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
     let dnaMorph = projectsActiveRef.current ? 1 : 0;
     let visualProgress = targetProgressRef.current;
     let paused = document.hidden;
+    let lastDraw = 0;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
-    const particleCount = reduceMotion ? 140 : isMobile ? 320 : 680;
+    const particleCount = reduceMotion ? 90 : isMobile ? 170 : 680;
+    const pathSteps = isMobile ? 44 : 84;
+    const bridgeCount = isMobile ? 14 : 26;
+    const minFrameMs = reduceMotion ? 40 : 0;
 
     const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => {
       const strand    = i % 2 === 0 ? -1 : 1;
@@ -82,7 +86,7 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
     const resize = () => {
       width  = window.innerWidth;
       height = window.innerHeight;
-      dpr    = Math.min(window.devicePixelRatio || 1, width < 768 ? 1.35 : 2);
+      dpr    = Math.min(window.devicePixelRatio || 1, width < 768 ? 1 : 2);
       canvas.width  = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width  = `${width}px`;
@@ -95,6 +99,12 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
         raf = window.requestAnimationFrame(draw);
         return;
       }
+
+      if (minFrameMs > 0 && time - lastDraw < minFrameMs) {
+        raf = window.requestAnimationFrame(draw);
+        return;
+      }
+      lastDraw = time;
 
       const t        = time * 0.001;
       visualProgress += (targetProgressRef.current - visualProgress) * (reduceMotion ? 0.035 : 0.075);
@@ -116,8 +126,8 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
       if (dnaMorph > 0.2) {
         for (let strand = 0; strand < 2; strand += 1) {
           ctx.beginPath();
-          for (let i = 0; i <= 84; i += 1) {
-            const yNorm = i / 84;
+          for (let i = 0; i <= pathSteps; i += 1) {
+            const yNorm = i / pathSteps;
             const angle = yNorm * Math.PI * twist + (strand === 0 ? 0 : Math.PI) + cameraOrbit;
             const x = cx + Math.cos(angle) * amp;
             const y = top + yNorm * columnH;
@@ -129,7 +139,7 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
           ctx.stroke();
         }
 
-        const bridges = 26;
+        const bridges = bridgeCount;
         for (let i = 0; i < bridges; i += 1) {
           const yNorm  = i / Math.max(bridges - 1, 1);
           const angle  = yNorm * Math.PI * twist + cameraOrbit;
