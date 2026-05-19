@@ -22,26 +22,49 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 /* ── Metadata ── */
 export const metadata: Metadata = {
-  title: 'Mattia Erigoni — Management Engineer',
+  title: {
+    default: 'Mattia Erigoni - Operational Software & AI Tools',
+    template: '%s | Mattia Erigoni',
+  },
   description:
-    'Management Engineer turning industrial complexity into software that works. Combinatorial optimization, AI pipelines, logistics tools, data governance.',
+    'Management Engineer building operational software for logistics, planning, data quality and private AI workflows.',
   metadataBase: new URL('https://mattiaerigoni.com'),
   alternates: { canonical: '/' },
+  applicationName: 'Mattia Erigoni Portfolio',
+  authors: [{ name: 'Mattia Erigoni', url: 'https://mattiaerigoni.com' }],
+  creator: 'Mattia Erigoni',
+  category: 'portfolio',
+  keywords: [
+    'Mattia Erigoni',
+    'management engineer',
+    'operations research',
+    'logistics software',
+    'bin packing',
+    'data quality',
+    'RAG',
+    'private AI',
+    'process digitalization',
+  ],
   robots: { index: true, follow: true },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title:       'Mattia Erigoni — Management Engineer',
-    description: 'From NP-hard optimization to AI-assisted pipelines — tools that make hard operational problems disappear.',
+    title:       'Mattia Erigoni - Operational Software & AI Tools',
+    description: 'Portfolio of logistics, planning, data quality and private AI tools for messy industrial workflows.',
     url:         'https://mattiaerigoni.com',
     siteName:    'Mattia Erigoni',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Mattia Erigoni portfolio preview' }],
     locale:      'en_US',
     type:        'website',
   },
   twitter: {
     card:        'summary_large_image',
-    title:       'Mattia Erigoni — Management Engineer',
-    description: 'From NP-hard optimization to AI-assisted pipelines — tools that make hard operational problems disappear.',
-    images:      ['/og-image.png'],
+    title:       'Mattia Erigoni - Operational Software & AI Tools',
+    description: 'Operational software for logistics, planning, data quality and private AI workflows.',
+    images:      ['/opengraph-image'],
   },
 };
 

@@ -50,11 +50,15 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
     let width  = 0;
     let height = 0;
     let raf    = 0;
+    let dpr    = 1;
     let dnaMorph = projectsActiveRef.current ? 1 : 0;
     let visualProgress = targetProgressRef.current;
-    const dpr  = Math.min(window.devicePixelRatio || 1, 2);
+    let paused = document.hidden;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    const particleCount = reduceMotion ? 140 : isMobile ? 320 : 680;
 
-    const particles: Particle[] = Array.from({ length: 680 }, (_, i) => {
+    const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => {
       const strand    = i % 2 === 0 ? -1 : 1;
       const blueRoll  = Math.random();
       const accent: Particle['accent'] =
@@ -78,6 +82,7 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
     const resize = () => {
       width  = window.innerWidth;
       height = window.innerHeight;
+      dpr    = Math.min(window.devicePixelRatio || 1, width < 768 ? 1.35 : 2);
       canvas.width  = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width  = `${width}px`;
@@ -86,11 +91,16 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
     };
 
     const draw = (time: number) => {
+      if (paused) {
+        raf = window.requestAnimationFrame(draw);
+        return;
+      }
+
       const t        = time * 0.001;
-      visualProgress += (targetProgressRef.current - visualProgress) * 0.075;
+      visualProgress += (targetProgressRef.current - visualProgress) * (reduceMotion ? 0.035 : 0.075);
       const p        = visualProgress;
       const targetMorph = projectsActiveRef.current ? 1 : 0;
-      dnaMorph += (targetMorph - dnaMorph) * 0.072;
+      dnaMorph += (targetMorph - dnaMorph) * (reduceMotion ? 0.04 : 0.072);
       const cx       = width * 0.5;
       const dnaPull  = dnaMorph * dnaMorph;
       const columnH  = height * lerp(0.8, 0.94, dnaPull);
@@ -99,7 +109,7 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
       const dnaAmp      = Math.min(width * 0.075, 68);
       const amp         = lerp(cylinderAmp, dnaAmp, dnaPull);
       const twist       = lerp(2.3, 4.2, dnaPull);
-      const cameraOrbit = t * lerp(0.13, 0.16, dnaPull) + p * Math.PI * 1.55;
+      const cameraOrbit = t * lerp(reduceMotion ? 0.045 : 0.13, reduceMotion ? 0.055 : 0.16, dnaPull) + p * Math.PI * 1.55;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -139,7 +149,7 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
       }
 
       for (const particle of particles) {
-        const yNorm         = (particle.yBase + t * 0.018 * particle.speed) % 1;
+        const yNorm         = (particle.yBase + t * (reduceMotion ? 0.006 : 0.018) * particle.speed) % 1;
         const cylinderAngle = particle.cylinderAngle + cameraOrbit * 0.72 +
                               Math.sin(t * 0.2 + particle.seed) * 0.12;
         const strandPhase   = particle.strand > 0 ? 0 : Math.PI;
@@ -173,13 +183,19 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
       raf = window.requestAnimationFrame(draw);
     };
 
+    const onVisibilityChange = () => {
+      paused = document.hidden;
+    };
+
     resize();
     window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', onVisibilityChange);
     raf = window.requestAnimationFrame(draw);
 
     return () => {
       window.cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, []);
 

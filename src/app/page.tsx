@@ -115,28 +115,225 @@ const TOOLKIT_GROUPS = [
   { title: 'Operations', items: ['BIM · Revit', 'Process Design', 'Lean Digital Engineering'] },
 ];
 
-const MOBILE_PROJECT_SKINS = [
-  {
+const MOBILE_PROJECT_SKINS: Record<string, {
+  glow: string;
+  primary: string;
+  secondary: string;
+  label: string;
+}> = {
+  nest: {
     glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(163,230,53,0.22),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(34,211,238,0.18),transparent_30%)]',
     primary: 'bg-lime-200/82',
     secondary: 'bg-cyan-200/72',
+    label: 'nesting board',
   },
-  {
+  cargo: {
     glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(251,191,36,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(34,211,238,0.18),transparent_30%)]',
     primary: 'bg-amber-200/82',
     secondary: 'bg-cyan-200/72',
+    label: 'freight model',
   },
-  {
+  load: {
     glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(59,130,246,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(16,185,129,0.16),transparent_30%)]',
     primary: 'bg-sky-200/82',
     secondary: 'bg-emerald-200/68',
+    label: 'load scan',
   },
-  {
+  door: {
     glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(251,113,133,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(250,204,21,0.16),transparent_30%)]',
     primary: 'bg-rose-200/78',
     secondary: 'bg-amber-200/68',
+    label: 'crate solver',
   },
-];
+  gantt: {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(129,140,248,0.22),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(34,211,238,0.16),transparent_30%)]',
+    primary: 'bg-indigo-200/78',
+    secondary: 'bg-cyan-200/64',
+    label: 'planning board',
+  },
+  db: {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(59,130,246,0.16),transparent_30%)]',
+    primary: 'bg-teal-200/78',
+    secondary: 'bg-sky-200/64',
+    label: 'governed data',
+  },
+  rag: {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(168,85,247,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(14,165,233,0.16),transparent_30%)]',
+    primary: 'bg-violet-200/76',
+    secondary: 'bg-cyan-200/62',
+    label: 'retrieval graph',
+  },
+  micro: {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(251,146,60,0.19),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(34,197,94,0.15),transparent_30%)]',
+    primary: 'bg-orange-200/76',
+    secondary: 'bg-emerald-200/60',
+    label: 'automation bench',
+  },
+};
+
+function MobileVisualBody({
+  id,
+  skin,
+}: {
+  id: string;
+  skin: (typeof MOBILE_PROJECT_SKINS)[string];
+}) {
+  if (id === 'nest') {
+    return (
+      <div className="relative h-16 rounded-[0.8rem] border border-white/10 bg-white/[0.04]">
+        {[
+          'left-[8%] top-[12%] h-[36%] w-[30%]',
+          'left-[43%] top-[12%] h-[22%] w-[23%]',
+          'left-[70%] top-[12%] h-[52%] w-[18%]',
+          'left-[8%] top-[55%] h-[28%] w-[22%]',
+          'left-[35%] top-[42%] h-[41%] w-[31%]',
+          'left-[70%] top-[71%] h-[12%] w-[18%]',
+        ].map((className, cell) => (
+          <span
+            key={className}
+            className={`absolute rounded-[0.35rem] ${cell % 2 === 0 ? skin.primary : skin.secondary} ${className}`}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (id === 'cargo') {
+    return (
+      <>
+        <div className="grid h-14 grid-cols-6 grid-rows-3 gap-1.5">
+          {Array.from({ length: 18 }, (_, cell) => (
+            <span
+              key={cell}
+              className={`rounded-[0.35rem] ${
+                cell % 5 === 0 ? skin.primary : cell % 3 === 0 ? skin.secondary : 'bg-white/14'
+              } ${cell === 7 || cell === 16 ? 'opacity-35' : ''}`}
+            />
+          ))}
+        </div>
+        <span className="mt-2 block h-1 overflow-hidden rounded-full bg-white/10">
+          <span className="block h-full w-[78%] rounded-full bg-gradient-to-r from-cyan-200 via-emerald-200 to-amber-200" />
+        </span>
+      </>
+    );
+  }
+
+  if (id === 'load') {
+    return (
+      <div className="relative h-16 overflow-hidden rounded-[0.8rem] border border-white/10 bg-white/[0.04] p-2">
+        <div className="absolute left-4 right-4 top-1/2 h-px bg-white/14" />
+        <div className="grid h-full grid-cols-5 gap-1.5 [transform:skewX(-8deg)]">
+          {Array.from({ length: 15 }, (_, cell) => (
+            <span
+              key={cell}
+              className={`rounded-[0.32rem] ${
+                cell % 4 === 0 ? skin.primary : cell % 5 === 0 ? skin.secondary : 'bg-white/14'
+              } ${cell === 2 || cell === 13 ? 'opacity-35' : ''}`}
+            />
+          ))}
+        </div>
+        <span className="absolute bottom-2 left-3 right-3 h-1 rounded-full bg-cyan-100/70" />
+      </div>
+    );
+  }
+
+  if (id === 'door') {
+    return (
+      <div className="relative h-16 rounded-[0.8rem] border border-white/10 bg-white/[0.04]">
+        <span className="absolute inset-x-6 bottom-3 h-1.5 rounded-full bg-rose-100/18" />
+        {[
+          'left-[12%] top-[20%] h-[50%] w-[15%]',
+          'left-[32%] top-[30%] h-[40%] w-[12%]',
+          'left-[50%] top-[14%] h-[56%] w-[17%]',
+          'left-[74%] top-[26%] h-[44%] w-[12%]',
+        ].map((className, panel) => (
+          <span
+            key={className}
+            className={`absolute rounded-[0.35rem] ${panel === 2 ? skin.secondary : panel === 1 ? 'bg-white/16' : skin.primary} ${className}`}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (id === 'gantt') {
+    return (
+      <div className="grid h-16 grid-rows-4 gap-2">
+        {[
+          ['w-[58%]', 'ml-[64%] w-[24%]'],
+          ['ml-[12%] w-[46%]', 'ml-[62%] w-[30%]'],
+          ['ml-[4%] w-[28%]', 'ml-[39%] w-[44%]'],
+          ['ml-[20%] w-[62%]'],
+        ].map((row, rowIndex) => (
+          <div key={rowIndex} className="relative rounded-full bg-white/8">
+            {row.map((bar, barIndex) => (
+              <span
+                key={bar}
+                className={`absolute top-1/2 h-2 -translate-y-1/2 rounded-full ${barIndex === 0 ? skin.primary : skin.secondary} ${bar}`}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (id === 'db') {
+    return (
+      <div className="relative grid h-16 grid-cols-5 gap-1.5 rounded-[0.8rem] border border-white/10 bg-white/[0.04] p-2">
+        {Array.from({ length: 20 }, (_, cell) => (
+          <span
+            key={cell}
+            className={`rounded-[0.28rem] ${
+              cell % 7 === 0 ? skin.primary : cell % 5 === 0 ? skin.secondary : 'bg-white/14'
+            }`}
+          />
+        ))}
+        <span className="absolute bottom-2 right-2 rounded-full border border-white/12 bg-white/10 px-1.5 py-0.5 font-mono text-[7px] uppercase tracking-[0.16em] text-white/62">
+          clean
+        </span>
+      </div>
+    );
+  }
+
+  if (id === 'rag') {
+    return (
+      <div className="relative h-16 rounded-[0.8rem] border border-white/10 bg-white/[0.04]">
+        <span className="absolute left-[18%] top-[26%] h-px w-[48%] rotate-12 bg-white/16" />
+        <span className="absolute left-[32%] top-[61%] h-px w-[44%] -rotate-12 bg-white/16" />
+        {[12, 32, 55, 73, 77].map((left, node) => (
+          <span
+            key={left}
+            className={`absolute h-7 w-7 rounded-full border border-white/12 ${
+              node % 2 === 0 ? skin.primary : node === 1 ? 'bg-white/17' : skin.secondary
+            }`}
+            style={{ left: `${left}%`, top: node % 2 === 0 ? '22%' : '58%' }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid h-16 grid-cols-[0.78fr_1.22fr] gap-2">
+      <div className="grid gap-1.5">
+        <span className={`rounded-[0.55rem] ${skin.primary}`} />
+        <span className="rounded-[0.55rem] bg-white/15" />
+        <span className={`rounded-[0.55rem] ${skin.secondary}`} />
+      </div>
+      <div className="rounded-[0.8rem] border border-white/10 bg-white/[0.04] p-2">
+        <span className="mb-2 block h-1 rounded-full bg-white/12">
+          <span className={`block h-full w-[72%] rounded-full ${skin.primary}`} />
+        </span>
+        <div className="grid grid-cols-3 gap-1.5">
+          {Array.from({ length: 9 }, (_, cell) => (
+            <span key={cell} className={`h-3 rounded-[0.25rem] ${cell % 3 === 0 ? skin.secondary : 'bg-white/14'}`} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function MobileProjectPreview({
   project,
@@ -147,32 +344,22 @@ function MobileProjectPreview({
   index: number;
   total: number;
 }) {
-  const skin = MOBILE_PROJECT_SKINS[index % MOBILE_PROJECT_SKINS.length];
+  const skin = MOBILE_PROJECT_SKINS[project.id] ?? MOBILE_PROJECT_SKINS.cargo;
   const progress = Math.round(((index + 1) / total) * 100);
 
   return (
-    <div className={`relative mb-3 overflow-hidden rounded-[1.05rem] border border-white/12 bg-slate-950 p-3 text-white ${skin.glow}`}>
+    <div className={`relative mb-3 overflow-hidden rounded-[1.05rem] border border-white/12 bg-slate-950 p-3 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ${skin.glow}`}>
       <div className="mb-2.5 flex items-center justify-between gap-3">
         <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">
-          {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+          {skin.label}
         </span>
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(110,231,183,0.85)]" />
+        <span className="inline-flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-[0.18em] text-white/46">
+          {project.demo ? 'live' : `${String(index + 1).padStart(2, '0')}/${String(total).padStart(2, '0')}`}
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(110,231,183,0.85)]" />
+        </span>
       </div>
 
-      <div className="grid h-14 grid-cols-6 grid-rows-3 gap-1.5">
-        {Array.from({ length: 18 }, (_, cell) => (
-          <span
-            key={cell}
-            className={`rounded-[0.35rem] ${
-              cell % 5 === 0
-                ? skin.primary
-                : cell % 3 === 0
-                  ? skin.secondary
-                  : 'bg-white/14'
-            } ${cell === 7 || cell === 16 ? 'opacity-35' : ''}`}
-          />
-        ))}
-      </div>
+      <MobileVisualBody id={project.id} skin={skin} />
 
       <div className="mt-2.5 flex items-center gap-3">
         <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/42">
@@ -231,7 +418,7 @@ export default function Home() {
         id="top"
         className="relative z-10 flex min-h-screen items-center justify-center overflow-hidden px-5 text-center"
       >
-        <div className="pointer-events-none absolute inset-x-8 top-[30%] bottom-[16%] z-0 rounded-full bg-white/78 blur-3xl md:hidden" />
+        <div className="pointer-events-none absolute inset-x-4 top-[29%] bottom-[14%] z-0 rounded-full bg-white/90 blur-3xl md:hidden" />
         <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center pt-20">
           <motion.p
             initial={{ opacity: 0, y: 14 }}
@@ -255,10 +442,15 @@ export default function Home() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.16, ease: 'easeOut' }}
-            className="mx-auto mt-7 max-w-[760px] text-balance text-center text-[15px] leading-relaxed text-neutral-700 md:mt-8 md:text-xl md:leading-9 md:text-neutral-600"
+            className="mx-auto mt-7 max-w-[330px] text-balance text-center text-[14px] font-medium leading-7 text-neutral-700 md:mt-8 md:max-w-[760px] md:text-xl md:font-normal md:leading-9 md:text-neutral-600"
           >
-            I turn industrial complexity into software that works. From combinatorial optimization to AI-assisted
-            pipelines — I build tools that make hard operational problems disappear.
+            <span className="md:hidden">
+              Industrial complexity, translated into tools for faster planning, cleaner data and private AI workflows.
+            </span>
+            <span className="hidden md:inline">
+              I turn industrial complexity into software that works. From combinatorial optimization to AI-assisted
+              pipelines — I build tools that make hard operational problems disappear.
+            </span>
           </motion.p>
         </div>
       </section>
@@ -293,10 +485,15 @@ export default function Home() {
 
       {/* ── Projects (mobile stacked) ── */}
       <section id="projects-mobile" className="relative z-10 mx-auto max-w-lg px-5 pb-10 pt-7 md:hidden">
-        <div className="mb-6 flex items-center justify-center gap-3">
-          <span className="h-px w-10 bg-neutral-200" />
-          <p className="text-center text-[10px] uppercase tracking-[0.34em] text-neutral-500">Selected work</p>
-          <span className="h-px w-10 bg-neutral-200" />
+        <div className="mb-6 text-center">
+          <div className="flex items-center justify-center gap-3">
+            <span className="h-px w-10 bg-neutral-200" />
+            <p className="text-[10px] uppercase tracking-[0.34em] text-neutral-500">Selected work</p>
+            <span className="h-px w-10 bg-neutral-200" />
+          </div>
+          <p className="mx-auto mt-3 max-w-[26rem] text-balance text-[13px] leading-6 text-neutral-500">
+            Eight operational tools, each reduced to the decision it makes easier.
+          </p>
         </div>
         <div className="grid gap-3.5">
           {PROJECTS.map((project, index) => (
@@ -304,9 +501,10 @@ export default function Home() {
               key={project.id}
               initial={{ opacity: 0, y: 34, scale: 0.96 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              whileTap={{ scale: 0.985 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.62, delay: Math.min(index * 0.035, 0.18), ease: [0.16, 1, 0.3, 1] }}
-              className="block w-full rounded-[1.45rem] border border-white/80 bg-white/82 p-3.5 text-left shadow-[0_22px_70px_rgba(0,0,0,0.075)] backdrop-blur-xl transition active:scale-[0.985]"
+              transition={{ duration: 0.58, delay: Math.min(index * 0.032, 0.16), ease: [0.16, 1, 0.3, 1] }}
+              className="group block w-full rounded-[1.45rem] border border-white/80 bg-white/84 p-3.5 text-left shadow-[0_22px_70px_rgba(0,0,0,0.075)] backdrop-blur-xl transition duration-300 hover:border-neutral-950/12 hover:bg-white"
             >
               <MobileProjectPreview project={project} index={index} total={PROJECTS.length} />
               <div className="mb-3 flex items-center gap-3">
@@ -318,6 +516,12 @@ export default function Home() {
               </div>
               <h3 className="text-balance text-[1.15rem] font-semibold tracking-[-0.04em] text-neutral-950">{project.title}</h3>
               <p className="mt-2 max-h-[3.95rem] overflow-hidden text-pretty text-[12.5px] leading-relaxed text-neutral-600">{project.shortDesc}</p>
+              {project.demo && (
+                <div className="mt-3 flex items-center gap-2 rounded-full border border-emerald-200/70 bg-emerald-50/80 px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-emerald-900">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]" />
+                  Live demo available
+                </div>
+              )}
               <div className="mt-3.5 flex flex-wrap gap-1.5">
                 {project.pills.slice(0, 3).map((pill) => (
                   <span
@@ -506,18 +710,37 @@ export default function Home() {
         <div className="mx-auto max-w-3xl">
           <p className="text-[10px] uppercase tracking-[0.34em] text-neutral-500">contact</p>
           <h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-0.04em] text-neutral-950 md:mt-6 md:text-6xl md:tracking-[-0.045em] lg:text-7xl">
-            Let&apos;s build the next system.
+            Let&apos;s turn the messy workflow into the useful tool.
           </h2>
-          <a
-            href="mailto:mattiaerigoni99@gmail.com"
-            className="mt-8 inline-flex rounded-full border border-neutral-950 bg-neutral-950 px-6 py-3.5 text-sm font-medium text-white transition hover:bg-white hover:text-neutral-950 md:mt-10 md:px-7 md:py-4"
-          >
-            mattiaerigoni99@gmail.com
-          </a>
-          <div className="mt-7 flex justify-center gap-5 text-[10px] uppercase tracking-[0.22em] text-neutral-500 md:mt-8 md:gap-6 md:text-xs">
-            <a href="https://www.linkedin.com/in/mattia-erigoni-b87614183/" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-950">
+          <p className="mx-auto mt-5 max-w-xl text-balance text-[15px] leading-7 text-neutral-600 md:mt-6 md:text-lg md:leading-8">
+            I build operational software for planning, logistics, data quality and private AI workflows.
+            The best starting point is a concrete constraint, a spreadsheet nobody trusts, or a process that takes too long.
+          </p>
+          <div className="mt-8 grid gap-2 sm:inline-grid sm:grid-cols-2 md:mt-10">
+            <a
+              href="mailto:mattiaerigoni99@gmail.com"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-neutral-950 bg-neutral-950 px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_18px_55px_rgba(0,0,0,0.13)] transition duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-neutral-950 active:translate-y-0"
+            >
+              Email me
+            </a>
+            <a
+              href="https://www.linkedin.com/in/mattia-erigoni-b87614183/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-neutral-200 bg-white/75 px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-neutral-700 shadow-[0_18px_55px_rgba(0,0,0,0.055)] transition duration-300 hover:-translate-y-0.5 hover:border-neutral-950/25 hover:text-neutral-950 active:translate-y-0"
+            >
               LinkedIn ↗
             </a>
+          </div>
+          <div className="mx-auto mt-7 grid max-w-xl grid-cols-3 gap-2 text-left md:mt-9">
+            {['operations', 'data', 'AI'].map((item) => (
+              <span
+                key={item}
+                className="rounded-2xl border border-neutral-200 bg-white/70 px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-500 shadow-[0_14px_45px_rgba(0,0,0,0.04)]"
+              >
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </section>
