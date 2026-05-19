@@ -295,11 +295,25 @@ function VisualPanel({ kind }: { kind: VisualKind }) {
   );
 }
 
-function SectionBlock({ label, text }: { label: string; text: string }) {
+function CaseStepBlock({
+  number,
+  label,
+  text,
+}: {
+  number: string;
+  label: string;
+  text: string;
+}) {
   return (
-    <div className="border-t border-neutral-200/80 pt-3 md:pt-4">
-      <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-400">{label}</p>
-      <p className="mt-2 text-pretty text-[13px] leading-6 text-neutral-600 md:text-[15px] md:leading-7">{text}</p>
+    <div className="grid gap-3 rounded-[1.1rem] border border-neutral-200/85 bg-white p-4 shadow-[0_14px_45px_rgba(0,0,0,0.035)] sm:grid-cols-[44px_1fr] md:p-5">
+      <div className="flex items-center gap-3 sm:block">
+        <span className="font-mono text-[11px] tracking-[0.24em] text-neutral-400">{number}</span>
+        <span className="h-px flex-1 bg-neutral-200 sm:mt-4 sm:block sm:w-8" />
+      </div>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-950">{label}</p>
+        <p className="mt-2 text-pretty text-[13px] leading-6 text-neutral-600 md:text-[15px] md:leading-7">{text}</p>
+      </div>
     </div>
   );
 }
@@ -375,11 +389,19 @@ export function ProjectModal({ openId, onClose }: Props) {
                     <div className="mb-4 flex items-start justify-between gap-4 sm:mb-5">
                       <div>
                         <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/48">
-                          {project.number} · {project.cat}
+                          case study · {project.number} · {project.cat}
                         </p>
-                        <p className={`mt-3 inline-flex rounded-full border px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] sm:mt-4 ${study.accent}`}>
-                          {study.eyebrow}
-                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
+                          <p className={`inline-flex rounded-full border px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] ${study.accent}`}>
+                            {study.eyebrow}
+                          </p>
+                          {project.demo && (
+                            <p className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/20 bg-emerald-200/10 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
+                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.8)]" />
+                              live demo
+                            </p>
+                          )}
+                        </div>
                       </div>
                       <button
                         type="button"
@@ -398,7 +420,7 @@ export function ProjectModal({ openId, onClose }: Props) {
 
                   <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4">
                     {study.metrics.map((metric) => (
-                      <div key={metric.label}>
+                      <div key={metric.label} className="rounded-2xl border border-white/10 bg-white/[0.055] p-2.5 sm:p-3">
                         <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white md:text-[13px]">{metric.value}</p>
                         <p className="mt-1 text-[9px] leading-snug uppercase tracking-[0.14em] text-white/45">{metric.label}</p>
                       </div>
@@ -410,16 +432,33 @@ export function ProjectModal({ openId, onClose }: Props) {
               </div>
             </div>
 
-            <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
-              <div className="grid gap-4 md:gap-5">
-                <SectionBlock label="Problem" text={study.problem} />
-                <SectionBlock label="System" text={study.system} />
-                <SectionBlock label="Output" text={study.output} />
+            <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto bg-neutral-50/60 p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
+              <div className="grid gap-3 md:gap-4">
+                <CaseStepBlock number="01" label="Problem" text={study.problem} />
+                <CaseStepBlock number="02" label="Approach" text={study.system} />
+                <CaseStepBlock number="03" label="Result" text={study.output} />
               </div>
 
-              <aside className="rounded-[1.15rem] border border-neutral-200/80 bg-neutral-50/80 p-4 md:rounded-[1.25rem] md:p-5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-400">stack</p>
-                <div className="mt-4 flex flex-wrap gap-2">
+              <aside className="grid content-start gap-3 rounded-[1.15rem] border border-neutral-200/80 bg-white p-4 shadow-[0_14px_45px_rgba(0,0,0,0.035)] md:rounded-[1.25rem] md:p-5">
+                <div className="rounded-[1rem] border border-neutral-200/80 bg-neutral-950 p-4 text-white">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">decision output</p>
+                  <p className="mt-3 text-pretty text-lg font-semibold leading-tight tracking-[-0.035em]">
+                    A practical interface for a specific operational decision.
+                  </p>
+                  <p className="mt-3 text-[12px] leading-6 text-white/56">
+                    The goal is not a generic dashboard: it is a repeatable way to move from raw operational input to a usable answer.
+                  </p>
+                </div>
+
+                {project.demo && (
+                  <ModalLink href={project.demo} project={project} kind="demo">
+                    Open live demo ↗
+                  </ModalLink>
+                )}
+
+                <div className="border-t border-neutral-200/80 pt-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-400">stack</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
                   {project.stack.map((item) => (
                     <span
                       key={item}
@@ -428,25 +467,22 @@ export function ProjectModal({ openId, onClose }: Props) {
                       {item}
                     </span>
                   ))}
+                  </div>
                 </div>
               </aside>
             </div>
 
-            <div className="shrink-0 grid grid-cols-2 gap-2 border-t border-neutral-200/80 bg-white/88 px-4 py-3.5 backdrop-blur-xl md:flex md:flex-wrap md:items-center md:justify-between md:gap-3 md:px-6">
+            <div className="shrink-0 grid grid-cols-1 gap-2 border-t border-neutral-200/80 bg-white/88 px-4 py-3.5 backdrop-blur-xl md:flex md:flex-wrap md:items-center md:justify-between md:gap-3 md:px-6">
               <button
                 type="button"
                 onClick={onClose}
-                className={`${project.demo ? '' : 'col-span-2 md:col-span-1'} inline-flex justify-center rounded-full border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950 active:scale-[0.98]`}
+                className="inline-flex justify-center rounded-full border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950 active:scale-[0.98]"
               >
                 Close
               </button>
-              <div className={project.demo ? 'flex min-w-0 flex-wrap gap-2' : 'hidden'}>
-                {project.demo && (
-                  <ModalLink href={project.demo} project={project} kind="demo">
-                    Open demo ↗
-                  </ModalLink>
-                )}
-              </div>
+              <p className="hidden max-w-md text-[12px] leading-6 text-neutral-500 md:block">
+                Structured as problem, approach and result so the operational value is visible before the technical stack.
+              </p>
             </div>
           </motion.div>
         </motion.div>
