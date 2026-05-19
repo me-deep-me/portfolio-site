@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Packaging Optimizer SHD</title>
+  <title>Packaging Optimizer</title>
   <link rel="icon" type="image/x-icon" href="Container_Red_icon-icons.com_54903.ico" />
   <style>
     :root {
@@ -1089,7 +1089,7 @@
   <div class="app">
     <header class="glass">
       <div class="title"><span class="dot"></span>
-        <h1>Packaging Optimizer System</h1><span class="badge">SHD ITALIA S.r.l.</span>
+        <h1>Packaging Optimizer System</h1><span class="badge">Operational Tool</span>
       </div>
       <div class="row">
         <button id="btnTheme" class="btn" title="Cambia tema">🌙</button>
@@ -2585,7 +2585,7 @@
         $('#btnTheme').textContent = '🌙';
         $('#btnTheme').title = 'Passa al tema chiaro';
       }
-      localStorage.setItem('shd_theme', t);
+      localStorage.setItem('packaging_optimizer_theme', t);
       // Ridisegna canvas attivi con i nuovi colori
       if (state.optimization) {
         const activeSingle = $('#panel-single').classList.contains('active');
@@ -2600,7 +2600,7 @@
       }
     }
     // Init tema da localStorage
-    _applyTheme(localStorage.getItem('shd_theme') || 'dark');
+    _applyTheme(localStorage.getItem('packaging_optimizer_theme') || 'dark');
     $('#btnTheme').addEventListener('click', () => {
       _applyTheme(_html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
     });

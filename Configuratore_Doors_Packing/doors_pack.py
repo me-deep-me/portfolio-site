@@ -6,7 +6,7 @@ import random
 import pandas as pd
 
 # =========================
-# PARAMETRI (tuning SHD)
+# PARAMETRI (tuning)
 # =========================
 # Gap cassa porte
 GAP_LEN = 200.0

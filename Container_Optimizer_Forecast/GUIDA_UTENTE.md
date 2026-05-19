@@ -1,6 +1,6 @@
 # Packaging Optimizer — Guida Utente
 
-> **SHD Italia S.r.l.** | Versione Maggio 2026
+> **Packaging Optimizer** | Versione Maggio 2026
 > Guida completa all'utilizzo di tutte le funzionalità dell'applicazione.
 
 ---

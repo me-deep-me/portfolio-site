@@ -265,7 +265,7 @@ class EditableTree(ttk.Treeview):
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("SHD - Door Decoder Stats (Verify grid -> Analyze)")
+        self.title("Door Decoder Stats (Verify grid -> Analyze)")
         self.geometry("1700x900")
 
         self.df: Optional[pd.DataFrame] = None

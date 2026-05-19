@@ -19,6 +19,17 @@
 
 # production
 /build
+**/build/
+**/build_tmp/
+**/dist/
+
+# generated Python/build artifacts
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pkg
+*.pyz
+*.exe
 
 # misc
 .DS_Store

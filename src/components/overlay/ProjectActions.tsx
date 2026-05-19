@@ -30,15 +30,15 @@ function openPopup(event: MouseEvent<HTMLAnchorElement>, url: string, label: str
 
 export function ProjectActions({ project, onOpen, compact = false }: Props) {
   const buttonBase = compact
-    ? 'px-3 py-2 text-[10px]'
+    ? 'justify-center px-3 py-2.5 text-[10px]'
     : 'px-4 py-2.5 text-[11px]';
 
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-2">
+    <div className={compact ? (project.demo ? 'mt-4 grid grid-cols-2 gap-2' : 'mt-4 flex flex-wrap items-center gap-2') : 'mt-6 flex flex-wrap items-center gap-2'}>
       <button
         type="button"
         onClick={onOpen}
-        className={`${buttonBase} rounded-full border border-neutral-950 bg-neutral-950 font-medium uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950`}
+        className={`${buttonBase} inline-flex rounded-full border border-neutral-950 bg-neutral-950 font-medium uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950 active:scale-[0.98]`}
       >
         Details
       </button>
@@ -48,7 +48,7 @@ export function ProjectActions({ project, onOpen, compact = false }: Props) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={(event) => openPopup(event, project.demo!, `${project.id}-demo`)}
-          className={`${buttonBase} rounded-full border border-neutral-200 bg-white/75 font-medium uppercase tracking-[0.18em] text-neutral-700 transition hover:border-neutral-950/30 hover:text-neutral-950`}
+          className={`${buttonBase} inline-flex rounded-full border border-neutral-200 bg-white/75 font-medium uppercase tracking-[0.18em] text-neutral-700 transition hover:border-neutral-950/30 hover:text-neutral-950 active:scale-[0.98]`}
         >
           Demo ↗
         </a>

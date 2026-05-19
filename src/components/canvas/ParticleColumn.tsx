@@ -187,7 +187,7 @@ export function ParticleColumn({ progress, projectsActive }: Props) {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 opacity-75"
+      className="pointer-events-none fixed inset-0 z-0 opacity-50 md:opacity-75"
     />
   );
 }

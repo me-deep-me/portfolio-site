@@ -261,7 +261,7 @@ class ThemeManager:
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.title("Packaging Calculator for SHD")
+        self.root.title("Packaging Calculator")
         self.root.geometry("1200x780")
 
         # STYLE + THEME (parte in white)
@@ -397,7 +397,7 @@ class App:
 
         title = ttk.Label(
             header,
-            text="Sistema di Calcolo Packaging Ottimizzato – SHD ITALIA",
+            text="Sistema di Calcolo Packaging Ottimizzato",
             font=("Segoe UI Semibold", 16)
         )
         title.pack(side="left")

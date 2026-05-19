@@ -1,6 +1,6 @@
 """
 Script one-shot: genera web/favicon.ico (multi-size) per
-PackagingOptimizer - SHD Italia.
+PackagingOptimizer.
 Eseguire una volta: py make_icon.py
 """
 from PIL import Image, ImageDraw

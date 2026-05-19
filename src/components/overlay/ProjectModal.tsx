@@ -157,7 +157,7 @@ function openPopup(event: MouseEvent<HTMLAnchorElement>, url: string, label: str
 
 function VisualPanel({ kind }: { kind: VisualKind }) {
   return (
-    <div className="relative h-44 overflow-hidden rounded-[1.25rem] border border-white/12 bg-white/[0.07] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:h-56 lg:h-full lg:min-h-[318px]">
+    <div className="relative h-32 overflow-hidden rounded-[1.1rem] border border-white/12 bg-white/[0.07] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:h-56 sm:p-4 lg:h-full lg:min-h-[318px]">
       {kind === 'nest' && (
         <div className="relative h-full rounded-[0.9rem] border border-lime-200/18 bg-white/[0.04]">
           {[
@@ -297,9 +297,9 @@ function VisualPanel({ kind }: { kind: VisualKind }) {
 
 function SectionBlock({ label, text }: { label: string; text: string }) {
   return (
-    <div className="border-t border-neutral-200/80 pt-4">
+    <div className="border-t border-neutral-200/80 pt-3 md:pt-4">
       <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-400">{label}</p>
-      <p className="mt-2 text-pretty text-[14px] leading-7 text-neutral-600 md:text-[15px]">{text}</p>
+      <p className="mt-2 text-pretty text-[13px] leading-6 text-neutral-600 md:text-[15px] md:leading-7">{text}</p>
     </div>
   );
 }
@@ -321,7 +321,7 @@ function ModalLink({
       target="_blank"
       rel="noopener noreferrer"
       onClick={(event) => openPopup(event, href, `${project.id}-${kind}`)}
-      className="rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-800 shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition hover:border-neutral-950/25"
+      className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-800 shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition hover:border-neutral-950/25 active:scale-[0.98] sm:w-auto"
     >
       {children}
     </a>
@@ -355,28 +355,29 @@ export function ProjectModal({ openId, onClose }: Props) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/45 p-3 backdrop-blur-xl md:p-6"
-          onClick={onClose}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 28, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 18, scale: 0.97 }}
-            transition={{ duration: 0.28, ease: 'easeOut' }}
-            className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-[1120px] flex-col overflow-hidden rounded-[1.35rem] border border-white/80 bg-white text-left shadow-[0_35px_140px_rgba(0,0,0,0.22)] md:max-h-[calc(100dvh-3rem)] md:rounded-[1.75rem]"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-950/45 p-0 pt-10 backdrop-blur-xl md:grid md:place-items-center md:p-6"
+            onClick={onClose}
           >
-            <div className="relative shrink-0 overflow-hidden bg-slate-950 p-4 text-white sm:p-5 md:p-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 360, damping: 34, mass: 0.82 }}
+              className="flex max-h-[92dvh] w-full max-w-[1120px] flex-col overflow-hidden rounded-t-[1.5rem] border border-white/80 bg-white text-left shadow-[0_35px_140px_rgba(0,0,0,0.22)] md:max-h-[calc(100dvh-3rem)] md:rounded-[1.75rem]"
+              onClick={(e) => e.stopPropagation()}
+            >
+            <div className="relative shrink-0 overflow-hidden bg-slate-950 p-4 pt-3 text-white sm:p-5 md:p-6">
               <div className={`pointer-events-none absolute inset-0 ${study.glow}`} />
-              <div className="relative grid gap-5 lg:grid-cols-[1fr_0.9fr] lg:items-stretch">
-                <div className="flex min-h-[190px] flex-col justify-between sm:min-h-[230px]">
+              <span className="relative mx-auto mb-3 block h-1 w-11 rounded-full bg-white/22 md:hidden" />
+              <div className="relative grid gap-4 sm:gap-5 lg:grid-cols-[1fr_0.9fr] lg:items-stretch">
+                <div className="flex min-h-[158px] flex-col justify-between sm:min-h-[230px]">
                   <div>
-                    <div className="mb-5 flex items-start justify-between gap-4">
+                    <div className="mb-4 flex items-start justify-between gap-4 sm:mb-5">
                       <div>
                         <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/48">
                           {project.number} · {project.cat}
                         </p>
-                        <p className={`mt-4 inline-flex rounded-full border px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] ${study.accent}`}>
+                        <p className={`mt-3 inline-flex rounded-full border px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] sm:mt-4 ${study.accent}`}>
                           {study.eyebrow}
                         </p>
                       </div>
@@ -384,18 +385,18 @@ export function ProjectModal({ openId, onClose }: Props) {
                         type="button"
                         onClick={onClose}
                         aria-label="Close project modal"
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xl text-white/70 transition hover:bg-white hover:text-slate-950"
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xl text-white/70 transition hover:bg-white hover:text-slate-950 active:scale-[0.96]"
                       >
                         ×
                       </button>
                     </div>
 
-                    <h3 className="max-w-2xl text-balance text-3xl font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                    <h3 className="max-w-2xl text-balance text-[2rem] font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
                       {project.title}
                     </h3>
                   </div>
 
-                  <div className="mt-7 grid grid-cols-3 gap-3 border-t border-white/12 pt-4">
+                  <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4">
                     {study.metrics.map((metric) => (
                       <div key={metric.label}>
                         <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white md:text-[13px]">{metric.value}</p>
@@ -409,14 +410,14 @@ export function ProjectModal({ openId, onClose }: Props) {
               </div>
             </div>
 
-            <div className="grid min-h-0 flex-1 gap-5 overflow-y-auto p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:p-6">
-              <div className="grid gap-5">
+            <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
+              <div className="grid gap-4 md:gap-5">
                 <SectionBlock label="Problem" text={study.problem} />
                 <SectionBlock label="System" text={study.system} />
                 <SectionBlock label="Output" text={study.output} />
               </div>
 
-              <aside className="rounded-[1.25rem] border border-neutral-200/80 bg-neutral-50/80 p-5">
+              <aside className="rounded-[1.15rem] border border-neutral-200/80 bg-neutral-50/80 p-4 md:rounded-[1.25rem] md:p-5">
                 <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-400">stack</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {project.stack.map((item) => (
@@ -431,15 +432,15 @@ export function ProjectModal({ openId, onClose }: Props) {
               </aside>
             </div>
 
-            <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200/80 bg-white/88 px-4 py-3.5 backdrop-blur-xl md:px-6">
+            <div className="shrink-0 grid grid-cols-2 gap-2 border-t border-neutral-200/80 bg-white/88 px-4 py-3.5 backdrop-blur-xl md:flex md:flex-wrap md:items-center md:justify-between md:gap-3 md:px-6">
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-full border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950"
+                className={`${project.demo ? '' : 'col-span-2 md:col-span-1'} inline-flex justify-center rounded-full border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950 active:scale-[0.98]`}
               >
                 Close
               </button>
-              <div className="flex flex-wrap gap-2">
+              <div className={project.demo ? 'flex min-w-0 flex-wrap gap-2' : 'hidden'}>
                 {project.demo && (
                   <ModalLink href={project.demo} project={project} kind="demo">
                     Open demo ↗

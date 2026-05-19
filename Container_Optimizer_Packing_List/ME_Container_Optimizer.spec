@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['c:/Users/merigoni/Desktop/SHD_ME/OPERATIONS/LOGISTIC/py/ME_Container_Optimizer_Project/pl_optimizer/app_gui.py'],
+    ['pl_optimizer/app_gui.py'],
     pathex=[],
     binaries=[],
     datas=[],

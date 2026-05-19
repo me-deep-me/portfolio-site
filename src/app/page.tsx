@@ -6,7 +6,7 @@ import { ParticleColumn }  from '@/components/canvas/ParticleColumn';
 import { ProjectCard }     from '@/components/overlay/ProjectCard';
 import { ProjectModal }    from '@/components/overlay/ProjectModal';
 import { ProjectActions }  from '@/components/overlay/ProjectActions';
-import { PROJECTS }        from '@/data/projects';
+import { PROJECTS, type Project } from '@/data/projects';
 
 function clamp(v: number, min = 0, max = 1) {
   return Math.max(min, Math.min(max, v));
@@ -115,6 +115,80 @@ const TOOLKIT_GROUPS = [
   { title: 'Operations', items: ['BIM · Revit', 'Process Design', 'Lean Digital Engineering'] },
 ];
 
+const MOBILE_PROJECT_SKINS = [
+  {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(163,230,53,0.22),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(34,211,238,0.18),transparent_30%)]',
+    primary: 'bg-lime-200/82',
+    secondary: 'bg-cyan-200/72',
+  },
+  {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(251,191,36,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(34,211,238,0.18),transparent_30%)]',
+    primary: 'bg-amber-200/82',
+    secondary: 'bg-cyan-200/72',
+  },
+  {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(59,130,246,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(16,185,129,0.16),transparent_30%)]',
+    primary: 'bg-sky-200/82',
+    secondary: 'bg-emerald-200/68',
+  },
+  {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(251,113,133,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(250,204,21,0.16),transparent_30%)]',
+    primary: 'bg-rose-200/78',
+    secondary: 'bg-amber-200/68',
+  },
+];
+
+function MobileProjectPreview({
+  project,
+  index,
+  total,
+}: {
+  project: Project;
+  index: number;
+  total: number;
+}) {
+  const skin = MOBILE_PROJECT_SKINS[index % MOBILE_PROJECT_SKINS.length];
+  const progress = Math.round(((index + 1) / total) * 100);
+
+  return (
+    <div className={`relative mb-3 overflow-hidden rounded-[1.05rem] border border-white/12 bg-slate-950 p-3 text-white ${skin.glow}`}>
+      <div className="mb-2.5 flex items-center justify-between gap-3">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">
+          {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+        </span>
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(110,231,183,0.85)]" />
+      </div>
+
+      <div className="grid h-14 grid-cols-6 grid-rows-3 gap-1.5">
+        {Array.from({ length: 18 }, (_, cell) => (
+          <span
+            key={cell}
+            className={`rounded-[0.35rem] ${
+              cell % 5 === 0
+                ? skin.primary
+                : cell % 3 === 0
+                  ? skin.secondary
+                  : 'bg-white/14'
+            } ${cell === 7 || cell === 16 ? 'opacity-35' : ''}`}
+          />
+        ))}
+      </div>
+
+      <div className="mt-2.5 flex items-center gap-3">
+        <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/42">
+          {project.cat.split(' · ')[0]}
+        </span>
+        <span className="h-1 flex-1 overflow-hidden rounded-full bg-white/10">
+          <span
+            className="block h-full rounded-full bg-white/70"
+            style={{ width: `${progress}%` }}
+          />
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const scrollRef = useRef<HTMLElement>(null);
   const { progress, projectsActive } = useScrollProgress(scrollRef);
@@ -155,14 +229,15 @@ export default function Home() {
       {/* ── Hero ── */}
       <section
         id="top"
-        className="relative z-10 flex min-h-screen items-center justify-center px-5 text-center"
+        className="relative z-10 flex min-h-screen items-center justify-center overflow-hidden px-5 text-center"
       >
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center pt-20">
+        <div className="pointer-events-none absolute inset-x-8 top-[30%] bottom-[16%] z-0 rounded-full bg-white/78 blur-3xl md:hidden" />
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center pt-20">
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="mb-5 text-[10px] uppercase tracking-[0.36em] text-neutral-500 sm:text-xs sm:tracking-[0.38em]"
+            className="mb-5 text-[9px] uppercase tracking-[0.32em] text-neutral-500 sm:text-xs sm:tracking-[0.38em]"
           >
             Management Engineer · Digital Builder · AI
           </motion.p>
@@ -180,7 +255,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.16, ease: 'easeOut' }}
-            className="mx-auto mt-7 max-w-[760px] text-balance text-center text-[15px] leading-relaxed text-neutral-600 md:mt-8 md:text-xl md:leading-9"
+            className="mx-auto mt-7 max-w-[760px] text-balance text-center text-[15px] leading-relaxed text-neutral-700 md:mt-8 md:text-xl md:leading-9 md:text-neutral-600"
           >
             I turn industrial complexity into software that works. From combinatorial optimization to AI-assisted
             pipelines — I build tools that make hard operational problems disappear.
@@ -217,18 +292,23 @@ export default function Home() {
       </section>
 
       {/* ── Projects (mobile stacked) ── */}
-      <section id="projects-mobile" className="relative z-10 mx-auto max-w-lg px-5 pb-12 pt-8 md:hidden">
-        <p className="mb-6 text-center text-[10px] uppercase tracking-[0.34em] text-neutral-500">Selected work</p>
-        <div className="grid gap-4">
+      <section id="projects-mobile" className="relative z-10 mx-auto max-w-lg px-5 pb-10 pt-7 md:hidden">
+        <div className="mb-6 flex items-center justify-center gap-3">
+          <span className="h-px w-10 bg-neutral-200" />
+          <p className="text-center text-[10px] uppercase tracking-[0.34em] text-neutral-500">Selected work</p>
+          <span className="h-px w-10 bg-neutral-200" />
+        </div>
+        <div className="grid gap-3.5">
           {PROJECTS.map((project, index) => (
             <motion.article
               key={project.id}
               initial={{ opacity: 0, y: 34, scale: 0.96 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.55, delay: Math.min(index * 0.035, 0.18), ease: [0.16, 1, 0.3, 1] }}
-              className="block w-full rounded-[1.75rem] border border-white/80 bg-white/75 px-6 py-5 text-left shadow-[0_22px_70px_rgba(0,0,0,0.07)] backdrop-blur-xl transition active:scale-[0.99]"
+              transition={{ duration: 0.62, delay: Math.min(index * 0.035, 0.18), ease: [0.16, 1, 0.3, 1] }}
+              className="block w-full rounded-[1.45rem] border border-white/80 bg-white/82 p-3.5 text-left shadow-[0_22px_70px_rgba(0,0,0,0.075)] backdrop-blur-xl transition active:scale-[0.985]"
             >
+              <MobileProjectPreview project={project} index={index} total={PROJECTS.length} />
               <div className="mb-3 flex items-center gap-3">
                 <span className="font-mono text-[11px] tracking-[0.28em] text-neutral-500">{project.number}</span>
                 <span className="h-px flex-1 bg-neutral-200" />
@@ -236,10 +316,10 @@ export default function Home() {
                   {project.cat.split(' · ')[0]}
                 </span>
               </div>
-              <h3 className="text-balance text-lg font-medium tracking-tight text-neutral-950">{project.title}</h3>
-              <p className="mt-2.5 text-pretty text-[13px] leading-relaxed text-neutral-600">{project.shortDesc}</p>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {project.pills.slice(0, 4).map((pill) => (
+              <h3 className="text-balance text-[1.15rem] font-semibold tracking-[-0.04em] text-neutral-950">{project.title}</h3>
+              <p className="mt-2 max-h-[3.95rem] overflow-hidden text-pretty text-[12.5px] leading-relaxed text-neutral-600">{project.shortDesc}</p>
+              <div className="mt-3.5 flex flex-wrap gap-1.5">
+                {project.pills.slice(0, 3).map((pill) => (
                   <span
                     key={pill.label}
                     className={`rounded-full border px-2.5 py-1 text-[9px] uppercase tracking-wide ${
@@ -261,7 +341,7 @@ export default function Home() {
       {/* ── About ── */}
       <section
         id="about"
-        className="relative z-20 scroll-mt-24 px-5 py-28 md:py-36"
+        className="relative z-20 scroll-mt-24 px-5 py-20 md:py-36"
       >
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -270,32 +350,32 @@ export default function Home() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="mx-auto w-full max-w-6xl"
         >
-          <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end md:gap-12">
+          <div className="grid gap-6 md:grid-cols-[0.9fr_1.1fr] md:items-end md:gap-12">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.34em] text-neutral-500">about</p>
-              <h2 className="mt-5 max-w-[11ch] text-balance text-4xl font-semibold leading-[0.96] tracking-[-0.045em] text-neutral-950 sm:text-5xl lg:text-[4.6rem]">
+              <h2 className="mt-4 max-w-[11ch] text-balance text-[2.45rem] font-semibold leading-[0.96] tracking-[-0.045em] text-neutral-950 sm:text-5xl lg:text-[4.6rem]">
                 Systems for messy operations.
               </h2>
             </div>
 
-            <div className="border-l border-neutral-950/12 pl-5 text-left md:pl-8">
-              <p className="max-w-2xl text-pretty text-[16px] leading-8 text-neutral-700 md:text-lg md:leading-9">
+            <div className="border-l border-neutral-950/12 pl-4 text-left md:pl-8">
+              <p className="max-w-2xl text-pretty text-[15px] leading-7 text-neutral-700 md:text-lg md:leading-9">
                 I work across operations, data, suppliers, customers and AI: the useful middle layer where messy
                 constraints become faster decisions and cleaner execution.
               </p>
-              <p className="mt-5 max-w-2xl text-pretty text-[14px] leading-7 text-neutral-500 md:text-base md:leading-8">
+              <p className="mt-4 max-w-2xl text-pretty text-[13px] leading-6 text-neutral-500 md:mt-5 md:text-base md:leading-8">
                 Management engineering gives the method; software gives the leverage. I map how work really happens,
                 remove manual friction and ship tools that people can trust when time, cost and coordination matter.
               </p>
             </div>
           </div>
 
-          <div className="mt-12 grid gap-4 lg:grid-cols-[0.92fr_1.08fr] lg:gap-5">
-            <div className="rounded-[1.25rem] border border-neutral-950/10 bg-neutral-950 p-6 text-white shadow-[0_30px_100px_rgba(15,23,42,0.16)] md:p-7">
+          <div className="mt-8 grid gap-3 md:mt-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-5">
+            <div className="rounded-[1.25rem] border border-neutral-950/10 bg-neutral-950 p-4 text-white shadow-[0_30px_100px_rgba(15,23,42,0.16)] md:p-7">
               <div className="flex items-start justify-between gap-5">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-white/45">operational thesis</p>
-                  <p className="mt-5 max-w-md text-pretty text-xl font-semibold leading-tight tracking-[-0.035em] md:text-2xl">
+                  <p className="mt-4 max-w-md text-pretty text-lg font-semibold leading-tight tracking-[-0.035em] md:mt-5 md:text-2xl">
                     Make operational work measurable, repeatable and faster.
                   </p>
                 </div>
@@ -304,19 +384,19 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="mt-7 grid gap-3 border-t border-white/12 pt-5 sm:grid-cols-2">
+              <div className="mt-5 grid grid-cols-2 gap-2 border-t border-white/12 pt-4 md:mt-7 md:gap-3 md:pt-5">
                 {IMPACT_METRICS.map((item) => (
                   <div
                     key={item.title}
-                    className="rounded-2xl border border-white/10 bg-white/[0.055] p-4"
+                    className="rounded-2xl border border-white/10 bg-white/[0.055] p-3 md:p-4"
                   >
-                    <p className="font-mono text-3xl font-semibold tracking-[-0.05em] text-white md:text-[2.35rem]">
+                    <p className="font-mono text-2xl font-semibold tracking-[-0.05em] text-white md:text-[2.35rem]">
                       {item.value}
                     </p>
-                    <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.16em] text-white/80">
+                    <p className="mt-1.5 text-[9px] font-semibold uppercase leading-snug tracking-[0.13em] text-white/80 md:mt-2 md:text-[11px] md:tracking-[0.16em]">
                       {item.title}
                     </p>
-                    <p className="mt-2 text-[12px] leading-relaxed text-white/44">
+                    <p className="mt-1.5 text-[10px] leading-snug text-white/44 md:mt-2 md:text-[12px] md:leading-relaxed">
                       {item.detail}
                     </p>
                   </div>
@@ -332,23 +412,23 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.k}
-                  className="grid gap-4 rounded-[1.15rem] border border-neutral-200/80 bg-white/85 p-4 text-left shadow-[0_18px_65px_rgba(0,0,0,0.045)] backdrop-blur-xl transition hover:border-neutral-950/20 hover:shadow-[0_24px_80px_rgba(0,0,0,0.07)] sm:grid-cols-[62px_1fr] sm:items-start md:p-5"
+                  className="grid grid-cols-[44px_1fr] items-start gap-3 rounded-[1.15rem] border border-neutral-200/80 bg-white/85 p-3 text-left shadow-[0_18px_65px_rgba(0,0,0,0.045)] backdrop-blur-xl transition hover:border-neutral-950/20 hover:shadow-[0_24px_80px_rgba(0,0,0,0.07)] md:grid-cols-[62px_1fr] md:p-5"
                 >
-                  <div className="flex items-center gap-3 sm:block">
+                  <div className="flex items-center gap-2 md:block">
                     <span className="font-mono text-[11px] tracking-[0.26em] text-neutral-400">{item.k}</span>
-                    <span className="h-px flex-1 bg-neutral-200 sm:mt-4 sm:block sm:w-10" />
+                    <span className="h-px flex-1 bg-neutral-200 md:mt-4 md:block md:w-10" />
                   </div>
                   <div>
-                    <p className="text-base font-semibold tracking-[-0.035em] text-neutral-950 md:text-lg">{item.t}</p>
-                    <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500 md:text-sm">{item.d}</p>
+                    <p className="text-[15px] font-semibold tracking-[-0.035em] text-neutral-950 md:text-lg">{item.t}</p>
+                    <p className="mt-1 text-[12px] leading-relaxed text-neutral-500 md:mt-1.5 md:text-sm">{item.d}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="mt-5 rounded-[1.25rem] border border-neutral-200/85 bg-white/78 p-4 text-left shadow-[0_18px_70px_rgba(0,0,0,0.04)] backdrop-blur-xl md:p-5 lg:p-6">
-            <div className="grid gap-7 lg:grid-cols-[1.18fr_0.82fr] lg:items-start">
+          <div className="mt-4 rounded-[1.25rem] border border-neutral-200/85 bg-white/78 p-4 text-left shadow-[0_18px_70px_rgba(0,0,0,0.04)] backdrop-blur-xl md:mt-5 md:p-5 lg:p-6">
+            <div className="grid gap-5 lg:grid-cols-[1.18fr_0.82fr] lg:items-start">
               <div>
                 <div className="flex items-center justify-between gap-4 border-b border-neutral-200/90 pb-4">
                   <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neutral-400">
@@ -357,11 +437,11 @@ export default function Home() {
                   <span className="hidden h-px flex-1 bg-neutral-200 sm:block" />
                 </div>
 
-                <div className="mt-5 grid gap-3 md:grid-cols-4">
+                <div className="mt-4 grid grid-cols-2 gap-2 md:mt-5 md:grid-cols-4 md:gap-3">
                   {METHOD_STEPS.map((item, index) => (
                     <div
                       key={item.label}
-                      className="group relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-50/70 p-4 transition hover:-translate-y-0.5 hover:border-neutral-950/20 hover:bg-white hover:shadow-[0_18px_45px_rgba(0,0,0,0.06)]"
+                      className="group relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-50/70 p-3 transition hover:-translate-y-0.5 hover:border-neutral-950/20 hover:bg-white hover:shadow-[0_18px_45px_rgba(0,0,0,0.06)] md:p-4"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <span className="font-mono text-[10px] text-neutral-400">
@@ -369,13 +449,13 @@ export default function Home() {
                         </span>
                         <span className="h-px flex-1 bg-neutral-200 transition group-hover:bg-neutral-950/20" />
                       </div>
-                      <p className="mt-5 text-sm font-semibold uppercase tracking-[0.16em] text-neutral-950">
+                      <p className="mt-4 text-[12px] font-semibold uppercase tracking-[0.16em] text-neutral-950 md:mt-5 md:text-sm">
                         {item.value}
                       </p>
-                      <p className="mt-1 text-[13px] font-medium leading-relaxed text-neutral-600">
+                      <p className="mt-1 text-[12px] font-medium leading-relaxed text-neutral-600 md:text-[13px]">
                         {item.label}
                       </p>
-                      <p className="mt-3 text-[12px] leading-relaxed text-neutral-500">
+                      <p className="mt-3 hidden text-[12px] leading-relaxed text-neutral-500 sm:block">
                         {item.detail}
                       </p>
                     </div>
@@ -393,7 +473,7 @@ export default function Home() {
                   </span>
                 </div>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-1">
                   {TOOLKIT_GROUPS.map((group) => (
                     <div key={group.title} className="border-t border-neutral-200/90 pt-3">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-950">
