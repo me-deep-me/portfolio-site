@@ -168,7 +168,7 @@ export function GiftLanding() {
       )}
 
       {revealed && (
-        <section id="pausa" className="scroll-mt-0 bg-[#f6efe3] px-4 py-16 sm:px-8 md:py-24">
+        <section id="pausa" className="scroll-mt-0 bg-[#f6efe3] px-4 pb-16 pt-[calc(5.5rem+env(safe-area-inset-top))] sm:px-8 md:py-24">
           <div className="mx-auto grid w-full min-w-0 max-w-6xl gap-8 md:grid-cols-[0.82fr_1.18fr] md:items-center">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
@@ -244,21 +244,27 @@ export function GiftLanding() {
                 </div>
                 <div className="min-w-0 text-right">
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#9c8b68]">
-                    Data
+                    Periodo
                   </dt>
-                  <dd className="mt-1 break-words text-[15px] leading-6">{giftTrip.boardingPass.date}</dd>
+                  <dd className="mt-1 break-words text-[15px] leading-6">{giftTrip.boardingPass.period}</dd>
                 </div>
-                <div className="min-w-0">
+                <div className="col-span-2 min-w-0 border-t border-[#1f3c52]/10 pt-4">
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#9c8b68]">
                     Andata
                   </dt>
-                  <dd className="mt-1 break-words text-[15px] leading-6">{giftTrip.boardingPass.outbound}</dd>
+                  <dd className="mt-1 flex min-w-0 flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-[15px] leading-6">
+                    <span>{giftTrip.boardingPass.outboundDate}</span>
+                    <span className="font-medium text-[#20302a]">{giftTrip.boardingPass.outboundTime}</span>
+                  </dd>
                 </div>
-                <div className="min-w-0 text-right">
+                <div className="col-span-2 min-w-0 border-t border-[#1f3c52]/10 pt-4">
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#9c8b68]">
                     Ritorno
                   </dt>
-                  <dd className="mt-1 break-words text-[15px] leading-6">{giftTrip.boardingPass.return}</dd>
+                  <dd className="mt-1 flex min-w-0 flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-[15px] leading-6">
+                    <span>{giftTrip.boardingPass.returnDate}</span>
+                    <span className="font-medium text-[#20302a]">{giftTrip.boardingPass.returnTime}</span>
+                  </dd>
                 </div>
                 <div className="min-w-0">
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#9c8b68]">
