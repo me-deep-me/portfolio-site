@@ -81,8 +81,8 @@ export function GiftLanding() {
   };
 
   return (
-    <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f6efe3] text-[#17231f] selection:bg-[#1f3c52] selection:text-[#fff9ec]">
-      <section className="relative flex h-[100svh] min-h-[720px] items-end overflow-hidden px-4 pb-7 pt-24 text-[#fff9ec] sm:px-8 md:px-10 md:pb-12">
+    <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#08141f] text-[#17231f] selection:bg-[#1f3c52] selection:text-[#fff9ec]">
+      <section className="relative flex h-[100svh] min-h-[720px] items-end overflow-hidden px-4 pb-[calc(1.75rem+env(safe-area-inset-bottom))] pt-[calc(6rem+env(safe-area-inset-top))] text-[#fff9ec] supports-[height:100dvh]:h-[100dvh] sm:px-8 md:px-10 md:pb-[calc(3rem+env(safe-area-inset-bottom))]">
         <div className="absolute inset-0">
           <CinematicImage image={imageById(giftTrip.intro.imageId)} priority />
         </div>
@@ -168,7 +168,7 @@ export function GiftLanding() {
       )}
 
       {revealed && (
-        <section id="pausa" className="scroll-mt-0 px-4 py-16 sm:px-8 md:py-24">
+        <section id="pausa" className="scroll-mt-0 bg-[#f6efe3] px-4 py-16 sm:px-8 md:py-24">
           <div className="mx-auto grid w-full min-w-0 max-w-6xl gap-8 md:grid-cols-[0.82fr_1.18fr] md:items-center">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
@@ -278,7 +278,7 @@ export function GiftLanding() {
         </section>
       )}
 
-      <section id="piano" className="scroll-mt-8 px-4 py-16 sm:px-8 md:py-24">
+      <section id="piano" className="scroll-mt-8 bg-[#f6efe3] px-4 py-16 sm:px-8 md:py-24">
         <div className="mx-auto w-full min-w-0 max-w-6xl">
           <div className="mb-9 max-w-2xl">
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7f765e] md:tracking-[0.34em]">
@@ -312,7 +312,7 @@ export function GiftLanding() {
         </div>
       </section>
 
-      <section className="px-4 py-14 sm:px-8 md:py-28">
+      <section className="bg-[#f6efe3] px-4 py-14 sm:px-8 md:py-28">
         <div className="mx-auto w-full min-w-0 max-w-6xl">
           <div className="grid w-full min-w-0 gap-4 md:grid-cols-[1.1fr_0.9fr] md:items-end">
             <motion.figure
