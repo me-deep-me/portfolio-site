@@ -55,166 +55,121 @@ function TravelMark() {
 }
 
 export function GiftLanding() {
+  const [revealed, setRevealed] = useState(false);
   const [accepted, setAccepted] = useState(false);
-  const planImages = useMemo(
-    () => tripPlan.map((item) => ({ ...item, image: imageById(item.imageId) })),
+
+  const galleryImages = useMemo(
+    () => giftTrip.galleryImageIds.map((id) => imageById(id)),
     []
   );
 
-  const scrollToReveal = () => {
-    document.getElementById('rivelazione')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const scrollToPlan = () => {
+    document.getElementById('piano')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
     <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f6efe3] text-[#17231f] selection:bg-[#1f3c52] selection:text-[#fff9ec]">
       <section className="relative flex h-[100svh] min-h-[720px] items-end overflow-hidden px-4 pb-7 pt-24 text-[#fff9ec] sm:px-8 md:px-10 md:pb-12">
         <div className="absolute inset-0">
-          <CinematicImage image={imageById('hero-sea')} priority />
+          <motion.div
+            key={revealed ? 'reveal-image' : 'intro-image'}
+            initial={{ opacity: 0.82, scale: 1.018 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="h-full"
+          >
+            <CinematicImage
+              image={imageById(revealed ? giftTrip.reveal.imageId : giftTrip.intro.imageId)}
+              priority
+            />
+          </motion.div>
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,20,31,0.34),rgba(8,20,31,0.18)_28%,rgba(8,20,31,0.82)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,20,31,0.34),rgba(8,20,31,0.2)_30%,rgba(8,20,31,0.86)_100%)]" />
         <div className="absolute inset-0 opacity-[0.13] [background-image:radial-gradient(rgba(255,255,255,0.72)_0.7px,transparent_0.7px)] [background-size:3px_3px]" />
 
         <motion.div
+          key={revealed ? 'reveal-copy' : 'intro-copy'}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
           className="relative z-10 mx-auto flex w-full max-w-6xl min-w-0 flex-col items-start"
         >
-          <p className="mb-5 inline-flex max-w-full rounded-full border border-[#fff9ec]/30 bg-[#07111f]/70 px-3.5 py-2 text-[14px] font-semibold tracking-[0.02em] text-[#fffdf4] shadow-[0_14px_38px_rgba(0,0,0,0.28)] backdrop-blur-md [text-shadow:0_2px_14px_rgba(0,0,0,0.65)] md:text-[15px]">
-            {giftTrip.recipientLine}
-          </p>
-          <h1 className="w-full max-w-[11.4ch] break-words font-display text-[clamp(2.85rem,12.8vw,3.35rem)] leading-[0.94] tracking-[-0.015em] text-[#fffdf4] text-balance [text-shadow:0_4px_26px_rgba(0,0,0,0.6)] sm:text-6xl md:max-w-[13ch] md:text-8xl md:tracking-[-0.035em] lg:text-[7.4rem]">
-            {giftTrip.hero.title}
-          </h1>
-          <div className="mt-7 flex w-full min-w-0 flex-col gap-5 border-t border-[#fff9ec]/24 pt-5 md:flex-row md:items-end md:justify-between">
-            <div className="min-w-0">
-              <p className="font-display text-[1.7rem] italic leading-tight text-[#f3d39d] [text-shadow:0_2px_18px_rgba(0,0,0,0.45)] md:text-3xl">
-                {giftTrip.hero.subtitle}
+          {!revealed ? (
+            <>
+              <h1 className="w-full max-w-[9.8ch] break-words font-display text-[clamp(3.25rem,14.6vw,3.95rem)] leading-[0.94] tracking-[-0.015em] text-[#fffdf4] text-balance [text-shadow:0_4px_26px_rgba(0,0,0,0.62)] sm:text-6xl md:max-w-[12ch] md:text-8xl md:tracking-[-0.035em]">
+                {giftTrip.intro.title}
+              </h1>
+              <p className="mt-5 max-w-[17rem] text-[18px] leading-8 text-[#fff9ec]/88 [text-shadow:0_2px_14px_rgba(0,0,0,0.52)] md:max-w-md md:text-xl">
+                {giftTrip.intro.subtitle}
               </p>
-              <p className="mt-2 max-w-sm text-[15px] leading-7 text-[#fff9ec]/84 [text-shadow:0_2px_14px_rgba(0,0,0,0.45)] md:text-base">
-                {giftTrip.hero.hint}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={scrollToReveal}
-              className="inline-flex min-h-[3.25rem] w-full max-w-full items-center justify-center gap-3 whitespace-normal rounded-full border border-[#fff9ec]/28 bg-[#fff9ec]/14 px-5 py-3.5 text-center text-[12px] font-semibold uppercase tracking-[0.08em] text-[#fff9ec] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-[#fff9ec]/48 hover:bg-[#fff9ec]/20 active:translate-y-0 sm:w-auto md:tracking-[0.18em]"
-            >
-              {giftTrip.hero.cta}
-              <span aria-hidden="true" className="text-base leading-none">↓</span>
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => setRevealed(true)}
+                className="mt-8 inline-flex min-h-[3.25rem] w-full max-w-full items-center justify-center rounded-full border border-[#fff9ec]/30 bg-[#fff9ec]/14 px-6 py-3.5 text-center text-[12px] font-semibold uppercase tracking-[0.14em] text-[#fff9ec] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-[#fff9ec]/54 hover:bg-[#fff9ec]/22 active:translate-y-0 sm:w-auto"
+              >
+                {giftTrip.intro.cta}
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="max-w-2xl">
+                <p className="font-display text-[clamp(2rem,8.8vw,2.65rem)] leading-[1.04] tracking-[-0.01em] text-[#fffdf4] text-balance [text-shadow:0_4px_24px_rgba(0,0,0,0.62)] md:text-6xl md:leading-[1.02]">
+                  {giftTrip.reveal.lineOne}
+                  <br />
+                  {giftTrip.reveal.lineTwo}
+                </p>
+                <p className="mt-5 max-w-md text-[16px] leading-8 text-[#fff9ec]/86 [text-shadow:0_2px_14px_rgba(0,0,0,0.52)] md:text-lg">
+                  {giftTrip.reveal.body}
+                </p>
+              </div>
+              <div className="mt-9 w-full border-t border-[#fff9ec]/24 pt-6">
+                <p className="font-display text-[clamp(3.05rem,15vw,3.7rem)] leading-[0.92] tracking-[-0.012em] text-[#fffdf4] [text-shadow:0_4px_28px_rgba(0,0,0,0.64)] sm:text-8xl md:text-[9rem] md:tracking-[-0.04em]">
+                  {giftTrip.destination}
+                </p>
+                <p className="mt-4 break-words font-display text-[1.45rem] italic leading-tight text-[#f3d39d] [text-shadow:0_2px_18px_rgba(0,0,0,0.48)] md:text-3xl">
+                  {giftTrip.reveal.subtitle}
+                </p>
+                <button
+                  type="button"
+                  onClick={scrollToPlan}
+                  className="mt-8 inline-flex min-h-[3.25rem] w-full max-w-full items-center justify-center rounded-full border border-[#fff9ec]/30 bg-[#fff9ec]/14 px-6 py-3.5 text-center text-[12px] font-semibold uppercase tracking-[0.1em] text-[#fff9ec] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-[#fff9ec]/54 hover:bg-[#fff9ec]/22 active:translate-y-0 sm:w-auto"
+                >
+                  {giftTrip.reveal.cta}
+                </button>
+              </div>
+            </>
+          )}
         </motion.div>
       </section>
 
-      <section className="px-4 py-20 sm:px-8 md:py-28">
-        <div className="mx-auto grid w-full min-w-0 max-w-6xl gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={{ duration: 0.75, ease: 'easeOut' }}
-            className="min-w-0"
-          >
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7f765e] md:tracking-[0.34em]">
-              Prima della mappa
-            </p>
-            <p className="mt-5 w-full max-w-full break-words font-display text-[clamp(1.92rem,8.4vw,2.28rem)] leading-[1.14] tracking-[-0.004em] text-[#243229] text-pretty md:max-w-xl md:text-6xl md:leading-[1.02] md:tracking-[-0.025em]">
-              {giftTrip.narrative}
-            </p>
-          </motion.div>
-          <motion.figure
-            initial={{ opacity: 0, y: 34 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.8, delay: 0.08, ease: 'easeOut' }}
-            className="relative w-full max-w-full min-w-0"
-          >
-            <CinematicImage
-              image={imageById('clear-rocks')}
-              className="aspect-[4/5] rounded-[0.5rem] shadow-[0_32px_110px_rgba(31,60,82,0.18)] md:aspect-[16/10]"
-              sizes="(min-width: 768px) 54vw, 100vw"
-            />
-            <figcaption className="mt-4 max-w-md text-[14px] leading-7 text-[#6c6656] md:text-xs md:leading-6">
-              {imageById('clear-rocks').caption}
-            </figcaption>
-          </motion.figure>
-        </div>
-      </section>
-
-      <section id="rivelazione" className="scroll-mt-8 px-4 py-14 sm:px-8 md:py-28">
-        <div className="mx-auto w-full max-w-6xl min-w-0">
-          <motion.div
-            initial={{ opacity: 0, y: 44, scale: 0.985 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative h-[74svh] min-h-[600px] w-full max-w-full min-w-0 overflow-hidden rounded-[0.5rem] bg-[#0e2234] px-4 py-8 text-[#fff9ec] shadow-[0_40px_130px_rgba(17,40,58,0.28)] sm:px-8 md:px-12 md:py-12"
-          >
-            <div className="absolute inset-0">
-              <CinematicImage image={imageById('city-walls')} />
-            </div>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,22,34,0.16),rgba(8,22,34,0.32)_42%,rgba(8,22,34,0.86)_100%)]" />
-            <div className="relative z-10 flex h-full w-full min-w-0 flex-col justify-end">
-              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#f0c985]/86 md:tracking-[0.42em]">
-                {giftTrip.country}
-              </p>
-              <motion.h2
-                initial={{ opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.55 }}
-                transition={{ duration: 1.1, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-3 block w-full max-w-full overflow-hidden break-words font-display text-[clamp(2.95rem,14.4vw,3.55rem)] leading-[0.92] tracking-[-0.012em] text-balance sm:text-8xl md:text-[9.5rem] md:tracking-[-0.045em]"
-              >
-                {giftTrip.destination}
-              </motion.h2>
-              <div className="mt-7 flex w-full min-w-0 flex-col gap-4 border-t border-[#fff9ec]/20 pt-5 md:flex-row md:items-end md:justify-between">
-                <p className="break-words font-display text-[1.55rem] italic leading-tight text-[#f3d39d] md:text-3xl">{giftTrip.dateRange}</p>
-                <div className="grid min-w-0 gap-2 text-[12px] uppercase tracking-[0.06em] text-[#fff9ec]/82 sm:grid-cols-2 md:tracking-[0.18em]">
-                  <p>Andata {giftTrip.flights.outbound.time}</p>
-                  <p>Ritorno {giftTrip.flights.return.time}</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="px-4 py-14 sm:px-8 md:py-24">
+      <section id="piano" className="scroll-mt-8 px-4 py-16 sm:px-8 md:py-24">
         <div className="mx-auto w-full min-w-0 max-w-6xl">
           <div className="mb-9 max-w-2xl">
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7f765e] md:tracking-[0.34em]">
               Il piano
             </p>
             <h2 className="mt-4 max-w-full break-words font-display text-[clamp(2.35rem,10.4vw,3rem)] leading-[1] tracking-[-0.01em] text-[#243229] md:text-6xl md:tracking-[-0.025em]">
-              Quattro giorni da ricordare.
+              {giftTrip.planTitle}
             </h2>
           </div>
 
           <div className="grid w-full min-w-0 gap-3 md:grid-cols-4">
-            {planImages.map((item, index) => (
+            {tripPlan.map((item, index) => (
               <motion.article
                 key={item.day}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.22 }}
                 transition={{ duration: 0.62, delay: index * 0.05, ease: 'easeOut' }}
-                className="group w-full max-w-full min-w-0 overflow-hidden rounded-[0.5rem] border border-[#1f3c52]/10 bg-[#fff9ec]/74 shadow-[0_18px_70px_rgba(58,47,32,0.06)]"
+                className="group w-full max-w-full min-w-0 rounded-[0.5rem] border border-[#1f3c52]/10 bg-[#fff9ec]/74 p-5 shadow-[0_18px_70px_rgba(58,47,32,0.06)] md:min-h-[19rem] md:p-6"
               >
-                <CinematicImage
-                  image={item.image}
-                  className="aspect-[5/4]"
-                  sizes="(min-width: 768px) 25vw, 100vw"
-                />
-                <div className="p-4 md:p-5">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#8f7b54] md:tracking-[0.28em]">
-                    0{index + 1}
-                  </p>
-                  <h3 className="mt-3 font-display text-[2rem] leading-none tracking-[-0.02em] text-[#20302a]">
-                    {item.day}
-                  </h3>
-                  <p className="mt-4 text-[16px] leading-7 text-[#4f574c]">{item.body}</p>
-                </div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#8f7b54] md:tracking-[0.28em]">
+                  0{index + 1}
+                </p>
+                <h3 className="mt-5 font-display text-[2.15rem] leading-none tracking-[-0.02em] text-[#20302a]">
+                  {item.day}
+                </h3>
+                <p className="mt-5 whitespace-pre-line text-[16px] leading-7 text-[#4f574c]">{item.body}</p>
               </motion.article>
             ))}
           </div>
@@ -232,18 +187,18 @@ export function GiftLanding() {
               className="w-full max-w-full min-w-0"
             >
               <CinematicImage
-                image={imageById('srd-sunset')}
+                image={galleryImages[0]}
                 className="aspect-[4/5] rounded-[0.5rem] md:aspect-[16/11]"
                 sizes="(min-width: 768px) 56vw, 100vw"
               />
               <figcaption className="mt-4 text-[14px] leading-7 text-[#6c6656] md:text-xs md:leading-6">
-                {imageById('srd-sunset').caption}
+                {galleryImages[0].caption}
               </figcaption>
             </motion.figure>
             <div className="grid w-full min-w-0 gap-4">
-              {[imageById('clear-rocks'), imageById('old-town'), imageById('city-walls')].map((image, index) => (
+              {galleryImages.slice(1).map((image, index) => (
                 <motion.figure
-                  key={`${image.id}-${index}`}
+                  key={image.id}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.25 }}
@@ -262,30 +217,13 @@ export function GiftLanding() {
               ))}
             </div>
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={{ duration: 0.75, ease: 'easeOut' }}
-            className="mx-auto mt-16 w-full max-w-3xl min-w-0 text-center md:mt-24"
-          >
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7f765e] md:tracking-[0.34em]">
-              Non è soltanto un posto da vedere.
-            </p>
-            <p className="mt-5 max-w-full break-words font-display text-[clamp(2.22rem,10vw,2.85rem)] leading-[1] tracking-[-0.01em] text-[#243229] text-balance md:text-7xl md:tracking-[-0.03em]">
-              È un ricordo che dobbiamo ancora costruire.
-            </p>
-          </motion.div>
         </div>
       </section>
 
       <section className="relative flex h-[82svh] min-h-[600px] items-center justify-center overflow-hidden px-4 py-20 text-center text-[#fff9ec] sm:px-8">
-        <div className="absolute inset-0">
-          <CinematicImage image={imageById('final-sunset')} />
-        </div>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,22,35,0.38),rgba(9,22,35,0.88))]" />
-        <div className="absolute inset-0 bg-[#07111f]/25" />
+        <div className="absolute inset-0 bg-[#07111f]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(31,60,82,0.68),rgba(7,17,31,0.92)_55%,rgba(7,17,31,1))]" />
+        <div className="absolute inset-0 opacity-[0.11] [background-image:radial-gradient(rgba(255,255,255,0.7)_0.7px,transparent_0.7px)] [background-size:3px_3px]" />
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -296,7 +234,7 @@ export function GiftLanding() {
           <div className="mx-auto mb-6 flex justify-center text-[#f3d39d]">
             <TravelMark />
           </div>
-          <h2 className="max-w-full break-words font-display text-[clamp(2.7rem,12.2vw,3.25rem)] leading-[1] tracking-[-0.012em] text-balance sm:text-6xl md:text-8xl md:tracking-[-0.035em]">
+          <h2 className="max-w-full break-words font-display text-[clamp(2.35rem,10.4vw,3rem)] leading-[1.04] tracking-[-0.012em] text-balance sm:text-6xl md:text-7xl md:tracking-[-0.035em]">
             {accepted ? giftTrip.final.after : giftTrip.final.before}
           </h2>
           <motion.div
@@ -312,16 +250,6 @@ export function GiftLanding() {
             >
               {giftTrip.final.cta}
             </button>
-          )}
-          {accepted && (
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.12, ease: 'easeOut' }}
-              className="mx-auto mt-7 max-w-md text-[15px] leading-7 text-[#fff9ec]/78 md:text-sm"
-            >
-              11 settembre 2026. Partiamo di sera, arriviamo con la città già accesa.
-            </motion.p>
           )}
         </motion.div>
       </section>

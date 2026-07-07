@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { GiftLanding } from './GiftLanding';
 
 export const metadata: Metadata = {
-  title: 'Aury bella mia',
+  title: 'Una piccola cosa',
   description: 'Una piccola rivelazione privata.',
   robots: {
     index: false,

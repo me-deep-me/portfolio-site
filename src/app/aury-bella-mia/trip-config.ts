@@ -9,9 +9,8 @@ export type DubrovnikImage = {
   focus?: string;
 };
 
-// Modifica qui destinazione, date, voli e testi principali del regalo.
+// Modifica qui destinazione, date, voli, testi e immagini principali del regalo.
 export const giftTrip = {
-  recipientLine: 'per il mio amore, Aury',
   destination: 'Dubrovnik',
   country: 'Croazia',
   dateRange: '11 — 14 settembre 2026',
@@ -25,17 +24,26 @@ export const giftTrip = {
       time: '21:35–22:55',
     },
   },
-  hero: {
-    title: 'Capitolo successivo: noi, da qualche parte sul mare.',
-    subtitle: '11 — 14 settembre 2026',
-    hint: 'Apri il prossimo ricordo.',
-    cta: 'Scopri dove andiamo',
+  intro: {
+    imageId: 'hero-sea',
+    title: 'C’è un’ultima cosa.',
+    subtitle: 'E questa non entrava nella scatola.',
+    cta: 'Apri',
   },
-  narrative:
-    'Ci siamo incontrati vicino al mare, ci siamo ritrovati lungo il cammino e questo è un nuovo posto dove costruiremo ricordi nostri.',
+  reveal: {
+    imageId: 'city-walls',
+    lineOne: 'Ci sono posti belli.',
+    lineTwo: 'E poi ci sono posti che diventano belli perché ci sei tu.',
+    body: 'Quattro giorni per perderci un po’, stare bene e aggiungere un altro posto alla nostra storia.',
+    subtitle: 'Croazia · 11 — 14 settembre 2026',
+    cta: 'Fammi vedere',
+  },
+  planTitle: 'Il piano, più o meno.',
+  galleryImageIds: ['clear-rocks', 'old-town', 'srd-sunset', 'final-sunset'],
   final: {
-    before: 'Prepariamo le valigie?',
-    cta: 'Lo costruiamo insieme',
+    before:
+      'Non so ancora quale sarà la foto più bella del viaggio. Ma so già con chi voglio esserci dentro.',
+    cta: 'Ok, andiamo.',
     after: 'Dubrovnik ci aspetta.',
   },
 };
@@ -45,7 +53,7 @@ export const dubrovnikImages: DubrovnikImage[] = [
   {
     id: 'hero-sea',
     src: '/aury-bella-mia/images/dubrovnik-boats-clear-water.jpg',
-    alt: 'Acqua limpida di Dubrovnik vista dall alto con barche e costa di pietra.',
+    alt: 'Acqua limpida vista dall alto con piccole barche e una costa di pietra.',
     caption: 'Il mare dall alto, chiaro come una rivelazione.',
     credit: 'Pexels / Luciann Photography',
     width: 1600,
@@ -95,8 +103,8 @@ export const dubrovnikImages: DubrovnikImage[] = [
   {
     id: 'final-sunset',
     src: '/aury-bella-mia/images/dubrovnik-skyline-sea.jpg',
-    alt: 'Dubrovnik al tramonto, con mura storiche e mare sullo sfondo.',
-    caption: 'La luce finale prima di dirci: andiamo davvero.',
+    alt: 'Dubrovnik vista dall alto con il mare e il profilo della città.',
+    caption: 'Un ultimo sguardo prima di scegliere dove fermarci.',
     credit: 'Pexels',
     width: 1800,
     height: 1200,
@@ -107,22 +115,18 @@ export const dubrovnikImages: DubrovnikImage[] = [
 export const tripPlan = [
   {
     day: 'Venerdì',
-    body: 'Arriviamo quando la città è già illuminata. Prima notte insieme a Dubrovnik.',
-    imageId: 'old-town',
+    body: 'Atterriamo tardi.\nQuindi la prima cosa da fare è capire dove siamo e baciarci da qualche parte con vista.',
   },
   {
     day: 'Sabato',
-    body: 'Mare, città vecchia, vicoli, vista dall’alto e nessuna fretta.',
-    imageId: 'city-walls',
+    body: 'Ci perdiamo tra vicoli, mare e posti che vedremo su TikTok cinque minuti prima.',
   },
   {
     day: 'Domenica',
-    body: 'Acqua, spiagge, tramonto e una cena che dobbiamo ancora scegliere.',
-    imageId: 'clear-rocks',
+    body: 'Giornata ufficiale dedicata al relax, al mare e a non avere alcuna fretta.',
   },
   {
     day: 'Lunedì',
-    body: 'Ultimo caffè, ultime foto, ritorno. Con un ricordo in più.',
-    imageId: 'srd-sunset',
+    body: 'Ultimo caffè, ultime foto e tentativo inutile di non voler tornare.',
   },
 ];

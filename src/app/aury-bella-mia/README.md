@@ -1,4 +1,4 @@
-# Aury bella mia
+# Aury Dubrovnik reveal
 
 - Route privata tramite URL diretto: `/aury-bella-mia`
 - Date, destinazione, voli e testi: `src/app/aury-bella-mia/trip-config.ts`
