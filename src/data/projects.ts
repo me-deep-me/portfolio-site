@@ -8,6 +8,8 @@ export interface Project {
   stack: string[];
   pills: { label: string; hi?: boolean }[];
   demo?: string;
+  capabilities?: { title: string; description: string }[];
+  example?: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -138,15 +140,42 @@ export const PROJECTS: Project[] = [
     id: 'cerbrain',
     number: '09',
     cat: 'Operational Intelligence · Energy · AI Systems',
-    title: 'CERbrain',
+    title: 'AI Company Second Brain',
     shortDesc:
-      'Operational intelligence platform that connects documents, structured business data, projects and energy workflows into one traceable system of work.',
-    body: 'CERbrain turns a fragmented operational record into a connected intelligence layer. It links source documents to structured entities, project work, tasks, dashboards and deterministic energy calculations, then adds cited retrieval, assistive AI and supervised automation on top. The completed system follows a clear order: establish trustworthy records and provenance, make work operational, then expose intelligence through search, tools and controlled agents. The result is a practical company operating layer rather than a generic chatbot: every important fact has context, every derived output has a source and every consequential action remains reviewable.',
-    stack: ['Python', 'FastAPI', 'PostgreSQL', 'Document Ingestion', 'RAG', 'Energy Models', 'Dashboards', 'MCP'],
+      'An AI second brain for a renewable-energy business: connects documents, emails, clients and projects to explain what changed, what matters and what needs to happen next.',
+    body: 'AI Company Second Brain gives a renewable-energy business a shared memory and a practical way to act on it. Documents, emails and business records are connected to clients, projects, contracts, energy assets and their history. People can find an answer with its sources, understand the current state of a project, run reproducible feasibility calculations and produce reports from the same connected information. AI reads, extracts, summarises and proposes; versioned calculation engines handle energy and economic rules. Scheduled workflows and specialised agents keep information current, surface opportunities and move routine work forward with permissions, approvals and an audit trail.',
+    stack: ['Python', 'FastAPI', 'PostgreSQL · pgvector', 'Microsoft Graph', 'OCR · Document Parsing', 'Hybrid Retrieval · RAG', 'Energy & Economic Models', 'AI Agents · MCP', 'Docker · Azure'],
     pills: [
       { label: 'Python · PostgreSQL', hi: true },
-      { label: 'Operational Intelligence' },
-      { label: 'AI Systems' },
+      { label: 'Company Knowledge' },
+      { label: 'AI · Automation' },
     ],
+    capabilities: [
+      {
+        title: 'A connected company memory',
+        description: 'Ingests documents, spreadsheets, scanned files and email, extracts their content and links it to clients, contacts, projects, contracts and energy assets. Source references, document versions and change history keep each fact in context.',
+      },
+      {
+        title: 'Answers you can inspect',
+        description: 'Combines keyword, vector and structured-data search to answer questions in the context of a client or project. AI supports extraction, summaries and drafting, with citations back to the evidence and review when information is uncertain.',
+      },
+      {
+        title: 'Projects that carry their own history',
+        description: 'Brings together project timelines, status, tasks, owners, deadlines, dependencies and approvals. Weekly management reports and dashboards use the same records to show progress, overdue actions, bottlenecks and portfolio risks.',
+      },
+      {
+        title: 'Energy analysis built on explicit rules',
+        description: 'Reads electricity bills and consumption data, models production and shared energy, and compares renewable-energy community scenarios. Versioned formulas calculate incentives and economic distributions, producing reproducible feasibility studies and technical reports.',
+      },
+      {
+        title: 'Automation with a visible trail',
+        description: 'Scheduled jobs and specialised agents monitor incoming information, propose or apply routine project updates, track regulatory changes and identify market opportunities. Scoped tools, approvals, reversible actions and execution history make the work inspectable.',
+      },
+      {
+        title: 'One workspace for the team',
+        description: 'A web workspace brings search, business records, maps, analysis tools and management views together. Controlled client access, document generation and MCP tools extend the same information to customers and AI assistants; a control room tracks freshness, failures and AI costs.',
+      },
+    ],
+    example: 'A new email and an electricity bill arrive for a project. The system links them to the client and energy supply point, extracts the relevant data and records the update. The team can then review the consumption profile, compare a feasibility scenario and prepare a sourced report. The project timeline, next actions and management view all reflect the same information.',
   },
 ];

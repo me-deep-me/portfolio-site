@@ -166,18 +166,18 @@ const premiumProjects: Record<string, PremiumProject> = {
     flow: ['raw export', 'script', 'report'],
   },
   cerbrain: {
-    eyebrow: 'operational intelligence layer',
-    description: 'Connects records, documents, workflows, energy models and supervised AI into one traceable operating system.',
+    eyebrow: 'company memory · AI · execution',
+    description: 'A shared company memory that turns documents and emails into project context, energy analysis, actionable updates and sourced answers.',
     visual: 'cerbrain',
     visualLabel: 'connected operations',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(139,92,246,0.18),transparent_30%)]',
     tag: 'text-teal-100 border-teal-200/20 bg-teal-200/10',
     stats: [
-      { value: 'Record', label: 'trusted source data' },
-      { value: 'Work', label: 'projects + actions' },
-      { value: 'Intelligence', label: 'cited + supervised' },
+      { value: 'Remember', label: 'documents + context' },
+      { value: 'Understand', label: 'answers + analysis' },
+      { value: 'Act', label: 'workflows + agents' },
     ],
-    flow: ['source records', 'connected work', 'guided action'],
+    flow: ['company memory', 'context + reasoning', 'reviewable action'],
   },
 };
 

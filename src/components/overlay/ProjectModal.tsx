@@ -136,17 +136,17 @@ const caseStudies: Record<string, CaseStudy> = {
     ],
   },
   cerbrain: {
-    eyebrow: 'operational intelligence layer',
+    eyebrow: 'company memory · AI · execution',
     visual: 'cerbrain',
     accent: 'text-teal-100 border-teal-200/20 bg-teal-200/10',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(139,92,246,0.18),transparent_30%)]',
-    problem: 'Operational knowledge was distributed across documents, structured records, projects and specialist tools, making context and next actions hard to keep aligned.',
-    system: 'CERbrain connects the record, work and intelligence layers: provenance-first ingestion, structured entities, workflows, deterministic energy models, cited retrieval and supervised automation.',
-    output: 'A company operating layer where facts remain traceable, work is contextualised and AI can assist without becoming an opaque or unreviewable decision-maker.',
+    problem: 'A renewable-energy business held its knowledge across document folders, emails, CRM records and specialist spreadsheets. Understanding a project meant reconstructing its history by hand; preparing a weekly management report meant copying, reconciling and rewriting the same information.',
+    system: 'I designed the system around three connected layers: reliable company records, operational workflows and AI intelligence. Documents and messages become searchable evidence linked to business entities. Projects, tasks and approvals use those records, while AI services and deterministic energy engines turn them into answers, analyses and actions.',
+    output: 'The team works from a shared company memory: it can see what changed, retrieve the evidence, understand project status, compare energy scenarios and generate reports. Management sees deadlines, risks and opportunities, while agents handle routine work through scoped permissions and recorded actions.',
     metrics: [
-      { value: 'Record', label: 'source-grounded data' },
-      { value: 'Work', label: 'connected operations' },
-      { value: 'AI', label: 'supervised intelligence' },
+      { value: 'Remember', label: 'company knowledge' },
+      { value: 'Understand', label: 'context + analysis' },
+      { value: 'Act', label: 'controlled automation' },
     ],
   },
 };
@@ -481,16 +481,30 @@ export function ProjectModal({ openId, onClose }: Props) {
                 <CaseStepBlock number="01" label="Problem" text={study.problem} />
                 <CaseStepBlock number="02" label="Approach" text={study.system} />
                 <CaseStepBlock number="03" label="Result" text={study.output} />
+                {project.capabilities && (
+                  <section className="rounded-[1.1rem] border border-neutral-200/85 bg-white p-4 md:p-5">
+                    <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-950">What the second brain does</h4>
+                    <p className="mt-3 text-[13px] leading-6 text-neutral-600">{project.body}</p>
+                    <div className="mt-5 grid gap-5">
+                      {project.capabilities.map((capability) => (
+                        <div key={capability.title}>
+                          <h5 className="text-sm font-semibold text-neutral-950">{capability.title}</h5>
+                          <p className="mt-1.5 text-[13px] leading-6 text-neutral-600">{capability.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
               </div>
 
               <aside className="grid content-start gap-3 rounded-[1.15rem] border border-neutral-200/80 bg-white p-4 shadow-[0_14px_45px_rgba(0,0,0,0.035)] md:rounded-[1.25rem] md:p-5">
                 <div className="rounded-[1rem] border border-neutral-200/80 bg-neutral-950 p-4 text-white">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">decision output</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">{project.example ? 'Example workflow' : 'decision output'}</p>
                   <p className="mt-3 text-pretty text-lg font-semibold leading-tight tracking-[-0.035em]">
-                    A practical interface for a specific operational decision.
+                    {project.example ? 'From incoming information to coordinated work.' : 'A practical interface for a specific operational decision.'}
                   </p>
                   <p className="mt-3 text-[12px] leading-6 text-white/56">
-                    The goal is not a generic dashboard: it is a repeatable way to move from raw operational input to a usable answer.
+                    {project.example ?? 'The goal is not a generic dashboard: it is a repeatable way to move from raw operational input to a usable answer.'}
                   </p>
                 </div>
 
