@@ -131,7 +131,7 @@ const premiumProjects: Record<string, PremiumProject> = {
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.18),transparent_34%),radial-gradient(circle_at_88%_22%,rgba(59,130,246,0.16),transparent_30%)]',
     tag: 'text-teal-100 border-teal-200/20 bg-teal-200/10',
     stats: [
-      { value: 'Scale', label: '85k+ records' },
+      { value: 'Scale', label: 'large contact archive' },
       { value: 'Quality', label: 'duplicate checks' },
       { value: 'Action', label: 'email workflow' },
     ],
@@ -139,7 +139,7 @@ const premiumProjects: Record<string, PremiumProject> = {
   },
   rag: {
     eyebrow: 'local RAG research',
-    description: 'Tests local AI retrieval that links answers back to source documents and the ÆMed path.',
+    description: 'Explores local AI retrieval with inspectable evidence and answers linked to source documents.',
     visual: 'rag',
     visualLabel: 'retrieval map',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(168,85,247,0.2),transparent_34%),radial-gradient(circle_at_88%_22%,rgba(14,165,233,0.15),transparent_30%)]',

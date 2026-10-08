@@ -64,24 +64,24 @@ function useScrollProgress(ref: React.RefObject<HTMLElement | null>) {
 
 const IMPACT_METRICS = [
   {
-    value: '40-70%',
-    title: 'manual planning effort cut',
-    detail: 'Estimated range across scheduling and logistics workflows.',
+    value: '09',
+    title: 'project case studies',
+    detail: 'Explore the problem, design decisions and operational solution.',
   },
   {
-    value: '85k+',
-    title: 'contacts cleaned and governed',
-    detail: 'CRM records structured, deduplicated and made operational.',
+    value: '2D / 3D',
+    title: 'physical planning models',
+    detail: 'Sheet layouts and shipment plans that can be inspected.',
   },
   {
-    value: '2-5x',
-    title: 'faster recurring reports',
-    detail: 'Raw exports turned into repeatable analysis-ready outputs.',
+    value: 'What-if',
+    title: 'interactive impact models',
+    detail: 'Adjust workload and effort assumptions for each project.',
   },
   {
-    value: '0',
-    title: 'external AI data exposure',
-    detail: 'Local retrieval tests designed around controlled documents.',
+    value: 'Sources',
+    title: 'inspectable knowledge',
+    detail: 'Evidence and human review built into knowledge workflows.',
   },
 ];
 
@@ -514,7 +514,7 @@ export default function Home() {
             <span className="h-px w-10 bg-neutral-200" />
           </div>
           <p className="mx-auto mt-3 max-w-[26rem] text-balance text-[13px] leading-6 text-neutral-500">
-            Eight operational tools, each reduced to the decision it makes easier.
+            Nine operational projects. Explore the decision, the case study and the impact model behind each one.
           </p>
         </div>
         <div className="grid gap-3.5">

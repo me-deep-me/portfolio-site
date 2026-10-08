@@ -1,8 +1,9 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { PROJECTS, type Project } from '@/data/projects';
+import { ProjectArticle, ProjectImpactDashboard } from './ProjectDeepDive';
 
 interface Props {
   openId: string | null;
@@ -29,7 +30,7 @@ const caseStudies: Record<string, CaseStudy> = {
     accent: 'text-lime-100 border-lime-200/20 bg-lime-200/10',
     glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(163,230,53,0.2),transparent_36%),radial-gradient(circle_at_88%_18%,rgba(34,211,238,0.16),transparent_30%)]',
     problem: 'Panel nesting was outsourced, so layout logic, room grouping and downstream packaging were hard to control.',
-    system: 'Æ-Nest normalises BIM/Revit Excel exports, expands quantities, applies kerf and rotation rules, then runs multi-scenario rectpack heuristics.',
+    system: 'The pipeline validates design exports, evaluates sheet layouts and carries item references into manufacturing and packaging outputs.',
     output: 'One data flow links design, CNC sequence, packaging and supplier documentation through Excel, DXF, GLB/IFC and PNG outputs.',
     metrics: [
       { value: 'Input', label: 'Revit/BIM export' },
@@ -102,7 +103,7 @@ const caseStudies: Record<string, CaseStudy> = {
     system: 'ContactBase XL adds standardised fields, guided input, validation, duplicate checks and separated consolidation in Excel/VBA.',
     output: 'The database becomes a working layer for segmentation, analysis and Outlook-based communication, not just storage.',
     metrics: [
-      { value: 'Scale', label: '85k+ records' },
+      { value: 'Scale', label: 'large contact archive' },
       { value: 'Quality', label: 'duplicate checks' },
       { value: 'Action', label: 'email workflow' },
     ],
@@ -114,7 +115,7 @@ const caseStudies: Record<string, CaseStudy> = {
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(168,85,247,0.2),transparent_34%),radial-gradient(circle_at_88%_22%,rgba(14,165,233,0.15),transparent_30%)]',
     problem: 'Technical knowledge was available but dispersed across manuals, specs, PDFs, extractions and project records.',
     system: 'The experiments combine local LLMs, preprocessing, OCR, vector retrieval and constrained prompting.',
-    output: 'They define the conditions for private, verifiable knowledge retrieval and inform the modular ÆMed architecture.',
+    output: 'The experiments clarify the conditions for private knowledge retrieval and answers supported by inspectable evidence.',
     metrics: [
       { value: 'Input', label: 'technical docs' },
       { value: 'Model', label: 'local retrieval' },
@@ -374,22 +375,53 @@ function ModalLink({
 }
 
 export function ProjectModal({ openId, onClose }: Props) {
+  return <ProjectDialog key={openId ?? 'closed'} openId={openId} onClose={onClose} />;
+}
+
+function ProjectDialog({ openId, onClose }: Props) {
   const project = PROJECTS.find((p) => p.id === openId);
   const study = project ? caseStudies[project.id] : null;
+  const [view, setView] = useState<'overview' | 'article' | 'impact'>('overview');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const expanded = view !== 'overview';
+
+  const changeView = (next: typeof view) => {
+    setView(next);
+    contentRef.current?.scrollTo({ top: 0 });
+    dialogRef.current?.querySelector<HTMLButtonElement>(`[data-view="${next}"]`)?.focus();
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (e.key === 'Tab' && dialogRef.current) {
+        const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>('button, a[href], input, [tabindex="0"]')).filter((element) => element.getClientRects().length > 0);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && (document.activeElement === first || !dialogRef.current.contains(document.activeElement))) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && (document.activeElement === last || !dialogRef.current.contains(document.activeElement))) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
   useEffect(() => {
-    if (project) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = '';
+    if (!project) return;
+    const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus({ preventScroll: true });
     };
   }, [project]);
 
@@ -404,6 +436,10 @@ export function ProjectModal({ openId, onClose }: Props) {
             onClick={onClose}
           >
             <motion.div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="project-dialog-title"
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
@@ -414,8 +450,8 @@ export function ProjectModal({ openId, onClose }: Props) {
             <div className="relative shrink-0 overflow-hidden bg-slate-950 p-3 text-white sm:p-5 md:p-6">
               <div className={`pointer-events-none absolute inset-0 ${study.glow}`} />
               <span className="relative mx-auto mb-3 block h-1 w-11 rounded-full bg-white/22 md:hidden" />
-              <div className="relative grid gap-4 sm:gap-5 lg:grid-cols-[1fr_0.9fr] lg:items-stretch">
-                <div className="flex min-h-0 flex-col justify-between md:min-h-[230px]">
+              <div className={`relative grid gap-4 sm:gap-5 ${expanded ? '' : 'lg:grid-cols-[1fr_0.9fr] lg:items-stretch'}`}>
+                <div className={`flex min-h-0 flex-col justify-between ${expanded ? '' : 'md:min-h-[230px]'}`}>
                   <div>
                     <div className="mb-3 flex items-start justify-between gap-4 sm:mb-5">
                       <div>
@@ -435,6 +471,7 @@ export function ProjectModal({ openId, onClose }: Props) {
                         </div>
                       </div>
                       <button
+                        ref={closeRef}
                         type="button"
                         onClick={onClose}
                         aria-label="Close project modal"
@@ -444,12 +481,12 @@ export function ProjectModal({ openId, onClose }: Props) {
                       </button>
                     </div>
 
-                    <h3 className="max-w-2xl text-balance text-[1.75rem] font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                    <h3 id="project-dialog-title" className={`max-w-2xl text-balance font-semibold leading-[1.05] tracking-[-0.045em] text-white ${expanded ? 'text-2xl sm:text-3xl' : 'text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl'}`}>
                       {project.title}
                     </h3>
                   </div>
 
-                  <div className="mt-5 hidden grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4 md:grid">
+                  <div className={expanded ? 'hidden' : 'mt-5 hidden grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4 md:grid'}>
                     {study.metrics.map((metric) => (
                       <div key={metric.label} className="rounded-2xl border border-white/10 bg-white/[0.055] p-2.5 sm:p-3">
                         <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white md:text-[13px]">{metric.value}</p>
@@ -459,13 +496,24 @@ export function ProjectModal({ openId, onClose }: Props) {
                   </div>
                 </div>
 
-                <div className="hidden md:block">
+                <div className={expanded ? 'hidden' : 'hidden md:block'}>
                   <VisualPanel kind={study.visual} />
                 </div>
               </div>
             </div>
 
-            <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto bg-neutral-50/60 p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
+            <nav aria-label="Project detail views" className="flex shrink-0 gap-1 border-b border-neutral-200 bg-white px-3 py-2 sm:px-6">
+              {([
+                { id: 'overview', label: 'Overview' },
+                { id: 'article', label: 'In details ↗' },
+                { id: 'impact', label: 'Impact lab' },
+              ] as const).map((item) => (
+                <button key={item.id} data-view={item.id} type="button" aria-pressed={view === item.id} onClick={() => changeView(item.id)} className={`rounded-full px-4 py-2.5 text-[11px] font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 ${view === item.id ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950'}`}>{item.label}</button>
+              ))}
+            </nav>
+            <div ref={contentRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-neutral-50/60">
+            {view === 'article' ? <ProjectArticle project={project} onExplore={() => changeView('impact')} /> : view === 'impact' ? <ProjectImpactDashboard project={project} /> : (
+            <div className="grid gap-4 p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
               <div className="grid gap-3 md:gap-4">
                 <div className="md:hidden">
                   <VisualPanel kind={study.visual} />
@@ -498,6 +546,12 @@ export function ProjectModal({ openId, onClose }: Props) {
               </div>
 
               <aside className="grid content-start gap-3 rounded-[1.15rem] border border-neutral-200/80 bg-white p-4 shadow-[0_14px_45px_rgba(0,0,0,0.035)] md:rounded-[1.25rem] md:p-5">
+                <div className="rounded-2xl border border-teal-200 bg-teal-50 p-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-teal-700">For the technically curious</p>
+                  <p className="mt-2 text-sm leading-6 text-teal-950">Read the problem, the design decisions and how the system works. Then explore its operational impact.</p>
+                  <button type="button" onClick={() => changeView('article')} className="mt-4 w-full rounded-full bg-teal-950 px-4 py-3 text-xs font-semibold text-white transition hover:bg-teal-800">In details · Read case study ↗</button>
+                  <button type="button" onClick={() => changeView('impact')} className="mt-2 w-full rounded-full border border-teal-300 bg-white px-4 py-3 text-xs font-semibold text-teal-950 transition hover:bg-teal-100">Explore impact lab</button>
+                </div>
                 <div className="rounded-[1rem] border border-neutral-200/80 bg-neutral-950 p-4 text-white">
                   <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">{project.example ? 'Example workflow' : 'decision output'}</p>
                   <p className="mt-3 text-pretty text-lg font-semibold leading-tight tracking-[-0.035em]">
@@ -529,6 +583,8 @@ export function ProjectModal({ openId, onClose }: Props) {
                 </div>
               </aside>
             </div>
+            )}
+            </div>
 
             <div className="shrink-0 grid grid-cols-1 gap-2 border-t border-neutral-200/80 bg-white/88 px-4 py-3.5 backdrop-blur-xl md:flex md:flex-wrap md:items-center md:justify-between md:gap-3 md:px-6">
               <button
@@ -539,7 +595,7 @@ export function ProjectModal({ openId, onClose }: Props) {
                 Close
               </button>
               <p className="hidden max-w-md text-[12px] leading-6 text-neutral-500 md:block">
-                Structured as problem, approach and result so the operational value is visible before the technical stack.
+                {view === 'impact' ? 'Illustrative workload model · adjust assumptions to explore the impact.' : view === 'article' ? 'Anonymised case study · public design narrative.' : 'Go further: read the case study or explore the impact lab.'}
               </p>
             </div>
           </motion.div>

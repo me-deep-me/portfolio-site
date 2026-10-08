@@ -17,11 +17,11 @@ export const PROJECTS: Project[] = [
     id: 'nest',
     number: '01',
     cat: 'Optimization · Manufacturing · Process Integration',
-    title: 'Æ-Nest',
+    title: 'Panel Nesting',
     shortDesc:
-      'Python pipeline that internalises panel nesting for healthcare modules: Revit exports become validated panel lists, CNC layouts, packaging logic and multi-format outputs for suppliers.',
-    body: 'Æ-Nest was built to bring a previously external, hard-to-control nesting process inside a structured digital pipeline. Starting from semi-manual Revit/BIM Excel exports, it validates inconsistent headers and numeric formats, expands quantities into physical panels, then runs rectpack-based heuristics for 2D cutting stock on standard sheets with kerf and rotation rules. The value is not only material optimisation: the system preserves the link between design, CNC sequence, room-based packaging and logistics, producing Excel workbooks, DXF files, 3D GLB/IFC checks and PNG layouts that can be shared with external suppliers.',
-    stack: ['Python', 'Tkinter', 'rectpack', 'Revit·BIM', 'DXF·CNC', 'Excel', 'GLB·IFC', 'NP-Hard Heuristics'],
+      'Panel-planning pipeline that connects design exports, cutting layouts, packaging checks and supplier-ready outputs in one consistent manufacturing handoff.',
+    body: 'Panel Nesting brings design data, layout planning and manufacturing outputs into a consistent workflow. Operators review input exceptions, evaluate sheet arrangements and generate cutting, packing and visual outputs from the same plan. The system preserves item references through the handoff so production and logistics can review a common record.',
+    stack: ['Python', 'Desktop UI', 'BIM Data', '2D Optimisation', 'CAD Outputs', 'Excel', '3D Visualisation'],
     pills: [
       { label: 'Python', hi: true },
       { label: 'NP-Hard Heuristics' },
@@ -36,8 +36,8 @@ export const PROJECTS: Project[] = [
     title: 'CargoCast',
     shortDesc:
       'Container loading estimator for the offer phase. Product codes and quantities become crate scenarios, loading simulations, saturation values and logistics cost-control signals.',
-    body: 'CargoCast supports the commercial phase when the real packing list does not exist yet. It takes product codes and forecast quantities, applies deterministic packaging rules by family - panels, profiles, doors and accessories - and turns abstract order data into physical crates. A FastAPI backend and web interface run packing heuristics to estimate required containers, fill levels and non-allocated items, giving the sales team a repeatable basis for freight assumptions instead of subjective sizing.',
-    stack: ['Python', 'FastAPI', 'HTML·CSS·JS', '3D Bin Packing', 'Skyline Algorithm', 'Grid-Based Packing'],
+    body: 'CargoCast supports freight review before a final packing list exists. Forecast quantities become a physical shipment scenario, with loading views, fill indicators and visible exceptions. A Python service and web interface let the commercial team compare assumptions when an offer changes.',
+    stack: ['Python', 'FastAPI', 'HTML·CSS·JS', '3D Packing', 'Scenario Analysis'],
     pills: [
       { label: 'Python · JS', hi: true },
       { label: '3D Packing' },
@@ -67,8 +67,8 @@ export const PROJECTS: Project[] = [
     cat: 'Engineering · Multi-Constraint Packing · Decision Support',
     title: 'Door Pack Optimizer',
     shortDesc:
-      'Decision-support tool for technical hospital doors. Parses product strings, models weights and generates crate or pallet configurations under real logistics constraints.',
-    body: 'Door Pack Optimizer formalises a process that was previously dependent on expert interpretation of door codes and manual Excel work. It decodes technical strings for hermetic, lead-lined, glazed and acoustic doors into structured attributes - type, dimensions, shielding, vision panels and structural elements - then estimates weights with material-based rules. A multi-start heuristic with local search groups doors, frames and beams into crates or pallets while respecting weight, depth and stability constraints, producing measurable outputs for volume, crate count and Excel/dashboard reporting.',
+      'Decision-support tool for engineered door assemblies. Turns product descriptions into reviewed crate or pallet proposals under physical handling constraints.',
+    body: 'Door Pack Optimizer connects structured product interpretation to a packing proposal. A desktop interface helps operators review physical attributes, compare crate or pallet arrangements and export a clear logistics summary. The design makes specialist planning more repeatable while preserving human review of handling suitability.',
     stack: ['Python', 'Tkinter', 'Multi-constraint Bin Packing', 'Product String Parsing', 'Excel Output', 'Decision Support'],
     pills: [
       { label: 'Python', hi: true },
@@ -97,13 +97,13 @@ export const PROJECTS: Project[] = [
     cat: 'Data Governance · CRM · Automation',
     title: 'ContactBase XL',
     shortDesc:
-      'Excel/VBA data-governance layer for a large international B2B contact base: validation, deduplication, guided input and Outlook-ready commercial workflows.',
-    body: 'ContactBase XL turns an 85,000+ record contact archive for hospitals, clinics, distributors, suppliers and professionals into an operating data layer. Built in Excel/VBA where adoption was fastest, it standardises fields, validates email and geographic formats, detects duplicates through logical keys, separates raw input from consolidated records and maps incomplete information into cleaner structures. It also connects data to action: selecting an email can generate an Outlook draft with predefined subject, message and variables, making the database useful for segmentation, analysis and commercial communication.',
-    stack: ['Excel', 'VBA', 'UserForms', 'Data Quality', 'Deduplication', 'Outlook Automation', '85k Records'],
+      'Excel/VBA data-governance layer for a large B2B contact archive: guided entry, quality checks, duplicate review and commercial workflows.',
+    body: 'ContactBase XL turns a fragmented contact archive into a working information layer. Guided input, validation and duplicate review improve consistency, while incoming data stays distinct from consolidated records. Users can reuse the reviewed information for segmentation and commercial communication.',
+    stack: ['Excel', 'VBA', 'UserForms', 'Data Quality', 'Deduplication', 'Email Integration'],
     pills: [
       { label: 'Excel · VBA', hi: true },
       { label: 'Data Quality' },
-      { label: '85k Records' },
+      { label: 'Large-scale Archive' },
     ],
   },
   {
@@ -112,9 +112,9 @@ export const PROJECTS: Project[] = [
     cat: 'AI Research · LLM · RAG Architecture',
     title: 'RAG Experiments',
     shortDesc:
-      'Exploration of local LLM and RAG architectures for fragmented technical documentation, focused on privacy, source-linked answers and the future ÆMed path.',
-    body: 'RAG Experiments came from a concrete knowledge-management problem: manuals, product sheets, technical specs and project documents existed, but retrieving the right information was still slow and manual. The work tests local LLM inference and Retrieval-Augmented Generation so documents can be preprocessed, indexed and queried without sending company data outside the environment. The main focus is methodological - document quality, OCR, heterogeneous formats, vector retrieval, prompt constraints, hallucination control and verifiable outputs - and it directly feeds the privacy-first, modular ÆMed vision.',
-    stack: ['Python', 'Local LLM', 'RAG', 'Vector DB', 'OCR', 'Prompt Engineering', 'ÆMed'],
+      'Research into private knowledge retrieval from scattered technical documents, with local inference, visible evidence and source-linked answers.',
+    body: 'RAG Experiments explores how controlled technical documents can support useful answers with inspectable evidence. The work separates document readability, retrieval quality and answer quality, using local inference and source references to understand where the system helps and where verification remains necessary.',
+    stack: ['Python', 'Local LLM', 'RAG', 'Vector DB', 'Document Processing', 'Evaluation'],
     pills: [
       { label: 'Python', hi: true },
       { label: 'LLM · RAG' },
