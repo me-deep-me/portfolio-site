@@ -39,7 +39,7 @@ interface Props {
   onOpen: () => void;
 }
 
-type PremiumVisual = 'nest' | 'cargo' | 'load' | 'door' | 'gantt' | 'db' | 'rag' | 'micro';
+type PremiumVisual = 'nest' | 'cargo' | 'load' | 'door' | 'gantt' | 'db' | 'rag' | 'micro' | 'cerbrain';
 
 interface PremiumProject {
   eyebrow: string;
@@ -164,6 +164,20 @@ const premiumProjects: Record<string, PremiumProject> = {
       { value: 'Output', label: 'reports' },
     ],
     flow: ['raw export', 'script', 'report'],
+  },
+  cerbrain: {
+    eyebrow: 'operational intelligence layer',
+    description: 'Connects records, documents, workflows, energy models and supervised AI into one traceable operating system.',
+    visual: 'cerbrain',
+    visualLabel: 'connected operations',
+    glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(139,92,246,0.18),transparent_30%)]',
+    tag: 'text-teal-100 border-teal-200/20 bg-teal-200/10',
+    stats: [
+      { value: 'Record', label: 'trusted source data' },
+      { value: 'Work', label: 'projects + actions' },
+      { value: 'Intelligence', label: 'cited + supervised' },
+    ],
+    flow: ['source records', 'connected work', 'guided action'],
   },
 };
 
@@ -338,6 +352,26 @@ function PremiumVisualPanel({ visual, label }: { visual: PremiumVisual; label: s
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {visual === 'cerbrain' && (
+        <div className="relative h-32 overflow-hidden rounded-[0.85rem] border border-white/10 bg-white/[0.04]">
+          <span className="absolute left-[22%] top-[28%] h-px w-[56%] rotate-[16deg] bg-teal-100/24" />
+          <span className="absolute left-[24%] top-[64%] h-px w-[52%] -rotate-[14deg] bg-violet-100/22" />
+          <span className="absolute left-[49%] top-[20%] h-[60%] w-px bg-white/12" />
+          {[
+            'left-[12%] top-[19%] bg-teal-200/78',
+            'left-[31%] top-[60%] bg-white/18',
+            'left-[52%] top-[38%] bg-violet-200/76',
+            'left-[73%] top-[18%] bg-cyan-100/62',
+            'left-[75%] top-[65%] bg-teal-100/56',
+          ].map((node) => (
+            <span key={node} className={`absolute h-8 w-8 rounded-full border border-white/12 ${node}`} />
+          ))}
+          <span className="absolute bottom-3 left-3 rounded-full border border-white/12 bg-white/8 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-white/60">
+            traceable
+          </span>
         </div>
       )}
     </div>

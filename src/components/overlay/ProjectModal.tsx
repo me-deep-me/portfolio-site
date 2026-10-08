@@ -9,7 +9,7 @@ interface Props {
   onClose: () => void;
 }
 
-type VisualKind = 'nest' | 'cargo' | 'load' | 'door' | 'gantt' | 'db' | 'rag' | 'micro';
+type VisualKind = 'nest' | 'cargo' | 'load' | 'door' | 'gantt' | 'db' | 'rag' | 'micro' | 'cerbrain';
 
 interface CaseStudy {
   eyebrow: string;
@@ -133,6 +133,20 @@ const caseStudies: Record<string, CaseStudy> = {
       { value: 'Input', label: 'raw exports' },
       { value: 'Process', label: 'clean + aggregate' },
       { value: 'Output', label: 'reports' },
+    ],
+  },
+  cerbrain: {
+    eyebrow: 'operational intelligence layer',
+    visual: 'cerbrain',
+    accent: 'text-teal-100 border-teal-200/20 bg-teal-200/10',
+    glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(139,92,246,0.18),transparent_30%)]',
+    problem: 'Operational knowledge was distributed across documents, structured records, projects and specialist tools, making context and next actions hard to keep aligned.',
+    system: 'CERbrain connects the record, work and intelligence layers: provenance-first ingestion, structured entities, workflows, deterministic energy models, cited retrieval and supervised automation.',
+    output: 'A company operating layer where facts remain traceable, work is contextualised and AI can assist without becoming an opaque or unreviewable decision-maker.',
+    metrics: [
+      { value: 'Record', label: 'source-grounded data' },
+      { value: 'Work', label: 'connected operations' },
+      { value: 'AI', label: 'supervised intelligence' },
     ],
   },
 };
@@ -289,6 +303,23 @@ function VisualPanel({ kind }: { kind: VisualKind }) {
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {kind === 'cerbrain' && (
+        <div className="relative h-full">
+          <span className="absolute left-[18%] top-[28%] h-px w-[52%] rotate-[16deg] bg-teal-100/22" />
+          <span className="absolute left-[25%] top-[62%] h-px w-[50%] -rotate-[14deg] bg-violet-100/22" />
+          <span className="absolute left-[50%] top-[18%] h-[62%] w-px bg-white/12" />
+          {[
+            'left-[12%] top-[20%] bg-teal-200/78',
+            'left-[31%] top-[63%] bg-white/18',
+            'left-[53%] top-[39%] bg-violet-200/76',
+            'left-[73%] top-[19%] bg-cyan-100/62',
+            'left-[75%] top-[67%] bg-teal-100/56',
+          ].map((node) => (
+            <span key={node} className={`absolute h-10 w-10 rounded-full border border-white/12 ${node}`} />
+          ))}
         </div>
       )}
     </div>

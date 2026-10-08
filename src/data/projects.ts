@@ -134,4 +134,19 @@ export const PROJECTS: Project[] = [
       { label: 'Analytics' },
     ],
   },
+  {
+    id: 'cerbrain',
+    number: '09',
+    cat: 'Operational Intelligence · Energy · AI Systems',
+    title: 'CERbrain',
+    shortDesc:
+      'Operational intelligence platform that connects documents, structured business data, projects and energy workflows into one traceable system of work.',
+    body: 'CERbrain turns a fragmented operational record into a connected intelligence layer. It links source documents to structured entities, project work, tasks, dashboards and deterministic energy calculations, then adds cited retrieval, assistive AI and supervised automation on top. The completed system follows a clear order: establish trustworthy records and provenance, make work operational, then expose intelligence through search, tools and controlled agents. The result is a practical company operating layer rather than a generic chatbot: every important fact has context, every derived output has a source and every consequential action remains reviewable.',
+    stack: ['Python', 'FastAPI', 'PostgreSQL', 'Document Ingestion', 'RAG', 'Energy Models', 'Dashboards', 'MCP'],
+    pills: [
+      { label: 'Python · PostgreSQL', hi: true },
+      { label: 'Operational Intelligence' },
+      { label: 'AI Systems' },
+    ],
+  },
 ];

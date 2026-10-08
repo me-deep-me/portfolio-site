@@ -169,6 +169,12 @@ const MOBILE_PROJECT_SKINS: Record<string, {
     secondary: 'bg-emerald-200/60',
     label: 'automation bench',
   },
+  cerbrain: {
+    glow: 'bg-[radial-gradient(circle_at_18%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_86%_18%,rgba(139,92,246,0.18),transparent_30%)]',
+    primary: 'bg-teal-200/78',
+    secondary: 'bg-violet-200/68',
+    label: 'connected operations',
+  },
 };
 
 function MobileVisualBody({
@@ -307,6 +313,22 @@ function MobileVisualBody({
             className={`absolute h-7 w-7 rounded-full border border-white/12 ${
               node % 2 === 0 ? skin.primary : node === 1 ? 'bg-white/17' : skin.secondary
             }`}
+            style={{ left: `${left}%`, top: node % 2 === 0 ? '22%' : '58%' }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (id === 'cerbrain') {
+    return (
+      <div className="relative h-16 rounded-[0.8rem] border border-white/10 bg-white/[0.04]">
+        <span className="absolute left-[18%] top-[29%] h-px w-[54%] rotate-[16deg] bg-white/16" />
+        <span className="absolute left-[25%] top-[62%] h-px w-[50%] -rotate-[14deg] bg-white/16" />
+        {[12, 31, 53, 73, 76].map((left, node) => (
+          <span
+            key={left}
+            className={`absolute h-7 w-7 rounded-full border border-white/12 ${node % 2 === 0 ? skin.primary : node === 1 ? 'bg-white/17' : skin.secondary}`}
             style={{ left: `${left}%`, top: node % 2 === 0 ? '22%' : '58%' }}
           />
         ))}
