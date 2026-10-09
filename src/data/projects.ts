@@ -142,7 +142,7 @@ export const PROJECTS: Project[] = [
     cat: 'Operational Intelligence · Energy · AI Systems',
     title: 'AI Company Second Brain',
     shortDesc:
-      'One enterprise AI hub for searching tens of thousands of documents, managing connected business records and running operational tools with governed agents.',
+      'One enterprise AI hub synced with SharePoint and company email: search tens of thousands of documents, manage connected records and run operational tools with governed agents.',
     body: 'AI Company Second Brain is a connected operating intelligence platform for a renewable-energy business, conceived and developed end to end by me. It goes beyond retrieving documents: a shared model connects company evidence, clients, projects, contracts, energy assets, relationships and the history of work. The team can understand incoming events, inspect sourced answers, run reproducible feasibility calculations and generate management reporting from the same context. AI interprets unstructured information; versioned engines execute explicit energy and economic rules. Scheduled workflows and specialised agents monitor change and move routine work forward through capability-specific permissions, approval boundaries, reversible actions and an audit trail. Its breadth comes from integrating memory, execution and intelligence into one operable system, not adding a conversational interface to a document folder.',
     stack: ['Python', 'FastAPI', 'PostgreSQL · pgvector', 'Microsoft Graph', 'OCR · Document Parsing', 'Hybrid Retrieval · RAG', 'Energy & Economic Models', 'AI Agents · MCP', 'Docker · Azure'],
     pills: [
@@ -151,6 +151,10 @@ export const PROJECTS: Project[] = [
       { label: 'AI · Automation' },
     ],
     capabilities: [
+      {
+        title: 'SharePoint and company email, kept in sync',
+        description: 'Background synchronisation brings new and revised SharePoint files and company email into the shared knowledge layer. The team keeps working in its existing document and communication tools instead of manually uploading a second copy. Updated evidence feeds search, project history and workflows, with source references and document versions preserving context. This is a maintained company memory, not a one-off document upload.',
+      },
       {
         title: 'Search tens of thousands of documents without opening them one by one',
         description: 'A persistent index turns a large company archive into searchable evidence. Embeddings find passages by meaning; keyword search finds exact terms, while metadata and structured records narrow the business context. Only relevant passages are retrieved for the answer, with links to their sources. Document changes update the index rather than requiring the whole archive to be reread for each question. Archive scale is a rounded description, not a published latency benchmark.',

@@ -17,7 +17,7 @@ export const PROJECT_DECISIONS: Record<string, { title: string; constraint: stri
 };
 
 export const FEATURED_WORK = [
-  { id: 'cerbrain', eyebrow: 'Flagship · Enterprise AI', title: 'AI Company Second Brain', description: 'Search tens of thousands of company documents without opening them one by one. Connect the evidence to an AI-enabled operational CRM/ERP layer and a single hub of analysis tools, workflows and governed agents.', links: [{ id: 'cerbrain', label: 'Explore the flagship' }] },
+  { id: 'cerbrain', eyebrow: 'Flagship · Enterprise AI', title: 'AI Company Second Brain', description: 'Synced with SharePoint and company email, not a one-off document upload. Search tens of thousands of documents without opening them one by one, then use the evidence across an AI-connected operational CRM/ERP layer and one governed tool hub.', links: [{ id: 'cerbrain', label: 'Explore the flagship' }] },
   { id: 'nest', eyebrow: 'Industrial engineering', title: 'From design to production', description: 'Panel Nesting connects validated design data, physical optimisation and the manufacturing handoff.', links: [{ id: 'nest', label: 'Explore Panel Nesting' }] },
   { id: 'cargo', eyebrow: 'End-to-end logistics', title: 'From quotation to dispatch', description: 'CargoCast estimates the shipment. LoadScan checks the confirmed packing list. Two tools, one connected decision path.', links: [{ id: 'cargo', label: 'CargoCast · Estimate' }, { id: 'load', label: 'LoadScan · Validate' }] },
 ];
