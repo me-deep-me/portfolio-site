@@ -30,8 +30,8 @@ function openPopup(event: MouseEvent<HTMLAnchorElement>, url: string, label: str
 
 export function ProjectActions({ project, onOpen, compact = false }: Props) {
   const buttonBase = compact
-    ? 'justify-center px-3 py-2.5 text-[10px] min-h-10'
-    : 'px-4 py-2.5 text-[11px]';
+    ? 'min-h-[44px] items-center justify-center px-3 py-2.5 text-[11px]'
+    : 'min-h-[44px] items-center px-4 py-2.5 text-[11px]';
 
   return (
     <div className={compact ? (project.demo ? 'mt-4 grid grid-cols-2 gap-2' : 'mt-4 flex flex-wrap items-center gap-2') : 'mt-6 flex flex-wrap items-center gap-2'}>

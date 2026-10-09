@@ -1,0 +1,56 @@
+/* Keep the public portfolio responsive without touching private-area styles. */
+.portfolio-pinned-only { display: none; }
+.portfolio-stacked-only { display: inline-flex; }
+
+.portfolio :is(button, a, input):focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 4px;
+}
+
+.portfolio-dialog-footer {
+  padding-bottom: max(0.875rem, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 1024px) and (min-height: 601px) {
+  .portfolio-pinned-only { display: inline-flex; }
+  .portfolio-stacked-only { display: none; }
+}
+
+@media (max-width: 1023px) {
+  .portfolio #projects { display: none; }
+  .portfolio #projects-mobile { display: block; }
+  .portfolio-dialog-header .portfolio-dialog-visual,
+  .portfolio-dialog-header .portfolio-dialog-metrics { display: none; }
+  .portfolio-dialog-header .portfolio-dialog-heading { min-height: 0; }
+  .portfolio-dialog-header h3 { font-size: 1.75rem; }
+}
+
+/* Short landscape screens need a normal list, not a full-height pinned scene. */
+@media (min-width: 768px) and (max-height: 600px) {
+  .portfolio #projects { display: none; }
+  .portfolio #projects-mobile { display: block; max-width: 64rem; }
+  .portfolio #projects-mobile > .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .portfolio-hero { min-height: 100svh; padding-block: 3rem; }
+  .portfolio-hero h1 { font-size: 3rem; }
+  .portfolio-dialog-header { padding: 0.75rem 1rem; }
+  .portfolio-dialog-header h3 { font-size: 1.5rem; }
+  .portfolio-dialog-header .portfolio-dialog-visual,
+  .portfolio-dialog-header .portfolio-dialog-metrics,
+  .portfolio-dialog-header .portfolio-dialog-badges { display: none; }
+  .portfolio-dialog-header .portfolio-dialog-heading { min-height: 0; }
+  .portfolio-dialog-overlay { padding: 8px; }
+  .portfolio-dialog { max-height: calc(100dvh - 16px); }
+  .portfolio-dialog-header .portfolio-dialog-heading > div > div { margin-bottom: 0; }
+  .portfolio-dialog-header .portfolio-dialog-heading > div > div > div { padding-right: 3rem; }
+  .portfolio-dialog-header button { position: absolute; right: 0; top: 0; }
+  .portfolio-dialog-header h3 { padding-right: 3rem; margin-top: 0.5rem; }
+  .portfolio-dialog-footer { padding-block: 6px; }
+  .portfolio-dialog-footer p { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio *, .portfolio *::before, .portfolio *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

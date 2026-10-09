@@ -7,6 +7,7 @@ import { ProjectCard }     from '@/components/overlay/ProjectCard';
 import { ProjectModal }    from '@/components/overlay/ProjectModal';
 import { ProjectActions }  from '@/components/overlay/ProjectActions';
 import { PROJECTS, type Project } from '@/data/projects';
+import './portfolio-responsive.css';
 
 function clamp(v: number, min = 0, max = 1) {
   return Math.max(min, Math.min(max, v));
@@ -405,15 +406,15 @@ export default function Home() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <main className="min-h-screen bg-white text-neutral-950 selection:bg-neutral-950 selection:text-white">
+    <main className="portfolio min-h-screen bg-white text-neutral-950 selection:bg-neutral-950 selection:text-white">
       <ParticleColumn progress={progress} projectsActive={projectsActive} />
 
       {/* ── Nav ── */}
-      <nav className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between px-4 py-4 text-[11px] uppercase tracking-[0.22em] text-neutral-600 sm:px-6 md:px-9 md:py-5">
+      <nav aria-label="Main navigation" className="portfolio-nav fixed left-0 right-0 top-0 z-40 flex items-center justify-between border-b border-neutral-200/50 bg-white/90 px-4 py-3 text-[11px] uppercase tracking-[0.14em] text-neutral-600 backdrop-blur-xl sm:px-6 md:border-0 md:bg-white/75 md:px-9 md:py-5">
         <a
           href="#top"
           aria-label="Mattia Erigoni homepage"
-          className="group inline-flex items-center gap-3 transition hover:text-neutral-950"
+          className="group inline-flex min-h-[44px] items-center gap-3 transition hover:text-neutral-950"
         >
           <span
             aria-hidden="true"
@@ -430,20 +431,21 @@ export default function Home() {
           </span>
         </a>
 
-        <div className="hidden items-center gap-6 md:flex">
-          <a href="#about"    className="transition hover:text-neutral-950">About</a>
-          <a href="#projects" className="transition hover:text-neutral-950">Projects</a>
-          <a href="#contact"  className="transition hover:text-neutral-950">Contact</a>
+        <div className="flex items-center gap-1 sm:gap-3 md:gap-6">
+          <a href="#about" className="inline-flex min-h-[44px] items-center px-2 transition hover:text-neutral-950">About</a>
+          <a href="#projects" className="portfolio-pinned-only min-h-[44px] items-center px-2 transition hover:text-neutral-950">Projects</a>
+          <a href="#projects-mobile" className="portfolio-stacked-only min-h-[44px] items-center px-2 transition hover:text-neutral-950">Projects</a>
+          <a href="#contact" className="inline-flex min-h-[44px] items-center px-2 transition hover:text-neutral-950">Contact</a>
         </div>
       </nav>
 
       {/* ── Hero ── */}
       <section
         id="top"
-        className="relative z-10 flex min-h-screen items-center justify-center overflow-hidden px-5 text-center"
+        className="portfolio-hero relative z-10 flex min-h-svh items-center justify-center overflow-hidden px-5 text-center"
       >
         <div className="pointer-events-none absolute inset-x-4 top-[29%] bottom-[14%] z-0 rounded-full bg-white/90 blur-3xl md:hidden" />
-        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center pt-20">
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center pb-12 pt-28 md:pb-0 md:pt-20">
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -476,6 +478,9 @@ export default function Home() {
               private knowledge workflows.
             </span>
           </motion.p>
+          <a href="#projects-mobile" className="portfolio-stacked-only mt-8 min-h-[48px] items-center justify-center gap-3 rounded-full bg-neutral-950 px-6 py-3 text-xs font-semibold text-white shadow-lg transition hover:bg-teal-950">
+            Explore selected work <span aria-hidden="true">↓</span>
+          </a>
         </div>
       </section>
 
@@ -508,7 +513,7 @@ export default function Home() {
       </section>
 
       {/* ── Projects (mobile stacked) ── */}
-      <section id="projects-mobile" className="relative z-10 mx-auto max-w-lg px-5 pb-10 pt-7 md:hidden">
+      <section id="projects-mobile" className="relative z-10 mx-auto max-w-lg scroll-mt-24 px-5 pb-10 pt-7 md:hidden">
         <div className="mb-6 text-center">
           <div className="flex items-center justify-center gap-3">
             <span className="h-px w-10 bg-neutral-200" />
@@ -539,7 +544,7 @@ export default function Home() {
                 </span>
               </div>
               <h3 className="text-balance text-[1.15rem] font-semibold tracking-[-0.04em] text-neutral-950">{project.title}</h3>
-              <p className="mt-2 max-h-[3.95rem] overflow-hidden text-pretty text-[12.5px] leading-relaxed text-neutral-600">{project.shortDesc}</p>
+              <p className="mt-2 text-pretty text-sm leading-6 text-neutral-600">{project.shortDesc}</p>
               {project.demo && (
                 <div className="mt-3 flex items-center gap-2 rounded-full border border-emerald-200/70 bg-emerald-50/80 px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-emerald-900">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]" />

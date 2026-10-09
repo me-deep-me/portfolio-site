@@ -367,7 +367,7 @@ function ModalLink({
       target="_blank"
       rel="noopener noreferrer"
       onClick={(event) => openPopup(event, href, `${project.id}-${kind}`)}
-      className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-800 shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition hover:border-neutral-950/25 active:scale-[0.98] sm:w-auto"
+      className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-800 shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition hover:border-neutral-950/25 active:scale-[0.98] sm:w-auto"
     >
       {children}
     </a>
@@ -432,7 +432,7 @@ function ProjectDialog({ openId, onClose }: Props) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-950/45 p-0 pt-10 backdrop-blur-xl md:grid md:place-items-center md:p-6"
+            className="portfolio-dialog-overlay fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-950/45 p-0 pt-10 backdrop-blur-xl md:grid md:place-items-center md:p-6"
             onClick={onClose}
           >
             <motion.div
@@ -444,21 +444,21 @@ function ProjectDialog({ openId, onClose }: Props) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ type: 'spring', stiffness: 360, damping: 34, mass: 0.82 }}
-              className="flex max-h-[92dvh] w-full max-w-[1120px] flex-col overflow-hidden rounded-t-[1.5rem] border border-white/80 bg-white text-left shadow-[0_35px_140px_rgba(0,0,0,0.22)] md:max-h-[calc(100dvh-3rem)] md:rounded-[1.75rem]"
+              className="portfolio-dialog flex max-h-[92dvh] w-full max-w-[1120px] flex-col overflow-hidden rounded-t-[1.5rem] border border-white/80 bg-white text-left shadow-[0_35px_140px_rgba(0,0,0,0.22)] md:max-h-[calc(100dvh-3rem)] md:rounded-[1.75rem]"
               onClick={(e) => e.stopPropagation()}
             >
-            <div className="relative shrink-0 overflow-hidden bg-slate-950 p-3 text-white sm:p-5 md:p-6">
+            <div className="portfolio-dialog-header relative shrink-0 overflow-hidden bg-slate-950 p-4 text-white sm:p-5 md:p-6">
               <div className={`pointer-events-none absolute inset-0 ${study.glow}`} />
               <span className="relative mx-auto mb-3 block h-1 w-11 rounded-full bg-white/22 md:hidden" />
               <div className={`relative grid gap-4 sm:gap-5 ${expanded ? '' : 'lg:grid-cols-[1fr_0.9fr] lg:items-stretch'}`}>
-                <div className={`flex min-h-0 flex-col justify-between ${expanded ? '' : 'md:min-h-[230px]'}`}>
+                <div className={`portfolio-dialog-heading flex min-h-0 flex-col justify-between ${expanded ? '' : 'md:min-h-[230px]'}`}>
                   <div>
                     <div className="mb-3 flex items-start justify-between gap-4 sm:mb-5">
                       <div>
-                        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/48">
-                          case study · {project.number} · {project.cat}
+                        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/65 sm:tracking-[0.28em]">
+                          case study · {project.number}<span className="hidden sm:inline"> · {project.cat}</span>
                         </p>
-                        <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
+                        <div className="portfolio-dialog-badges mt-3 hidden flex-wrap gap-2 sm:mt-4 sm:flex">
                           <p className={`inline-flex rounded-full border px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] ${study.accent}`}>
                             {study.eyebrow}
                           </p>
@@ -475,7 +475,7 @@ function ProjectDialog({ openId, onClose }: Props) {
                         type="button"
                         onClick={onClose}
                         aria-label="Close project modal"
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xl text-white/70 transition hover:bg-white hover:text-slate-950 active:scale-[0.96]"
+                        className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xl text-white/70 transition hover:bg-white hover:text-slate-950 active:scale-[0.96]"
                       >
                         ×
                       </button>
@@ -486,7 +486,7 @@ function ProjectDialog({ openId, onClose }: Props) {
                     </h3>
                   </div>
 
-                  <div className={expanded ? 'hidden' : 'mt-5 hidden grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4 md:grid'}>
+                  <div className={expanded ? 'hidden' : 'portfolio-dialog-metrics mt-5 hidden grid-cols-3 gap-2 border-t border-white/12 pt-3 sm:mt-7 sm:gap-3 sm:pt-4 md:grid'}>
                     {study.metrics.map((metric) => (
                       <div key={metric.label} className="rounded-2xl border border-white/10 bg-white/[0.055] p-2.5 sm:p-3">
                         <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white md:text-[13px]">{metric.value}</p>
@@ -496,7 +496,7 @@ function ProjectDialog({ openId, onClose }: Props) {
                   </div>
                 </div>
 
-                <div className={expanded ? 'hidden' : 'hidden md:block'}>
+                <div className={expanded ? 'hidden' : 'portfolio-dialog-visual hidden md:block'}>
                   <VisualPanel kind={study.visual} />
                 </div>
               </div>
@@ -508,16 +508,18 @@ function ProjectDialog({ openId, onClose }: Props) {
                 { id: 'article', label: 'In details ↗' },
                 { id: 'impact', label: 'Impact lab' },
               ] as const).map((item) => (
-                <button key={item.id} data-view={item.id} type="button" aria-pressed={view === item.id} onClick={() => changeView(item.id)} className={`rounded-full px-4 py-2.5 text-[11px] font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 ${view === item.id ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950'}`}>{item.label}</button>
+                <button key={item.id} data-view={item.id} type="button" aria-pressed={view === item.id} onClick={() => changeView(item.id)} className={`min-h-[44px] flex-1 rounded-full px-2 py-2.5 text-[11px] font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 sm:flex-none sm:px-4 ${view === item.id ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950'}`}>{item.label}</button>
               ))}
             </nav>
             <div ref={contentRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-neutral-50/60">
             {view === 'article' ? <ProjectArticle project={project} onExplore={() => changeView('impact')} /> : view === 'impact' ? <ProjectImpactDashboard project={project} /> : (
             <div className="grid gap-4 p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
+              <div className="grid grid-cols-2 gap-2 rounded-2xl border border-teal-200 bg-teal-50 p-3 md:hidden">
+                <p className="col-span-2 mb-1 text-xs leading-5 text-teal-950">Go deeper: the design story and an interactive impact model.</p>
+                <button type="button" onClick={() => changeView('article')} className="min-h-[44px] rounded-full bg-teal-950 px-3 py-3 text-xs font-semibold text-white">Read case study ↗</button>
+                <button type="button" onClick={() => changeView('impact')} className="min-h-[44px] rounded-full border border-teal-300 bg-white px-3 py-3 text-xs font-semibold text-teal-950">Impact lab</button>
+              </div>
               <div className="grid gap-3 md:gap-4">
-                <div className="md:hidden">
-                  <VisualPanel kind={study.visual} />
-                </div>
                 <div className="grid grid-cols-3 gap-2 md:hidden">
                   {study.metrics.map((metric) => (
                     <div key={metric.label} className="rounded-2xl border border-neutral-200/80 bg-white p-2.5 shadow-[0_12px_34px_rgba(0,0,0,0.035)]">
@@ -546,11 +548,11 @@ function ProjectDialog({ openId, onClose }: Props) {
               </div>
 
               <aside className="grid content-start gap-3 rounded-[1.15rem] border border-neutral-200/80 bg-white p-4 shadow-[0_14px_45px_rgba(0,0,0,0.035)] md:rounded-[1.25rem] md:p-5">
-                <div className="rounded-2xl border border-teal-200 bg-teal-50 p-4">
+                <div className="hidden rounded-2xl border border-teal-200 bg-teal-50 p-4 md:block">
                   <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-teal-700">For the technically curious</p>
                   <p className="mt-2 text-sm leading-6 text-teal-950">Read the problem, the design decisions and how the system works. Then explore its operational impact.</p>
-                  <button type="button" onClick={() => changeView('article')} className="mt-4 w-full rounded-full bg-teal-950 px-4 py-3 text-xs font-semibold text-white transition hover:bg-teal-800">In details · Read case study ↗</button>
-                  <button type="button" onClick={() => changeView('impact')} className="mt-2 w-full rounded-full border border-teal-300 bg-white px-4 py-3 text-xs font-semibold text-teal-950 transition hover:bg-teal-100">Explore impact lab</button>
+                  <button type="button" onClick={() => changeView('article')} className="mt-4 min-h-[44px] w-full rounded-full bg-teal-950 px-4 py-3 text-xs font-semibold text-white transition hover:bg-teal-800">In details · Read case study ↗</button>
+                  <button type="button" onClick={() => changeView('impact')} className="mt-2 min-h-[44px] w-full rounded-full border border-teal-300 bg-white px-4 py-3 text-xs font-semibold text-teal-950 transition hover:bg-teal-100">Explore impact lab</button>
                 </div>
                 <div className="rounded-[1rem] border border-neutral-200/80 bg-neutral-950 p-4 text-white">
                   <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">{project.example ? 'Example workflow' : 'decision output'}</p>
@@ -586,11 +588,11 @@ function ProjectDialog({ openId, onClose }: Props) {
             )}
             </div>
 
-            <div className="shrink-0 grid grid-cols-1 gap-2 border-t border-neutral-200/80 bg-white/88 px-4 py-3.5 backdrop-blur-xl md:flex md:flex-wrap md:items-center md:justify-between md:gap-3 md:px-6">
+            <div className="portfolio-dialog-footer shrink-0 grid grid-cols-1 gap-2 border-t border-neutral-200/80 bg-white/88 px-4 py-3.5 backdrop-blur-xl md:flex md:flex-wrap md:items-center md:justify-between md:gap-3 md:px-6">
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex justify-center rounded-full border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950 active:scale-[0.98]"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-neutral-950 active:scale-[0.98]"
               >
                 Close
               </button>

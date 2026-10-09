@@ -44,7 +44,7 @@ export function ProjectArticle({ project, onExplore }: { project: Project; onExp
           <p className="text-sm font-semibold text-teal-950">Explore the operational impact</p>
           <p className="mt-1 text-xs leading-5 text-teal-800">Change the workload assumptions and inspect the time model.</p>
         </div>
-        <button type="button" onClick={onExplore} className="shrink-0 rounded-full bg-teal-950 px-5 py-3 text-xs font-semibold text-white transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700">Open impact lab ↗</button>
+        <button type="button" onClick={onExplore} className="min-h-[44px] shrink-0 rounded-full bg-teal-950 px-5 py-3 text-xs font-semibold text-white transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700">Open impact lab ↗</button>
       </div>
     </article>
   );
@@ -98,15 +98,15 @@ function ImpactModel({ article }: { article: CaseStudyArticle }) {
           ].map((input) => (
             <label key={input.label} className="block">
               <span className="flex items-start justify-between gap-2 text-xs text-slate-300"><span>{input.label}</span><span className="shrink-0 font-mono text-white">{input.value}{input.suffix}</span></span>
-              <input type="range" min={input.min} max={input.max} value={input.value} onChange={(event) => input.set(Number(event.target.value))} className="mt-4 w-full cursor-pointer accent-teal-300" />
+              <input type="range" min={input.min} max={input.max} value={input.value} onChange={(event) => input.set(Number(event.target.value))} className="mt-1 h-[44px] w-full cursor-pointer accent-teal-300" />
             </label>
           ))}
         </div>
         <div aria-label="Review effort scenario" className="mt-5 flex flex-wrap gap-2">
           {scenarios.map((item, index) => (
-            <button key={item.label} type="button" aria-pressed={scenario === index} onClick={() => setScenario(index)} className={`rounded-full border px-4 py-2 text-xs transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300 ${scenario === index ? 'border-teal-200 bg-teal-200 text-slate-950' : 'border-white/20 bg-white/5 text-white hover:bg-white/10'}`}>{item.label}</button>
+            <button key={item.label} type="button" aria-pressed={scenario === index} onClick={() => setScenario(index)} className={`min-h-[44px] rounded-full border px-4 py-2 text-xs transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300 ${scenario === index ? 'border-teal-200 bg-teal-200 text-slate-950' : 'border-white/20 bg-white/5 text-white hover:bg-white/10'}`}>{item.label}</button>
           ))}
-          <button type="button" onClick={reset} className="ml-auto rounded-full px-3 py-2 text-xs text-slate-300 underline underline-offset-4 hover:text-white">Reset</button>
+          <button type="button" onClick={reset} className="ml-auto min-h-[44px] rounded-full px-3 py-2 text-xs text-slate-300 underline underline-offset-4 hover:text-white">Reset</button>
         </div>
         <p className="mt-3 text-xs text-slate-400">{selected.description}. Scenario adjustments apply only to assisted effort.</p>
         <div aria-live="polite" aria-atomic="true" className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
