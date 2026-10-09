@@ -6,6 +6,7 @@ import { ParticleColumn }  from '@/components/canvas/ParticleColumn';
 import { ProjectCard }     from '@/components/overlay/ProjectCard';
 import { ProjectModal }    from '@/components/overlay/ProjectModal';
 import { ProjectActions }  from '@/components/overlay/ProjectActions';
+import { FeaturedWork } from '@/components/overlay/FeaturedWork';
 import { PROJECTS, type Project } from '@/data/projects';
 import './portfolio-responsive.css';
 
@@ -76,8 +77,8 @@ const IMPACT_METRICS = [
   },
   {
     value: 'What-if',
-    title: 'interactive impact models',
-    detail: 'Adjust workload and effort assumptions for each project.',
+    title: 'system-specific decision labs',
+    detail: 'Explore constraints, evidence and governed actions with synthetic scenarios.',
   },
   {
     value: 'Sources',
@@ -431,8 +432,7 @@ export default function Home() {
 
         <div className="flex items-center gap-1 sm:gap-3 md:gap-6">
           <a href="#about" className="inline-flex min-h-[44px] items-center px-2 transition hover:text-neutral-950">About</a>
-          <a href="#projects" className="portfolio-pinned-only min-h-[44px] items-center px-2 transition hover:text-neutral-950">Projects</a>
-          <a href="#projects-mobile" className="portfolio-stacked-only min-h-[44px] items-center px-2 transition hover:text-neutral-950">Projects</a>
+          <a href="#selected-work" className="inline-flex min-h-[44px] items-center px-2 transition hover:text-neutral-950">Projects</a>
           <a href="#contact" className="inline-flex min-h-[44px] items-center px-2 transition hover:text-neutral-950">Contact</a>
         </div>
       </nav>
@@ -450,7 +450,7 @@ export default function Home() {
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="mb-5 text-[9px] uppercase tracking-[0.32em] text-neutral-500 sm:text-xs sm:tracking-[0.38em]"
           >
-            Process engineering · Operational software · AI systems
+            Management engineer · Technical product builder
           </motion.p>
 
           <motion.h1
@@ -469,18 +469,20 @@ export default function Home() {
             className="mx-auto mt-7 max-w-[330px] text-balance text-center text-[14px] font-medium leading-7 text-neutral-700 md:mt-8 md:max-w-[760px] md:text-xl md:font-normal md:leading-9 md:text-neutral-600"
           >
             <span className="md:hidden">
-              Industrial constraints turned into tools for faster planning, cleaner data and private AI workflows.
+              Operational constraints turned into industrial software and connected enterprise AI systems.
             </span>
             <span className="hidden md:inline">
-              I turn industrial constraints into operational software for logistics, planning, data quality and
-              private knowledge workflows.
+              I turn operational constraints into industrial software and connected enterprise AI systems,
+              from logistics and planning to company-wide intelligence.
             </span>
           </motion.p>
-          <a href="#projects-mobile" className="portfolio-stacked-only mt-8 min-h-[48px] items-center justify-center gap-3 rounded-full bg-neutral-950 px-6 py-3 text-xs font-semibold text-white shadow-lg transition hover:bg-teal-950">
+          <a href="#selected-work" className="portfolio-stacked-only mt-8 min-h-[48px] items-center justify-center gap-3 rounded-full bg-neutral-950 px-6 py-3 text-xs font-semibold text-white shadow-lg transition hover:bg-teal-950">
             Explore selected work <span aria-hidden="true">↓</span>
           </a>
         </div>
       </section>
+
+      <FeaturedWork onOpen={setOpenId} />
 
       {/* ── Projects (pinned, md+) ── */}
       <section
@@ -492,7 +494,7 @@ export default function Home() {
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 h-[78vh] w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-neutral-950/10 to-transparent" />
           <div className="absolute left-1/2 top-[7vh] z-30 -translate-x-1/2 text-center">
             <p className="rounded-full bg-white/80 px-4 py-1.5 text-[10px] uppercase tracking-[0.32em] text-neutral-600 backdrop-blur-md ring-1 ring-black/[0.04]">
-              Selected work
+              Full project collection
             </p>
           </div>
           <div className="relative h-screen w-full max-w-7xl">
@@ -515,11 +517,11 @@ export default function Home() {
         <div className="mb-6 text-center">
           <div className="flex items-center justify-center gap-3">
             <span className="h-px w-10 bg-neutral-200" />
-            <p className="text-[10px] uppercase tracking-[0.34em] text-neutral-500">Selected work</p>
+            <p className="text-[10px] uppercase tracking-[0.34em] text-neutral-500">Full project collection</p>
             <span className="h-px w-10 bg-neutral-200" />
           </div>
           <p className="mx-auto mt-3 max-w-[26rem] text-balance text-[13px] leading-6 text-neutral-500">
-            Nine operational projects. Explore the decision, the case study and the impact model behind each one.
+            Nine operational projects. Explore the design decision, the case study and the system-specific lab behind each one.
           </p>
         </div>
         <div className="grid gap-3.5">
@@ -740,7 +742,7 @@ export default function Home() {
             Let&apos;s turn the messy workflow into the useful tool.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-balance text-[15px] leading-7 text-neutral-600 md:mt-6 md:text-lg md:leading-8">
-            I build operational software for planning, logistics, data quality and private AI workflows.
+            I build operational software for planning, logistics, data quality and connected enterprise AI.
             The best starting point is a concrete constraint, a spreadsheet nobody trusts, or a process that takes too long.
           </p>
           <div className="mt-8 grid gap-2 sm:inline-grid sm:grid-cols-2 md:mt-10">

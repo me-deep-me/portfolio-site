@@ -3,11 +3,15 @@
 import { useState } from 'react';
 import type { Project } from '@/data/projects';
 import { CASE_STUDY_ARTICLES, type CaseStudyArticle } from '@/data/case-studies';
+import { PROJECT_DECISIONS } from '@/data/project-editorial';
+import { ProjectDomainLab } from './ProjectDomainLab';
+import { ProjectOwnership } from './ProjectOwnership';
 
 const number = new Intl.NumberFormat('en', { maximumFractionDigits: 1 });
 
 export function ProjectArticle({ project, onExplore }: { project: Project; onExplore: () => void }) {
   const article = CASE_STUDY_ARTICLES[project.id];
+  const decision = PROJECT_DECISIONS[project.id];
   const words = [article.standfirst, ...article.sections.map((section) => section.text)].join(' ').split(/\s+/).length;
 
   return (
@@ -18,6 +22,7 @@ export function ProjectArticle({ project, onExplore }: { project: Project; onExp
       <h4 className="mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.12] tracking-[-0.045em] text-neutral-950 sm:text-4xl">{article.headline}</h4>
       <p className="mt-4 max-w-2xl text-pretty text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">{article.standfirst}</p>
       <p className="mt-4 text-xs leading-5 text-neutral-500">Anonymised project account · Architecture and design decisions at a public level.</p>
+      <div className="mt-5"><ProjectOwnership /></div>
 
       <ol aria-label="System flow" className="my-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {article.flow.map((step, index) => (
@@ -27,6 +32,12 @@ export function ProjectArticle({ project, onExplore }: { project: Project; onExp
           </li>
         ))}
       </ol>
+
+      <section className="mb-8 rounded-2xl border border-teal-200 bg-teal-50 p-5 sm:p-6">
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-teal-700">Key design decision</p>
+        <h5 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-teal-950">{decision.title}</h5>
+        <dl className="mt-4 grid gap-4 text-sm leading-7">{[{ label: 'Constraint', text: decision.constraint }, { label: 'My choice', text: decision.choice }, { label: 'Trade-off', text: decision.tradeoff }].map(item => <div key={item.label}><dt className="text-xs font-semibold uppercase tracking-wide text-teal-800">{item.label}</dt><dd className="mt-1 text-teal-950/80">{item.text}</dd></div>)}</dl>
+      </section>
 
       <div className="grid gap-7">
         {article.sections.map((section, index) => (
@@ -42,7 +53,7 @@ export function ProjectArticle({ project, onExplore }: { project: Project; onExp
       <div className="mt-9 flex flex-col gap-4 rounded-2xl border border-teal-200 bg-teal-50 p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-semibold text-teal-950">Explore the operational impact</p>
-          <p className="mt-1 text-xs leading-5 text-teal-800">Change the workload assumptions and inspect the time model.</p>
+          <p className="mt-1 text-xs leading-5 text-teal-800">Explore the system-specific decision lab with synthetic examples.</p>
         </div>
         <button type="button" onClick={onExplore} className="min-h-[44px] shrink-0 rounded-full bg-teal-950 px-5 py-3 text-xs font-semibold text-white transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700">Open impact lab ↗</button>
       </div>
@@ -176,7 +187,12 @@ export function ProjectImpactDashboard({ project }: { project: Project }) {
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-7 sm:py-8">
       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-neutral-500">Impact lab / {project.title}</p>
-      <div className="mt-4"><ImpactModel key={project.id} article={article} /></div>
+      <div className="mt-4"><ProjectDomainLab key={project.id} projectId={project.id} /></div>
+      {project.id !== 'rag' && <details className="mt-5 rounded-2xl border border-neutral-200 bg-white p-4">
+        <summary className="flex min-h-[44px] cursor-pointer items-center text-sm font-semibold text-neutral-800">Optional effort estimate · {article.impact.unit} ↗</summary>
+        <p className="mb-4 text-xs leading-6 text-neutral-500">A separate hypothetical time model, not a combined ROI calculation. All defaults are fictional.</p>
+        <ImpactModel key={project.id} article={article} />
+      </details>}
       <h4 className="mb-3 mt-7 text-sm font-semibold text-neutral-950">System profile</h4>
       <div className="grid gap-3 sm:grid-cols-3">
         {article.signals.map((signal) => (

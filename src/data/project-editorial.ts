@@ -1,0 +1,23 @@
+export const PROJECT_OWNERSHIP = {
+  role: 'Concept, analysis, architecture & development',
+  status: 'In operational use',
+  detail: 'Independently conceived and developed by Mattia Erigoni, tested in real working contexts and used in day-to-day operations.',
+};
+
+export const PROJECT_DECISIONS: Record<string, { title: string; constraint: string; choice: string; tradeoff: string }> = {
+  nest: { title: 'Optimise the handoff, not just the sheet', constraint: 'A compact layout still fails if production cannot trace its parts.', choice: 'Carry item identity through layout, cutting and packing outputs.', tradeoff: 'A valid production plan can matter more than the smallest theoretical scrap figure.' },
+  cargo: { title: 'Expose the assumptions before promising the shipment', constraint: 'Quotes exist before final crate dimensions do.', choice: 'Separate packaging assumptions from loading evaluation and make scenarios comparable.', tradeoff: 'Fast commercial estimates remain conditional until confirmed packing data arrives.' },
+  load: { title: 'Keep estimation and dispatch validation distinct', constraint: 'A plausible quotation is not evidence that the final shipment fits.', choice: 'Start from confirmed shipping units and surface unresolved items.', tradeoff: 'Digital checks aid dispatch review; securing and actual loading still need operational verification.' },
+  door: { title: 'Separate product knowledge from packing decisions', constraint: 'Technical descriptions and physical handling limits change for different reasons.', choice: 'Interpret products into reviewed attributes before evaluating packaging.', tradeoff: 'Maintainable rules and visible exceptions take precedence over an opaque automatic recommendation.' },
+  gantt: { title: 'Make the familiar spreadsheet a usable planning system', constraint: 'Adoption matters as much as a sophisticated scheduling model.', choice: 'Separate inputs, scheduling logic and the Gantt view within the existing Excel workflow.', tradeoff: 'Average processing times keep the plan understandable, but must be revised as conditions change.' },
+  db: { title: 'Prevent the next dirty record, not only clean the last one', constraint: 'A one-off cleanup does not govern new information.', choice: 'Combine controlled entry with a review boundary between incoming and consolidated contacts.', tradeoff: 'Potential matches stay reviewable instead of automatically merging ambiguous identities.' },
+  rag: { title: 'An inspectable answer beats a fluent unsupported one', constraint: 'Technical use requires evidence, not conversational confidence.', choice: 'Treat extraction, retrieval and answer support as separate quality layers.', tradeoff: 'A source gap is made visible instead of being filled by a convincing guess.' },
+  micro: { title: 'Automate one stable transformation at a time', constraint: 'Small recurring tasks do not justify a large generic platform.', choice: 'Build focused utilities with explicit input checks and a specific output consumer.', tradeoff: 'Narrow scope keeps maintenance manageable; changed source formats still require attention.' },
+  cerbrain: { title: 'Build an operating intelligence layer, not a chat wrapper', constraint: 'Agents cannot act reliably on disconnected documents and unmodelled work.', choice: 'Connect a system of record, a system of work and a system of intelligence. Use deterministic engines for explicit rules and AI for interpretation.', tradeoff: 'Autonomy grows per capability with sources, permissions, review and reversible actions. More integration demands more governance, not less.' },
+};
+
+export const FEATURED_WORK = [
+  { id: 'cerbrain', eyebrow: 'Flagship · Enterprise AI', title: 'AI Company Second Brain', description: 'A connected operating intelligence platform: company memory, project execution, energy analysis and governed agents in one workspace.', links: [{ id: 'cerbrain', label: 'Explore the flagship' }] },
+  { id: 'nest', eyebrow: 'Industrial engineering', title: 'From design to production', description: 'Panel Nesting connects validated design data, physical optimisation and the manufacturing handoff.', links: [{ id: 'nest', label: 'Explore Panel Nesting' }] },
+  { id: 'cargo', eyebrow: 'End-to-end logistics', title: 'From quotation to dispatch', description: 'CargoCast estimates the shipment. LoadScan checks the confirmed packing list. Two tools, one connected decision path.', links: [{ id: 'cargo', label: 'CargoCast · Estimate' }, { id: 'load', label: 'LoadScan · Validate' }] },
+];

@@ -138,8 +138,8 @@ const premiumProjects: Record<string, PremiumProject> = {
     flow: ['validate', 'duplicate check', 'activate'],
   },
   rag: {
-    eyebrow: 'local RAG research',
-    description: 'Explores local AI retrieval with inspectable evidence and answers linked to source documents.',
+    eyebrow: 'private knowledge retrieval',
+    description: 'Local knowledge retrieval used in real working contexts, with inspectable evidence and source-linked answers.',
     visual: 'rag',
     visualLabel: 'retrieval map',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(168,85,247,0.2),transparent_34%),radial-gradient(circle_at_88%_22%,rgba(14,165,233,0.15),transparent_30%)]',
@@ -166,8 +166,8 @@ const premiumProjects: Record<string, PremiumProject> = {
     flow: ['raw export', 'script', 'report'],
   },
   cerbrain: {
-    eyebrow: 'company memory · AI · execution',
-    description: 'A shared company memory that turns documents and emails into project context, energy analysis, actionable updates and sourced answers.',
+    eyebrow: 'enterprise AI · operating intelligence',
+    description: 'A connected enterprise AI platform that unifies company memory, operational workflows, domain calculations and governed agents.',
     visual: 'cerbrain',
     visualLabel: 'connected operations',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(139,92,246,0.18),transparent_30%)]',

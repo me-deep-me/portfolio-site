@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { PROJECTS, type Project } from '@/data/projects';
 import { ProjectArticle, ProjectImpactDashboard } from './ProjectDeepDive';
+import { ProjectOwnership } from './ProjectOwnership';
 
 interface Props {
   openId: string | null;
@@ -109,13 +110,13 @@ const caseStudies: Record<string, CaseStudy> = {
     ],
   },
   rag: {
-    eyebrow: 'local RAG research',
+    eyebrow: 'private knowledge retrieval',
     visual: 'rag',
     accent: 'text-violet-100 border-violet-200/20 bg-violet-200/10',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(168,85,247,0.2),transparent_34%),radial-gradient(circle_at_88%_22%,rgba(14,165,233,0.15),transparent_30%)]',
     problem: 'Technical knowledge was available but dispersed across manuals, specs, PDFs, extractions and project records.',
-    system: 'The experiments combine local LLMs, preprocessing, OCR, vector retrieval and constrained prompting.',
-    output: 'The experiments clarify the conditions for private knowledge retrieval and answers supported by inspectable evidence.',
+    system: 'The system combines local inference, document preparation and retrieval with source inspection in a real working context.',
+    output: 'Technical evidence becomes easier to retrieve and inspect, with source gaps visible rather than replaced by unsupported answers.',
     metrics: [
       { value: 'Input', label: 'technical docs' },
       { value: 'Model', label: 'local retrieval' },
@@ -137,7 +138,7 @@ const caseStudies: Record<string, CaseStudy> = {
     ],
   },
   cerbrain: {
-    eyebrow: 'company memory · AI · execution',
+    eyebrow: 'flagship · enterprise operating intelligence',
     visual: 'cerbrain',
     accent: 'text-teal-100 border-teal-200/20 bg-teal-200/10',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(139,92,246,0.18),transparent_30%)]',
@@ -514,8 +515,9 @@ function ProjectDialog({ openId, onClose }: Props) {
             <div ref={contentRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-neutral-50/60">
             {view === 'article' ? <ProjectArticle project={project} onExplore={() => changeView('impact')} /> : view === 'impact' ? <ProjectImpactDashboard project={project} /> : (
             <div className="grid gap-4 p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
+              <div className="md:col-span-2"><ProjectOwnership /></div>
               <div className="grid grid-cols-2 gap-2 rounded-2xl border border-teal-200 bg-teal-50 p-3 md:hidden">
-                <p className="col-span-2 mb-1 text-xs leading-5 text-teal-950">Go deeper: the design story and an interactive impact model.</p>
+                <p className="col-span-2 mb-1 text-xs leading-5 text-teal-950">Go deeper: the design story and a system-specific decision lab.</p>
                 <button type="button" onClick={() => changeView('article')} className="min-h-[44px] rounded-full bg-teal-950 px-3 py-3 text-xs font-semibold text-white">Read case study ↗</button>
                 <button type="button" onClick={() => changeView('impact')} className="min-h-[44px] rounded-full border border-teal-300 bg-white px-3 py-3 text-xs font-semibold text-teal-950">Impact lab</button>
               </div>
@@ -597,7 +599,7 @@ function ProjectDialog({ openId, onClose }: Props) {
                 Close
               </button>
               <p className="hidden max-w-md text-[12px] leading-6 text-neutral-500 md:block">
-                {view === 'impact' ? 'Illustrative workload model · adjust assumptions to explore the impact.' : view === 'article' ? 'Anonymised case study · public design narrative.' : 'Go further: read the case study or explore the impact lab.'}
+                {view === 'impact' ? 'Synthetic decision lab · no customer data or measured ROI.' : view === 'article' ? 'Anonymised case study · public design narrative.' : 'Go further: read the case study or explore the impact lab.'}
               </p>
             </div>
           </motion.div>

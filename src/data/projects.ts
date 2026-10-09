@@ -109,11 +109,11 @@ export const PROJECTS: Project[] = [
   {
     id: 'rag',
     number: '07',
-    cat: 'AI Research · LLM · RAG Architecture',
+    cat: 'Private Knowledge · LLM · RAG Architecture',
     title: 'RAG Experiments',
     shortDesc:
-      'Research into private knowledge retrieval from scattered technical documents, with local inference, visible evidence and source-linked answers.',
-    body: 'RAG Experiments explores how controlled technical documents can support useful answers with inspectable evidence. The work separates document readability, retrieval quality and answer quality, using local inference and source references to understand where the system helps and where verification remains necessary.',
+      'Private knowledge retrieval from scattered technical documents, with local inference, visible evidence and source-linked answers. Developed through experimentation and used in real working contexts.',
+    body: 'RAG Experiments turns controlled technical documents into inspectable evidence for practical information retrieval. Developed through iterative experimentation and used in real working contexts, the system separates document readability, retrieval quality and answer support. Source references make verification part of the workflow rather than treating a fluent answer as proof.',
     stack: ['Python', 'Local LLM', 'RAG', 'Vector DB', 'Document Processing', 'Evaluation'],
     pills: [
       { label: 'Python', hi: true },
@@ -142,8 +142,8 @@ export const PROJECTS: Project[] = [
     cat: 'Operational Intelligence · Energy · AI Systems',
     title: 'AI Company Second Brain',
     shortDesc:
-      'An AI second brain for a renewable-energy business: connects documents, emails, clients and projects to explain what changed, what matters and what needs to happen next.',
-    body: 'AI Company Second Brain gives a renewable-energy business a shared memory and a practical way to act on it. Documents, emails and business records are connected to clients, projects, contracts, energy assets and their history. People can find an answer with its sources, understand the current state of a project, run reproducible feasibility calculations and produce reports from the same connected information. AI reads, extracts, summarises and proposes; versioned calculation engines handle energy and economic rules. Scheduled workflows and specialised agents keep information current, surface opportunities and move routine work forward with permissions, approvals and an audit trail.',
+      'An enterprise AI operating intelligence platform: connects company memory, projects, energy analysis and governed agents to understand events and move work forward.',
+    body: 'AI Company Second Brain is a connected operating intelligence platform for a renewable-energy business, conceived and developed end to end by me. It goes beyond retrieving documents: a shared model connects company evidence, clients, projects, contracts, energy assets, relationships and the history of work. The team can understand incoming events, inspect sourced answers, run reproducible feasibility calculations and generate management reporting from the same context. AI interprets unstructured information; versioned engines execute explicit energy and economic rules. Scheduled workflows and specialised agents monitor change and move routine work forward through capability-specific permissions, approval boundaries, reversible actions and an audit trail. Its breadth comes from integrating memory, execution and intelligence into one operable system, not adding a conversational interface to a document folder.',
     stack: ['Python', 'FastAPI', 'PostgreSQL · pgvector', 'Microsoft Graph', 'OCR · Document Parsing', 'Hybrid Retrieval · RAG', 'Energy & Economic Models', 'AI Agents · MCP', 'Docker · Azure'],
     pills: [
       { label: 'Python · PostgreSQL', hi: true },
