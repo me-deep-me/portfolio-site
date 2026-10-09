@@ -4,7 +4,7 @@ import { FEATURED_WORK, PROJECT_OWNERSHIP } from '@/data/project-editorial';
 
 export function FeaturedWork({ onOpen }: { onOpen: (id: string) => void }) {
   return <section id="selected-work" className="relative z-20 mx-auto max-w-6xl scroll-mt-24 px-5 py-14 sm:py-20">
-    <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-neutral-500">Start here · Selected systems</p>
+    <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-neutral-500">Highlights</p>
     <div className="mt-4"><h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-5xl">One builder. From industrial tools to connected enterprise AI.</h2><p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-600">{PROJECT_OWNERSHIP.detail}</p></div>
     <div className="mt-8 grid gap-4 lg:grid-cols-2">{FEATURED_WORK.map((item, i) => <article key={item.id} className={`overflow-hidden rounded-[1.5rem] border p-5 sm:p-7 ${i === 0 ? 'border-teal-200/20 bg-slate-950 text-white lg:col-span-2' : 'border-neutral-200 bg-white text-neutral-950 shadow-[0_15px_60px_rgba(15,23,42,0.05)]'}`}>
       <p className={`font-mono text-[10px] uppercase tracking-[0.2em] ${i === 0 ? 'text-teal-200' : 'text-neutral-500'}`}>{item.eyebrow}</p>

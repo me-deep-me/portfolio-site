@@ -490,14 +490,14 @@ export default function Home() {
         ref={scrollRef}
         className="relative z-10 hidden md:block md:h-[820vh]"
       >
-        <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden px-5">
+        <div className="portfolio-project-scene sticky flex items-center justify-center overflow-hidden">
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 h-[78vh] w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-neutral-950/10 to-transparent" />
-          <div className="absolute left-1/2 top-[7vh] z-30 -translate-x-1/2 text-center">
+          <div className="absolute left-1/2 top-4 z-30 -translate-x-1/2 text-center">
             <p className="rounded-full bg-white/80 px-4 py-1.5 text-[10px] uppercase tracking-[0.32em] text-neutral-600 backdrop-blur-md ring-1 ring-black/[0.04]">
               Full project collection
             </p>
           </div>
-          <div className="relative h-screen w-full max-w-7xl">
+          <div className="portfolio-project-stage relative h-full w-full max-w-7xl">
             {PROJECTS.map((project, index) => (
               <ProjectCard
                 key={project.id}

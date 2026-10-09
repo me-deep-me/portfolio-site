@@ -11,7 +11,14 @@
   padding-bottom: max(0.875rem, env(safe-area-inset-bottom));
 }
 
-@media (min-width: 1024px) and (min-height: 601px) {
+.portfolio-project-scene {
+  /* Desktop navigation is 84px tall (44px controls + 20px vertical padding). */
+  top: 84px;
+  height: calc(100svh - 84px);
+  padding: 64px 20px 20px;
+}
+
+@media (min-width: 1024px) and (min-height: 740px) {
   .portfolio-pinned-only { display: inline-flex; }
   .portfolio-stacked-only { display: none; }
 }
@@ -25,11 +32,14 @@
   .portfolio-dialog-header h3 { font-size: 1.75rem; }
 }
 
-/* Short landscape screens need a normal list, not a full-height pinned scene. */
-@media (min-width: 768px) and (max-height: 600px) {
+/* Use readable full-size cards whenever the pinned scene would be too short. */
+@media (min-width: 768px) and (max-height: 739px) {
   .portfolio #projects { display: none; }
   .portfolio #projects-mobile { display: block; max-width: 64rem; }
   .portfolio #projects-mobile > .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 768px) and (max-height: 600px) {
   .portfolio-hero { min-height: 100svh; padding-block: 3rem; }
   .portfolio-hero h1 { font-size: 3rem; }
   .portfolio-dialog-header { padding: 0.75rem 1rem; }

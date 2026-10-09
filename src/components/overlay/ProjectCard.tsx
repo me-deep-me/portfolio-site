@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import type { Project } from '@/data/projects';
 import { ProjectActions } from './ProjectActions';
 
@@ -29,6 +29,28 @@ function useViewportSize() {
   }, []);
 
   return size;
+}
+
+function useCardSpace(ref: RefObject<HTMLElement | null>) {
+  const [space, setSpace] = useState({ cardHeight: 900, stageHeight: 0 });
+
+  useEffect(() => {
+    const card = ref.current;
+    const stage = card?.parentElement;
+    if (!card || !stage) return;
+    const measure = () => setSpace(previous => {
+      const next = { cardHeight: card.offsetHeight, stageHeight: stage.clientHeight };
+      return previous.cardHeight === next.cardHeight && previous.stageHeight === next.stageHeight ? previous : next;
+    });
+    // offsetHeight is unscaled: changing the transform cannot create an observer loop.
+    const observer = new ResizeObserver(measure);
+    observer.observe(card);
+    observer.observe(stage);
+    measure();
+    return () => observer.disconnect();
+  }, [ref]);
+
+  return space;
 }
 
 interface Props {
@@ -500,6 +522,8 @@ export function ProjectCard({ project, index, total, progress, onOpen }: Props) 
                      (1 - smoothstep(exitStart, exitEnd, slotLocal));
   const premium    = premiumProjects[project.id];
   const viewport = useViewportSize();
+  const cardRef = useRef<HTMLElement>(null);
+  const space = useCardSpace(cardRef);
 
   const side      = index % 2 === 0 ? -1 : 1;
   const yOffset   = side * (premium ? 12 : 18);
@@ -511,11 +535,15 @@ export function ProjectCard({ project, index, total, progress, onOpen }: Props) 
   const xDistance = Math.min(desiredX, maxX);
   const x         = side * xDistance;
   const y         = lerp(34 * side, yOffset, visible);
-  const heightScale = clamp((viewport.height - 48) / 680, 0.78, 1);
+  // Reserve room for both the real card height and its full vertical animation.
+  const stageHeight = space.stageHeight || Math.max(0, viewport.height - 168);
+  const heightScale = clamp((stageHeight - 92) / Math.max(space.cardHeight, 1));
   const scale     = lerp(Math.min(0.92, heightScale), heightScale, visible);
 
   return (
     <motion.article
+      ref={cardRef}
+      data-project-id={project.id}
       style={{
         left: '50%',
         top: '50%',
