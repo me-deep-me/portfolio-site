@@ -745,7 +745,7 @@ export default function Home() {
             I build operational software for planning, logistics, data quality and connected enterprise AI.
             The best starting point is a concrete constraint, a spreadsheet nobody trusts, or a process that takes too long.
           </p>
-          <div className="mt-8 grid gap-2 sm:inline-grid sm:grid-cols-2 md:mt-10">
+          <div className="mt-8 grid gap-2 sm:inline-grid sm:grid-cols-3 md:mt-10">
             <a
               href="mailto:mattiaerigoni99@gmail.com"
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-neutral-950 bg-neutral-950 px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_18px_55px_rgba(0,0,0,0.13)] transition duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-neutral-950 active:translate-y-0"
@@ -759,6 +759,13 @@ export default function Home() {
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-neutral-200 bg-white/75 px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-neutral-700 shadow-[0_18px_55px_rgba(0,0,0,0.055)] transition duration-300 hover:-translate-y-0.5 hover:border-neutral-950/25 hover:text-neutral-950 active:translate-y-0"
             >
               LinkedIn ↗
+            </a>
+            <a
+              href="/Mattia_Erigoni.pdf"
+              download="Mattia_Erigoni.pdf"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-teal-900/20 bg-teal-50 px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-teal-950 transition duration-300 hover:-translate-y-0.5 hover:bg-teal-100 active:translate-y-0"
+            >
+              Download CV · PDF ↓
             </a>
           </div>
           <div className="mx-auto mt-7 grid max-w-xl grid-cols-3 gap-2 text-left md:mt-9">

@@ -142,7 +142,7 @@ export const PROJECTS: Project[] = [
     cat: 'Operational Intelligence · Energy · AI Systems',
     title: 'AI Company Second Brain',
     shortDesc:
-      'An enterprise AI operating intelligence platform: connects company memory, projects, energy analysis and governed agents to understand events and move work forward.',
+      'One enterprise AI hub for searching tens of thousands of documents, managing connected business records and running operational tools with governed agents.',
     body: 'AI Company Second Brain is a connected operating intelligence platform for a renewable-energy business, conceived and developed end to end by me. It goes beyond retrieving documents: a shared model connects company evidence, clients, projects, contracts, energy assets, relationships and the history of work. The team can understand incoming events, inspect sourced answers, run reproducible feasibility calculations and generate management reporting from the same context. AI interprets unstructured information; versioned engines execute explicit energy and economic rules. Scheduled workflows and specialised agents monitor change and move routine work forward through capability-specific permissions, approval boundaries, reversible actions and an audit trail. Its breadth comes from integrating memory, execution and intelligence into one operable system, not adding a conversational interface to a document folder.',
     stack: ['Python', 'FastAPI', 'PostgreSQL · pgvector', 'Microsoft Graph', 'OCR · Document Parsing', 'Hybrid Retrieval · RAG', 'Energy & Economic Models', 'AI Agents · MCP', 'Docker · Azure'],
     pills: [
@@ -152,16 +152,16 @@ export const PROJECTS: Project[] = [
     ],
     capabilities: [
       {
-        title: 'A connected company memory',
-        description: 'Ingests documents, spreadsheets, scanned files and email, extracts their content and links it to clients, contacts, projects, contracts and energy assets. Source references, document versions and change history keep each fact in context.',
+        title: 'Search tens of thousands of documents without opening them one by one',
+        description: 'A persistent index turns a large company archive into searchable evidence. Embeddings find passages by meaning; keyword search finds exact terms, while metadata and structured records narrow the business context. Only relevant passages are retrieved for the answer, with links to their sources. Document changes update the index rather than requiring the whole archive to be reread for each question. Archive scale is a rounded description, not a published latency benchmark.',
       },
       {
         title: 'Answers you can inspect',
         description: 'Combines keyword, vector and structured-data search to answer questions in the context of a client or project. AI supports extraction, summaries and drafting, with citations back to the evidence and review when information is uncertain.',
       },
       {
-        title: 'Projects that carry their own history',
-        description: 'Brings together project timelines, status, tasks, owners, deadlines, dependencies and approvals. Weekly management reports and dashboards use the same records to show progress, overdue actions, bottlenecks and portfolio risks.',
+        title: 'An AI-connected operational CRM/ERP layer',
+        description: 'Clients, projects, contracts, energy assets, tasks, deadlines and approvals live in a shared business model connected to document evidence. AI can interpret an update in the context of these records, while dashboards and management reports use the same state of work. This is a domain-specific operational layer, not a claim to replace a full accounting or general-purpose ERP suite.',
       },
       {
         title: 'Energy analysis built on explicit rules',
@@ -172,8 +172,8 @@ export const PROJECTS: Project[] = [
         description: 'Scheduled jobs and specialised agents monitor incoming information, propose or apply routine project updates, track regulatory changes and identify market opportunities. Scoped tools, approvals, reversible actions and execution history make the work inspectable.',
       },
       {
-        title: 'One workspace for the team',
-        description: 'A web workspace brings search, business records, maps, analysis tools and management views together. Controlled client access, document generation and MCP tools extend the same information to customers and AI assistants; a control room tracks freshness, failures and AI costs.',
+        title: 'One tool hub, one shared business context',
+        description: 'Search, records, maps, document processing, energy calculators, report generation and management views work from the same clients and projects. The team moves between tools without reconstructing the context or copying the same data into separate applications. Scoped MCP tools make this indexed knowledge and these capabilities available to compatible AI assistants too; the platform is their operational foundation, not a substitute for an AI coding IDE.',
       },
     ],
     example: 'A new email and an electricity bill arrive for a project. The system links them to the client and energy supply point, extracts the relevant data and records the update. The team can then review the consumption profile, compare a feasibility scenario and prepare a sourced report. The project timeline, next actions and management view all reflect the same information.',

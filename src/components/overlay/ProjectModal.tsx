@@ -143,12 +143,12 @@ const caseStudies: Record<string, CaseStudy> = {
     accent: 'text-teal-100 border-teal-200/20 bg-teal-200/10',
     glow: 'bg-[radial-gradient(circle_at_14%_0%,rgba(45,212,191,0.2),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(139,92,246,0.18),transparent_30%)]',
     problem: 'A renewable-energy business held its knowledge across document folders, emails, CRM records and specialist spreadsheets. Understanding a project meant reconstructing its history by hand; preparing a weekly management report meant copying, reconciling and rewriting the same information.',
-    system: 'I designed the system around three connected layers: reliable company records, operational workflows and AI intelligence. Documents and messages become searchable evidence linked to business entities. Projects, tasks and approvals use those records, while AI services and deterministic energy engines turn them into answers, analyses and actions.',
+    system: 'I built a persistent hybrid search index over tens of thousands of documents, an AI-connected operational CRM/ERP layer and one shared hub of tools. Semantic embeddings and exact-term search retrieve relevant evidence without opening every source. Business records, calculations, reports and agents then use the same company context.',
     output: 'The team works from a shared company memory: it can see what changed, retrieve the evidence, understand project status, compare energy scenarios and generate reports. Management sees deadlines, risks and opportunities, while agents handle routine work through scoped permissions and recorded actions.',
     metrics: [
-      { value: 'Remember', label: 'company knowledge' },
-      { value: 'Understand', label: 'context + analysis' },
-      { value: 'Act', label: 'controlled automation' },
+      { value: 'Search', label: 'large indexed archive' },
+      { value: 'Connect', label: 'AI-linked CRM/ERP layer' },
+      { value: 'Operate', label: 'one governed tool hub' },
     ],
   },
 };
