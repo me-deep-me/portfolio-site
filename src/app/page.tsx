@@ -416,11 +416,9 @@ export default function Home() {
           aria-label="Mattia Erigoni homepage"
           className="group inline-flex min-h-[44px] items-center gap-3 transition hover:text-neutral-950"
         >
-          <span
-            aria-hidden="true"
-            className="block h-10 w-10 shrink-0 rounded-xl bg-black bg-cover bg-center shadow-[0_8px_24px_rgba(15,23,42,0.18)] ring-1 ring-black/10 transition group-hover:scale-105"
-            style={{ backgroundImage: "url('/brand/me-logo.webp')" }}
-          />
+          <span aria-hidden="true" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-neutral-950/15 bg-white/75 text-[10px] font-semibold tracking-[-0.02em] text-neutral-950 shadow-[0_10px_35px_rgba(0,0,0,0.05)] backdrop-blur-xl transition group-hover:border-neutral-950/35">
+            ME
+          </span>
           <span className="hidden leading-none sm:block">
             <span className="block text-[12px] font-semibold tracking-[0.28em] text-neutral-950">
               MATTIA ERIGONI
