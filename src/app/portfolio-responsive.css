@@ -11,6 +11,12 @@
   padding-bottom: max(0.875rem, env(safe-area-inset-bottom));
 }
 
+.portfolio-dialog-scroll {
+  scroll-padding-top: 120px;
+  /* Keep the reading position stable when the compact title appears. */
+  overflow-anchor: none;
+}
+
 .portfolio-project-scene {
   /* Desktop navigation is 84px tall (44px controls + 20px vertical padding). */
   top: 84px;

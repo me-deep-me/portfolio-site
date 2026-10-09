@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { PROJECTS, type Project } from '@/data/projects';
 import { ProjectArticle, ProjectImpactDashboard } from './ProjectDeepDive';
 import { ProjectOwnership } from './ProjectOwnership';
+import { SystemIllustration } from './SystemIllustration';
 
 interface Props {
   openId: string | null;
@@ -172,6 +173,9 @@ function openPopup(event: MouseEvent<HTMLAnchorElement>, url: string, label: str
 }
 
 function VisualPanel({ kind }: { kind: VisualKind }) {
+  if (kind === 'cerbrain' || kind === 'rag' || kind === 'db' || kind === 'load' || kind === 'micro') {
+    return <div className="flex h-full min-h-[240px] items-center rounded-[1.1rem] border border-white/12 bg-white/[0.04] p-3"><SystemIllustration kind={kind} /></div>;
+  }
   return (
     <div className="relative h-32 overflow-hidden rounded-[1.1rem] border border-white/12 bg-white/[0.07] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:h-56 sm:p-4 lg:h-full lg:min-h-[318px]">
       {kind === 'nest' && (
@@ -207,22 +211,6 @@ function VisualPanel({ kind }: { kind: VisualKind }) {
         </div>
       )}
 
-      {kind === 'load' && (
-        <div className="relative h-full rounded-[0.9rem] border border-white/10 bg-white/[0.04] p-3">
-          <div className="grid h-full grid-cols-5 gap-1.5">
-            {Array.from({ length: 20 }, (_, cell) => (
-              <span
-                key={cell}
-                className={`rounded-[0.35rem] ${
-                  cell % 4 === 0 ? 'bg-sky-200/80' : cell % 5 === 0 ? 'bg-emerald-200/72' : 'bg-white/15'
-                } ${cell === 2 || cell === 17 ? 'opacity-35' : ''}`}
-              />
-            ))}
-          </div>
-          <span className="absolute bottom-3 left-3 right-3 h-1 rounded-full bg-cyan-100/70" />
-        </div>
-      )}
-
       {kind === 'door' && (
         <div className="relative h-full rounded-[0.9rem] border border-white/10 bg-white/[0.04]">
           <span className="absolute inset-x-6 bottom-7 h-2 rounded-full bg-rose-100/18" />
@@ -255,75 +243,6 @@ function VisualPanel({ kind }: { kind: VisualKind }) {
         </div>
       )}
 
-      {kind === 'db' && (
-        <div className="grid h-full grid-cols-5 gap-1.5">
-          {Array.from({ length: 30 }, (_, cell) => (
-            <span
-              key={cell}
-              className={`rounded-[0.32rem] ${
-                cell % 7 === 0 ? 'bg-teal-200/78' : cell % 5 === 0 ? 'bg-sky-200/62' : 'bg-white/14'
-              }`}
-            />
-          ))}
-        </div>
-      )}
-
-      {kind === 'rag' && (
-        <div className="relative h-full">
-          <span className="absolute left-[18%] top-[28%] h-px w-[48%] rotate-12 bg-violet-100/18" />
-          <span className="absolute left-[32%] top-[60%] h-px w-[44%] -rotate-12 bg-cyan-100/18" />
-          <span className="absolute left-[50%] top-[18%] h-[60%] w-px bg-white/12" />
-          {[
-            'left-[12%] top-[22%] bg-violet-200/78',
-            'left-[31%] top-[64%] bg-white/18',
-            'left-[55%] top-[39%] bg-cyan-200/72',
-            'left-[73%] top-[19%] bg-violet-100/58',
-            'left-[75%] top-[68%] bg-cyan-100/52',
-          ].map((node) => (
-            <span key={node} className={`absolute h-10 w-10 rounded-full border border-white/12 ${node}`} />
-          ))}
-        </div>
-      )}
-
-      {kind === 'micro' && (
-        <div className="grid h-full grid-cols-[0.75fr_1.25fr] gap-3">
-          <div className="grid gap-2">
-            <span className="rounded-[0.7rem] bg-orange-200/72" />
-            <span className="rounded-[0.7rem] bg-white/15" />
-            <span className="rounded-[0.7rem] bg-emerald-200/62" />
-          </div>
-          <div className="rounded-[0.9rem] border border-white/10 bg-white/[0.04] p-3">
-            <div className="mb-4 h-1.5 rounded-full bg-white/12">
-              <span className="block h-full w-[72%] rounded-full bg-orange-200/78" />
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              {Array.from({ length: 12 }, (_, cell) => (
-                <span
-                  key={cell}
-                  className={`h-6 rounded-[0.3rem] ${cell % 3 === 0 ? 'bg-emerald-200/58' : 'bg-white/14'}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {kind === 'cerbrain' && (
-        <div className="relative h-full">
-          <span className="absolute left-[18%] top-[28%] h-px w-[52%] rotate-[16deg] bg-teal-100/22" />
-          <span className="absolute left-[25%] top-[62%] h-px w-[50%] -rotate-[14deg] bg-violet-100/22" />
-          <span className="absolute left-[50%] top-[18%] h-[62%] w-px bg-white/12" />
-          {[
-            'left-[12%] top-[20%] bg-teal-200/78',
-            'left-[31%] top-[63%] bg-white/18',
-            'left-[53%] top-[39%] bg-violet-200/76',
-            'left-[73%] top-[19%] bg-cyan-100/62',
-            'left-[75%] top-[67%] bg-teal-100/56',
-          ].map((node) => (
-            <span key={node} className={`absolute h-10 w-10 rounded-full border border-white/12 ${node}`} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -387,9 +306,11 @@ function ProjectDialog({ openId, onClose }: Props) {
   const contentRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const expanded = view !== 'overview';
+  const [compact, setCompact] = useState(false);
 
   const changeView = (next: typeof view) => {
     setView(next);
+    setCompact(false);
     contentRef.current?.scrollTo({ top: 0 });
     dialogRef.current?.querySelector<HTMLButtonElement>(`[data-view="${next}"]`)?.focus();
   };
@@ -448,6 +369,7 @@ function ProjectDialog({ openId, onClose }: Props) {
               className="portfolio-dialog flex max-h-[92dvh] w-full max-w-[1120px] flex-col overflow-hidden rounded-t-[1.5rem] border border-white/80 bg-white text-left shadow-[0_35px_140px_rgba(0,0,0,0.22)] md:max-h-[calc(100dvh-3rem)] md:rounded-[1.75rem]"
               onClick={(e) => e.stopPropagation()}
             >
+            <div ref={contentRef} onScroll={(event) => setCompact(event.currentTarget.scrollTop > 120)} className="portfolio-dialog-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain bg-neutral-50/60">
             <div className="portfolio-dialog-header relative shrink-0 overflow-hidden bg-slate-950 p-4 text-white sm:p-5 md:p-6">
               <div className={`pointer-events-none absolute inset-0 ${study.glow}`} />
               <span className="relative mx-auto mb-3 block h-1 w-11 rounded-full bg-white/22 md:hidden" />
@@ -503,7 +425,16 @@ function ProjectDialog({ openId, onClose }: Props) {
               </div>
             </div>
 
-            <nav aria-label="Project detail views" className="flex shrink-0 gap-1 border-b border-neutral-200 bg-white px-3 py-2 sm:px-6">
+            <div className="portfolio-dialog-reading-bar sticky top-0 z-10 border-b border-neutral-200 bg-white/95 backdrop-blur-xl">
+              <div className={`portfolio-dialog-compact-title grid transition-[grid-template-rows,opacity] duration-300 ${compact ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`} aria-hidden={!compact}>
+                <div className="min-h-0 overflow-hidden">
+                  <div className="flex items-center justify-between gap-3 px-4 pt-2 sm:px-6">
+                    <p className="min-w-0 truncate text-sm font-semibold tracking-tight text-slate-950">{project.title}</p>
+                    <button type="button" tabIndex={compact ? 0 : -1} onClick={onClose} aria-label="Close case study" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-neutral-200 text-xl text-neutral-600 transition hover:bg-neutral-100">×</button>
+                  </div>
+                </div>
+              </div>
+            <nav aria-label="Project detail views" className="flex shrink-0 gap-1 px-3 py-2 sm:px-6">
               {([
                 { id: 'overview', label: 'Overview' },
                 { id: 'article', label: 'In details ↗' },
@@ -512,7 +443,7 @@ function ProjectDialog({ openId, onClose }: Props) {
                 <button key={item.id} data-view={item.id} type="button" aria-pressed={view === item.id} onClick={() => changeView(item.id)} className={`min-h-[44px] flex-1 rounded-full px-2 py-2.5 text-[11px] font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 sm:flex-none sm:px-4 ${view === item.id ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950'}`}>{item.label}</button>
               ))}
             </nav>
-            <div ref={contentRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-neutral-50/60">
+            </div>
             {view === 'article' ? <ProjectArticle project={project} onExplore={() => changeView('impact')} /> : view === 'impact' ? <ProjectImpactDashboard project={project} /> : (
             <div className="grid gap-4 p-4 sm:p-5 md:grid-cols-[1fr_0.72fr] md:gap-5 md:p-6">
               <div className="md:col-span-2"><ProjectOwnership /></div>

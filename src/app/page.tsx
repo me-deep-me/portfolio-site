@@ -7,6 +7,7 @@ import { ProjectCard }     from '@/components/overlay/ProjectCard';
 import { ProjectModal }    from '@/components/overlay/ProjectModal';
 import { ProjectActions }  from '@/components/overlay/ProjectActions';
 import { FeaturedWork } from '@/components/overlay/FeaturedWork';
+import { SystemIllustration } from '@/components/overlay/SystemIllustration';
 import { PROJECTS, type Project } from '@/data/projects';
 import './portfolio-responsive.css';
 
@@ -186,6 +187,9 @@ function MobileVisualBody({
   id: string;
   skin: (typeof MOBILE_PROJECT_SKINS)[string];
 }) {
+  if (id === 'cerbrain' || id === 'rag' || id === 'db' || id === 'load' || id === 'micro') {
+    return <SystemIllustration kind={id} className="h-auto" />;
+  }
   if (id === 'nest') {
     return (
       <div className="relative h-16 rounded-[0.8rem] border border-white/10 bg-white/[0.04]">
@@ -223,25 +227,6 @@ function MobileVisualBody({
           <span className="block h-full w-[78%] rounded-full bg-gradient-to-r from-cyan-200 via-emerald-200 to-amber-200" />
         </span>
       </>
-    );
-  }
-
-  if (id === 'load') {
-    return (
-      <div className="relative h-16 overflow-hidden rounded-[0.8rem] border border-white/10 bg-white/[0.04] p-2">
-        <div className="absolute left-4 right-4 top-1/2 h-px bg-white/14" />
-        <div className="grid h-full grid-cols-5 gap-1.5 [transform:skewX(-8deg)]">
-          {Array.from({ length: 15 }, (_, cell) => (
-            <span
-              key={cell}
-              className={`rounded-[0.32rem] ${
-                cell % 4 === 0 ? skin.primary : cell % 5 === 0 ? skin.secondary : 'bg-white/14'
-              } ${cell === 2 || cell === 13 ? 'opacity-35' : ''}`}
-            />
-          ))}
-        </div>
-        <span className="absolute bottom-2 left-3 right-3 h-1 rounded-full bg-cyan-100/70" />
-      </div>
     );
   }
 
@@ -286,77 +271,7 @@ function MobileVisualBody({
     );
   }
 
-  if (id === 'db') {
-    return (
-      <div className="relative grid h-16 grid-cols-5 gap-1.5 rounded-[0.8rem] border border-white/10 bg-white/[0.04] p-2">
-        {Array.from({ length: 20 }, (_, cell) => (
-          <span
-            key={cell}
-            className={`rounded-[0.28rem] ${
-              cell % 7 === 0 ? skin.primary : cell % 5 === 0 ? skin.secondary : 'bg-white/14'
-            }`}
-          />
-        ))}
-        <span className="absolute bottom-2 right-2 rounded-full border border-white/12 bg-white/10 px-1.5 py-0.5 font-mono text-[7px] uppercase tracking-[0.16em] text-white/62">
-          clean
-        </span>
-      </div>
-    );
-  }
-
-  if (id === 'rag') {
-    return (
-      <div className="relative h-16 rounded-[0.8rem] border border-white/10 bg-white/[0.04]">
-        <span className="absolute left-[18%] top-[26%] h-px w-[48%] rotate-12 bg-white/16" />
-        <span className="absolute left-[32%] top-[61%] h-px w-[44%] -rotate-12 bg-white/16" />
-        {[12, 32, 55, 73, 77].map((left, node) => (
-          <span
-            key={left}
-            className={`absolute h-7 w-7 rounded-full border border-white/12 ${
-              node % 2 === 0 ? skin.primary : node === 1 ? 'bg-white/17' : skin.secondary
-            }`}
-            style={{ left: `${left}%`, top: node % 2 === 0 ? '22%' : '58%' }}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  if (id === 'cerbrain') {
-    return (
-      <div className="relative h-16 rounded-[0.8rem] border border-white/10 bg-white/[0.04]">
-        <span className="absolute left-[18%] top-[29%] h-px w-[54%] rotate-[16deg] bg-white/16" />
-        <span className="absolute left-[25%] top-[62%] h-px w-[50%] -rotate-[14deg] bg-white/16" />
-        {[12, 31, 53, 73, 76].map((left, node) => (
-          <span
-            key={left}
-            className={`absolute h-7 w-7 rounded-full border border-white/12 ${node % 2 === 0 ? skin.primary : node === 1 ? 'bg-white/17' : skin.secondary}`}
-            style={{ left: `${left}%`, top: node % 2 === 0 ? '22%' : '58%' }}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  return (
-    <div className="grid h-16 grid-cols-[0.78fr_1.22fr] gap-2">
-      <div className="grid gap-1.5">
-        <span className={`rounded-[0.55rem] ${skin.primary}`} />
-        <span className="rounded-[0.55rem] bg-white/15" />
-        <span className={`rounded-[0.55rem] ${skin.secondary}`} />
-      </div>
-      <div className="rounded-[0.8rem] border border-white/10 bg-white/[0.04] p-2">
-        <span className="mb-2 block h-1 rounded-full bg-white/12">
-          <span className={`block h-full w-[72%] rounded-full ${skin.primary}`} />
-        </span>
-        <div className="grid grid-cols-3 gap-1.5">
-          {Array.from({ length: 9 }, (_, cell) => (
-            <span key={cell} className={`h-3 rounded-[0.25rem] ${cell % 3 === 0 ? skin.secondary : 'bg-white/14'}`} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }
 
 function MobileProjectPreview({

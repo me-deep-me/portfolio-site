@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import type { Project } from '@/data/projects';
 import { ProjectActions } from './ProjectActions';
+import { SystemIllustration } from './SystemIllustration';
 
 function clamp(v: number, min = 0, max = 1) {
   return Math.max(min, Math.min(max, v));
@@ -204,6 +205,9 @@ const premiumProjects: Record<string, PremiumProject> = {
 };
 
 function PremiumVisualPanel({ visual, label }: { visual: PremiumVisual; label: string }) {
+  if (visual === 'cerbrain' || visual === 'rag' || visual === 'db' || visual === 'load' || visual === 'micro') {
+    return <div className="rounded-[1.15rem] border border-white/12 bg-white/[0.07] p-3"><SystemIllustration kind={visual} className="h-auto" /></div>;
+  }
   return (
     <div className="rounded-[1.15rem] border border-white/12 bg-white/[0.07] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
       <div className="mb-3 flex items-center justify-between">
@@ -251,29 +255,6 @@ function PremiumVisualPanel({ visual, label }: { visual: PremiumVisual; label: s
         </>
       )}
 
-      {visual === 'load' && (
-        <div className="relative h-32 overflow-hidden rounded-[0.85rem] border border-white/10 bg-white/[0.04] p-3">
-          <div className="absolute left-3 right-3 top-1/2 h-px bg-white/14" />
-          <div className="grid h-full grid-cols-5 gap-1.5">
-            {Array.from({ length: 15 }, (_, cell) => (
-              <span
-                key={cell}
-                className={`rounded-[0.35rem] ${
-                  cell % 4 === 0
-                    ? 'bg-sky-200/80'
-                    : cell % 5 === 0
-                      ? 'bg-emerald-200/72'
-                      : 'bg-white/15'
-                } ${cell === 2 || cell === 11 ? 'opacity-35' : ''}`}
-              />
-            ))}
-          </div>
-          <div className="absolute bottom-3 left-3 right-3 h-1 overflow-hidden rounded-full bg-white/10">
-            <span className="block h-full w-[86%] rounded-full bg-gradient-to-r from-sky-300 via-cyan-200 to-emerald-200" />
-          </div>
-        </div>
-      )}
-
       {visual === 'door' && (
         <div className="relative h-32 overflow-hidden rounded-[0.85rem] border border-white/10 bg-white/[0.04] p-3">
           <div className="absolute inset-x-5 bottom-5 h-2 rounded-full bg-rose-100/18" />
@@ -312,90 +293,6 @@ function PremiumVisualPanel({ visual, label }: { visual: PremiumVisual; label: s
         </div>
       )}
 
-      {visual === 'db' && (
-        <div className="relative h-32 overflow-hidden rounded-[0.85rem] border border-white/10 bg-white/[0.04] p-3">
-          <div className="grid h-full grid-cols-4 gap-1.5">
-            {Array.from({ length: 20 }, (_, cell) => (
-              <span
-                key={cell}
-                className={`rounded-[0.32rem] ${
-                  cell % 7 === 0
-                    ? 'bg-teal-200/78'
-                    : cell % 5 === 0
-                      ? 'bg-sky-200/62'
-                      : 'bg-white/14'
-                }`}
-              />
-            ))}
-          </div>
-          <span className="absolute bottom-3 right-3 rounded-full border border-teal-100/20 bg-teal-100/12 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-teal-50/75">
-            clean
-          </span>
-        </div>
-      )}
-
-      {visual === 'rag' && (
-        <div className="relative h-32 overflow-hidden rounded-[0.85rem] border border-white/10 bg-white/[0.04]">
-          <div className="absolute left-[18%] top-[25%] h-px w-[46%] rotate-12 bg-violet-100/18" />
-          <div className="absolute left-[32%] top-[58%] h-px w-[42%] -rotate-12 bg-cyan-100/18" />
-          <div className="absolute left-[48%] top-[20%] h-[54%] w-px bg-white/12" />
-          {[
-            'left-[12%] top-[20%] bg-violet-200/78',
-            'left-[32%] top-[62%] bg-white/18',
-            'left-[55%] top-[38%] bg-cyan-200/72',
-            'left-[72%] top-[18%] bg-violet-100/58',
-            'left-[74%] top-[66%] bg-cyan-100/52',
-          ].map((node) => (
-            <span key={node} className={`absolute h-8 w-8 rounded-full border border-white/12 ${node}`} />
-          ))}
-          <span className="absolute bottom-3 left-3 rounded-full border border-white/12 bg-white/8 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-white/60">
-            sources
-          </span>
-        </div>
-      )}
-
-      {visual === 'micro' && (
-        <div className="grid h-32 grid-cols-[0.8fr_1.2fr] gap-2">
-          <div className="grid gap-2">
-            <span className="rounded-[0.65rem] bg-orange-200/72" />
-            <span className="rounded-[0.65rem] bg-white/15" />
-            <span className="rounded-[0.65rem] bg-emerald-200/62" />
-          </div>
-          <div className="rounded-[0.85rem] border border-white/10 bg-white/[0.04] p-3">
-            <div className="mb-3 h-1.5 rounded-full bg-white/12">
-              <span className="block h-full w-[72%] rounded-full bg-orange-200/78" />
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              {Array.from({ length: 9 }, (_, cell) => (
-                <span
-                  key={cell}
-                  className={`h-5 rounded-[0.28rem] ${cell % 3 === 0 ? 'bg-emerald-200/58' : 'bg-white/14'}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {visual === 'cerbrain' && (
-        <div className="relative h-32 overflow-hidden rounded-[0.85rem] border border-white/10 bg-white/[0.04]">
-          <span className="absolute left-[22%] top-[28%] h-px w-[56%] rotate-[16deg] bg-teal-100/24" />
-          <span className="absolute left-[24%] top-[64%] h-px w-[52%] -rotate-[14deg] bg-violet-100/22" />
-          <span className="absolute left-[49%] top-[20%] h-[60%] w-px bg-white/12" />
-          {[
-            'left-[12%] top-[19%] bg-teal-200/78',
-            'left-[31%] top-[60%] bg-white/18',
-            'left-[52%] top-[38%] bg-violet-200/76',
-            'left-[73%] top-[18%] bg-cyan-100/62',
-            'left-[75%] top-[65%] bg-teal-100/56',
-          ].map((node) => (
-            <span key={node} className={`absolute h-8 w-8 rounded-full border border-white/12 ${node}`} />
-          ))}
-          <span className="absolute bottom-3 left-3 rounded-full border border-white/12 bg-white/8 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-white/60">
-            traceable
-          </span>
-        </div>
-      )}
     </div>
   );
 }
